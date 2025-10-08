@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --forest-green: #2E4A34;
+    --moss: #6B8E23;
+    --warm-beige: #DCCCA3;
+    --burnt-orange: #C65D2B;
+    --off-white: #F7F5EB;
+    
+    --background: 46 74 52;
+    --foreground: 247 245 235;
+    --primary: 107 142 35;
+    --primary-foreground: 247 245 235;
+    --secondary: 220 204 163;
+    --secondary-foreground: 46 74 52;
+    --accent: 198 93 43;
+    --accent-foreground: 247 245 235;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 247 245 235;
+    --muted: 107 142 35;
+    --muted-foreground: 247 245 235;
+    --card: 46 74 52;
+    --card-foreground: 247 245 235;
+    --popover: 46 74 52;
+    --popover-foreground: 247 245 235;
+    --border: 107 142 35;
+    --input: 107 142 35;
+    --ring: 107 142 35;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-[#2E4A34] text-[#F7F5EB];
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
