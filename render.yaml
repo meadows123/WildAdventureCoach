@@ -1,0 +1,35 @@
+services:
+  # Combined Service - Node.js server serving React frontend
+  - type: web
+    name: wild-adventure-coach
+    env: node
+    rootDir: .
+    buildCommand: |
+      echo "🔍 Current directory: $(pwd)"
+      echo "📁 Directory contents:"
+      ls -la
+      echo "📄 Checking package.json:"
+      ls -la package.json
+      echo "🚀 Installing dependencies..."
+      npm install
+      echo "🏗️ Building project..."
+      npm run build
+    startCommand: npm start
+    envVars:
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: SENDGRID_API_KEY
+        sync: false
+      - key: FROM_EMAIL
+        value: wildadventurecoach@gmail.com
+      - key: CLIENT_URL
+        value: https://wildadventurecoach.onrender.com
+      - key: PORT
+        value: 10000
+
