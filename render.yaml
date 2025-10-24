@@ -8,8 +8,15 @@ services:
       echo "🔍 Current directory: $(pwd)"
       echo "📁 Directory contents:"
       ls -la
-      echo "📄 Checking package.json:"
-      ls -la package.json
+      echo "📄 Checking package.json exists:"
+      if [ -f "package.json" ]; then
+        echo "✅ package.json found in current directory"
+        cat package.json | head -5
+      else
+        echo "❌ package.json NOT found in current directory"
+        echo "🔍 Looking for package.json in subdirectories:"
+        find . -name "package.json" -type f
+      fi
       echo "🚀 Installing dependencies..."
       npm install
       echo "🏗️ Building project..."
