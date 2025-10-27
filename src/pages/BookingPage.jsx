@@ -20,28 +20,81 @@ const BookingPage = () => {
   // API URL - since backend serves the frontend, use relative URLs in production
   const API_URL = import.meta.env.VITE_API_URL || '';
   
-  const retreat = {
-    name: 'Hiking and Yoga Retreat - August',
-    price: 1250,
-    dates: 'August 30 - September 4, 2026',
-    duration: '6 Days',
-    location: 'Mont Blanc (France and Italy)',
-    description: '4 iconic stages of the Tour du Mont Blanc covering 65 km across France and Italy. 15 km each day and 1000 D+ each day. Good fitness level is required.',
-    included: [
-      '5 nights accommodation',
-      '3 meals / day',
-      '4 guided hiking days',
-      'Daily yoga & mindfulness sessions'
-    ],
-    notIncluded: [
-      'Flights & transfer to Chamonix',
-      'Hiking & yoga equipment',
-      'Snacks and drinks'
-    ]
+  // Get retreat from URL parameter
+  const retreatParam = searchParams.get('retreat');
+  
+  // Define retreat configurations
+  const retreats = {
+    'Hiking and Yoga Retreat - July': {
+      name: 'Hiking and Yoga Retreat - July',
+      beginnerFriendly: true,
+      hasAccommodationOptions: true,
+      accommodationOptions: [
+        {
+          name: 'Standard Accommodation',
+          price: 1250,
+          deposit: 375,
+          description: 'Comfortable shared mountain lodges with all essential amenities'
+        },
+        {
+          name: 'Premium Quarters',
+          price: 1430,
+          deposit: 375,
+          description: 'Luxury mountain tents with private facilities and enhanced comfort'
+        }
+      ],
+      // Default values for backward compatibility
+      price: 1250,
+      deposit: 375,
+      dates: 'July 15 - 20, 2026',
+      duration: '6 Days',
+      location: 'Mont Blanc (France and Italy)',
+      description: 'A beginner-friendly adventure through the stunning landscapes of Mont Blanc. This retreat offers the flexibility of cable transportation options, making it suitable for all fitness levels. Experience the same breathtaking views at your own pace.',
+      included: [
+        '5 nights accommodation',
+        '3 meals / day',
+        '4 guided hiking days with cable transportation options',
+        'Daily yoga & mindfulness sessions',
+        'Flexible difficulty levels'
+      ],
+      notIncluded: [
+        'Flights & transfer to Chamonix',
+        'Hiking & yoga equipment',
+        'Snacks and drinks',
+        'Cable transportation fees (optional)'
+      ]
+    },
+    'Hiking and Yoga Retreat - August': {
+      name: 'Hiking and Yoga Retreat - August',
+      beginnerFriendly: false,
+      price: 1250,
+      deposit: 375,
+      dates: 'August 30 - September 4, 2026',
+      duration: '6 Days',
+      location: 'Mont Blanc (France and Italy)',
+      description: '4 iconic stages of the Tour du Mont Blanc covering 65 km across France and Italy. 15 km each day and 1000 D+ each day. Good fitness level is required.',
+      included: [
+        '5 nights accommodation',
+        '3 meals / day',
+        '4 guided hiking days',
+        'Daily yoga & mindfulness sessions'
+      ],
+      notIncluded: [
+        'Flights & transfer to Chamonix',
+        'Hiking & yoga equipment',
+        'Snacks and drinks'
+      ]
+    }
   };
+  
+  // Select the retreat based on URL parameter or default to August
+  const retreat = retreats[retreatParam] || retreats['Hiking and Yoga Retreat - August'];
 
   const [formData, setFormData] = useState({
     retreat: retreat.name,
+    accommodationType: '',
+    travelingAloneOrGroup: '',
+    numberOfPeople: '',
     firstName: '',
     lastName: '',
     email: '',
@@ -55,6 +108,11 @@ const BookingPage = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
+
+  // Scroll to top whenever step changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [step]);
 
   // Check if user returned from canceled payment
   useEffect(() => {
@@ -98,11 +156,20 @@ const BookingPage = () => {
 
   const handleNextStep = () => {
     if (step === 1) {
+      // Check if accommodation selection is required (July retreat)
+      const needsAccommodation = retreat.hasAccommodationOptions && !formData.accommodationType;
+      
+      // Check if number of people is required for groups
+      const needsGroupCount = formData.travelingAloneOrGroup === 'Group' && !formData.numberOfPeople;
+      
       if (!formData.firstName || !formData.lastName || !formData.email || 
-          !formData.gender || !formData.age || !formData.beenHiking || !formData.hikingExperience) {
+          !formData.gender || !formData.age || !formData.beenHiking || !formData.hikingExperience || 
+          !formData.travelingAloneOrGroup || needsAccommodation || needsGroupCount) {
         toast({
           title: "Missing information",
-          description: "Please fill in all required fields",
+          description: needsAccommodation ? "Please select your accommodation preference" : 
+                       needsGroupCount ? "Please enter the number of people in your group" :
+                       "Please fill in all required fields",
           variant: "destructive"
         });
         return;
@@ -122,8 +189,6 @@ const BookingPage = () => {
     
     if (step < 3) {
       setStep(step + 1);
-      // Scroll to top when moving to next step (especially important for step 2 - safety notice)
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -184,9 +249,16 @@ const BookingPage = () => {
     }
   };
 
-  // Calculate total price (single person booking)
+  // Calculate total price - now returns deposit amount
   const calculateTotal = () => {
-    return retreat.price;
+    // If accommodation is selected (July retreat), use that price
+    if (retreat.hasAccommodationOptions && formData.accommodationType) {
+      const selectedAccommodation = retreat.accommodationOptions.find(
+        opt => opt.name === formData.accommodationType
+      );
+      return selectedAccommodation?.deposit || selectedAccommodation?.price || 375;
+    }
+    return retreat.deposit || retreat.price;
   };
 
   const fadeInUp = {
@@ -256,7 +328,50 @@ const BookingPage = () => {
                     </div>
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
                       <span className="text-sm sm:text-base text-[#DCCCA3]">{retreat.dates}</span>
-                      <span className="text-xl sm:text-2xl font-bold text-[#C65D2B]">£{retreat.price} <span className="text-xs sm:text-sm text-[#DCCCA3]">per person</span></span>
+                      <div className="flex flex-col items-end">
+                        {(() => {
+                          let depositToShow = retreat.deposit;
+                          let priceToShow = retreat.price;
+                          
+                          if (retreat.hasAccommodationOptions && formData.accommodationType) {
+                            const selectedAccom = retreat.accommodationOptions.find(opt => opt.name === formData.accommodationType);
+                            if (selectedAccom) {
+                              depositToShow = selectedAccom.deposit;
+                              priceToShow = selectedAccom.price;
+                            }
+                          }
+                          
+                          return (
+                            <>
+                              <span className="text-xl sm:text-2xl font-bold text-[#C65D2B]">£{depositToShow} deposit</span>
+                              {retreat.hasAccommodationOptions ? (
+                                <p className="text-xs text-[#DCCCA3] mt-1">Full price: £{retreat.price} or £{retreat.accommodationOptions[1].price}</p>
+                              ) : (
+                                <p className="text-xs text-[#DCCCA3] mt-1">Full price: £{priceToShow}</p>
+                              )}
+                            </>
+                          );
+                        })()}
+                      </div>
+                    </div>
+                    
+                    <div className="bg-[#6B8E23]/20 border border-[#6B8E23]/40 rounded-lg px-4 py-2 mb-4">
+                      <p className="text-center text-[#DCCCA3] text-sm">
+                        {(() => {
+                          let depositToShow = retreat.deposit;
+                          let priceToShow = retreat.price;
+                          
+                          if (retreat.hasAccommodationOptions && formData.accommodationType) {
+                            const selectedAccom = retreat.accommodationOptions.find(opt => opt.name === formData.accommodationType);
+                            if (selectedAccom) {
+                              depositToShow = selectedAccom.deposit;
+                              priceToShow = selectedAccom.price;
+                            }
+                          }
+                          
+                          return `Secure your spot today with a £${depositToShow} deposit • Remaining balance due closer to the retreat date`;
+                        })()}
+                      </p>
                     </div>
                     
                     {/* Capacity Indicator */}
@@ -300,6 +415,45 @@ const BookingPage = () => {
                     </div>
                   </div>
 
+                  {/* Accommodation Selection - Only for July retreat */}
+                  {retreat.hasAccommodationOptions && (
+                    <div className="bg-[#C65D2B]/10 border border-[#C65D2B]/30 rounded-lg sm:rounded-xl p-4 sm:p-6 mb-6">
+                      <h2 className="text-xl sm:text-2xl font-bold text-[#F7F5EB] mb-4">Choose Your Accommodation</h2>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        {retreat.accommodationOptions.map((option, index) => (
+                          <label
+                            key={index}
+                            className={`cursor-pointer border-2 rounded-lg p-4 transition-all ${
+                              formData.accommodationType === option.name
+                                ? 'border-[#C65D2B] bg-[#C65D2B]/20'
+                                : 'border-[#6B8E23] bg-[#6B8E23]/10 hover:border-[#C65D2B]/50'
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              name="accommodationType"
+                              value={option.name}
+                              checked={formData.accommodationType === option.name}
+                              onChange={(e) => setFormData({...formData, accommodationType: e.target.value})}
+                              className="hidden"
+                            />
+                            <div className="space-y-2">
+                              <div className="flex items-center justify-between">
+                                <h3 className="font-bold text-[#F7F5EB] text-lg">{option.name}</h3>
+                                <div className="flex items-baseline gap-2">
+                                  <span className="text-lg text-[#DCCCA3] line-through">£{retreat.price}</span>
+                                  <span className="text-2xl font-bold text-[#C65D2B]">£{option.price}</span>
+                                </div>
+                              </div>
+                              <p className="text-[#DCCCA3] text-sm">{option.description}</p>
+                              <p className="text-[#6B8E23] text-xs font-semibold mt-2">Deposit: £{option.deposit}</p>
+                            </div>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-4 sm:mb-6">Your Information</h2>
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
@@ -337,6 +491,52 @@ const BookingPage = () => {
                       required
                     />
                   </div>
+                  
+                  {/* Traveling Alone or in Group */}
+                  <div>
+                    <Label htmlFor="travelingAloneOrGroup" className="text-[#DCCCA3] mb-2 block">Are you traveling alone or in a group? *</Label>
+                    <select
+                      id="travelingAloneOrGroup"
+                      name="travelingAloneOrGroup"
+                      value={formData.travelingAloneOrGroup}
+                      onChange={handleInputChange}
+                      className="flex h-10 w-full rounded-md border border-[#6B8E23] bg-[#2E4A34] px-3 py-2 text-sm text-[#F7F5EB] ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-[#DCCCA3]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C65D2B] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 appearance-none cursor-pointer"
+                      style={{ backgroundImage: "url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%207l5%205%205-5%22%20stroke%3D%22%23DCCCA3%22%20stroke-width%3D%221.5%22%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E')", backgroundPosition: 'right 0.5rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1.5em 1.5em', paddingRight: '2.5rem' }}
+                      required
+                    >
+                      <option value="">Select an option</option>
+                      <option value="Alone">Alone</option>
+                      <option value="Group">Group</option>
+                    </select>
+                  </div>
+                  
+                  {/* Number of People - Only show if "Group" */}
+                  {formData.travelingAloneOrGroup === 'Group' ? (
+                    <div>
+                      <Label htmlFor="numberOfPeople" className="text-[#DCCCA3] mb-2 block">How many people? (including you) *</Label>
+                      <select
+                        id="numberOfPeople"
+                        name="numberOfPeople"
+                        value={formData.numberOfPeople}
+                        onChange={handleInputChange}
+                        className="flex h-10 w-full rounded-md border border-[#6B8E23] bg-[#2E4A34] px-3 py-2 text-sm text-[#F7F5EB] ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-[#DCCCA3]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C65D2B] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 appearance-none cursor-pointer"
+                        style={{ backgroundImage: "url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%207l5%205%205-5%22%20stroke%3D%22%23DCCCA3%22%20stroke-width%3D%221.5%22%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E')", backgroundPosition: 'right 0.5rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1.5em 1.5em', paddingRight: '2.5rem' }}
+                        required
+                      >
+                        <option value="">Select number</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                      </select>
+                    </div>
+                  ) : null}
+                  
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
                       <Label htmlFor="gender" className="text-[#DCCCA3] mb-2 block">Gender *</Label>
@@ -400,6 +600,7 @@ const BookingPage = () => {
                         required
                       >
                         <option value="">Select level</option>
+                        {retreat.beginnerFriendly && <option value="Beginner">Beginner</option>}
                         <option value="Intermediate">Intermediate</option>
                         <option value="Experienced">Experienced</option>
                       </select>
@@ -410,8 +611,8 @@ const BookingPage = () => {
 
               {step === 2 && (
                 <div className="space-y-4 sm:space-y-6">
-                  {formData.beenHiking === 'No' ? (
-                    // Different message for users with no hiking experience
+                  {formData.beenHiking === 'No' && !retreat.beginnerFriendly ? (
+                    // Different message for users with no hiking experience on non-beginner-friendly retreat
                     <>
                       <div className="text-center mb-6 sm:mb-8">
                         <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-red-600/20 border-2 border-red-600 mb-4 sm:mb-6">
@@ -460,8 +661,132 @@ const BookingPage = () => {
                         </div>
                       </div>
                     </>
+                  ) : formData.beenHiking === 'No' && retreat.beginnerFriendly ? (
+                    // Message for beginners on the July retreat
+                    <>
+                      <div className="text-center mb-6 sm:mb-8">
+                        <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#6B8E23]/20 border-2 border-[#6B8E23] mb-4 sm:mb-6">
+                          <span className="text-4xl sm:text-5xl">🌿</span>
+                        </div>
+                        <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-2 px-2 leading-tight">Perfect for Beginners!</h2>
+                      </div>
+
+                      <div className="bg-[#6B8E23]/10 border-2 border-[#6B8E23]/50 rounded-lg sm:rounded-xl p-4 sm:p-6 md:p-8">
+                        <div className="space-y-4 text-[#F7F5EB] leading-relaxed">
+                          <p className="text-lg">
+                            Great news! This retreat is <strong className="text-[#6B8E23]">beginner-friendly</strong> and perfect for your first hiking adventure.
+                          </p>
+                          
+                          <p className="text-lg">
+                            This experience includes <strong className="text-[#6B8E23]">cable transportation options</strong> to make it accessible for all fitness levels. You'll still experience the same stunning landscapes and breathtaking views at your own pace.
+                          </p>
+                          
+                          <div className="my-6 pt-6 border-t border-[#6B8E23]/30">
+                            <p className="text-lg font-semibold text-[#6B8E23] mb-4">What makes this retreat beginner-friendly:</p>
+                            <ul className="space-y-3 text-[#DCCCA3]">
+                              <li className="flex items-start">
+                                <span className="text-[#6B8E23] mr-3 mt-1 flex-shrink-0">✓</span>
+                                <span>Optional cable transportation for challenging sections - hike as much or as little as you like.</span>
+                              </li>
+                              <li className="flex items-start">
+                                <span className="text-[#6B8E23] mr-3 mt-1 flex-shrink-0">✓</span>
+                                <span>Flexible difficulty levels - our guides adapt to your fitness level.</span>
+                              </li>
+                              <li className="flex items-start">
+                                <span className="text-[#6B8E23] mr-3 mt-1 flex-shrink-0">✓</span>
+                                <span>No prior hiking experience required - we'll teach you the basics.</span>
+                              </li>
+                              <li className="flex items-start">
+                                <span className="text-[#6B8E23] mr-3 mt-1 flex-shrink-0">✓</span>
+                                <span>Supportive group environment - everyone starts somewhere!</span>
+                              </li>
+                            </ul>
+                          </div>
+                          
+                          <div className="bg-[#2E4A34] rounded-lg p-4 border border-[#6B8E23]/50">
+                            <p className="text-[#DCCCA3] text-sm italic">
+                              You'll experience the same stunning landscapes of Mont Blanc, but with the flexibility to choose your adventure level. Whether you hike every step or take advantage of cable transportation, you'll have an unforgettable experience!
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Acknowledgment Checkbox for beginner-friendly retreat */}
+                      <div className="bg-[#2E4A34]/50 rounded-xl p-6 border-2 border-[#6B8E23]/50">
+                        <label className="flex items-start cursor-pointer group">
+                          <input
+                            type="checkbox"
+                            checked={termsAccepted}
+                            onChange={(e) => setTermsAccepted(e.target.checked)}
+                            className="mt-1 w-5 h-5 rounded border-2 border-[#6B8E23] bg-[#2E4A34] text-[#C65D2B] focus:ring-2 focus:ring-[#C65D2B] focus:ring-offset-0 cursor-pointer"
+                          />
+                          <span className="ml-3 text-[#DCCCA3] text-sm leading-relaxed group-hover:text-[#F7F5EB] transition-colors">
+                            I understand that this is an adventure activity and will follow all safety instructions and guidelines provided by the guides.
+                          </span>
+                        </label>
+                      </div>
+                    </>
+                  ) : formData.beenHiking === 'Yes' && retreat.beginnerFriendly ? (
+                    // Message for experienced hikers on beginner-friendly July retreat
+                    <>
+                      <div className="text-center mb-6 sm:mb-8">
+                        <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#6B8E23]/20 border-2 border-[#6B8E23] mb-4 sm:mb-6">
+                          <span className="text-4xl sm:text-5xl">🏔️</span>
+                        </div>
+                        <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-2 px-2 leading-tight">Welcome Hikers!</h2>
+                      </div>
+
+                      <div className="bg-[#6B8E23]/10 border-2 border-[#6B8E23]/50 rounded-lg sm:rounded-xl p-4 sm:p-6 md:p-8">
+                        <div className="space-y-4 text-[#F7F5EB] leading-relaxed">
+                          <p className="text-lg">
+                            Great to have you with your hiking experience! This retreat offers <strong className="text-[#6B8E23]">flexible difficulty levels</strong> so you can choose your adventure intensity.
+                          </p>
+                          
+                          <p className="text-lg">
+                            Whether you want to challenge yourself on full hiking days or take advantage of cable transportation for a more relaxed pace, you'll have an amazing experience in Mont Blanc.
+                          </p>
+                          
+                          <div className="my-6 pt-6 border-t border-[#6B8E23]/30">
+                            <p className="text-lg font-semibold text-[#6B8E23] mb-4">What you can expect:</p>
+                            <ul className="space-y-3 text-[#DCCCA3]">
+                              <li className="flex items-start">
+                                <span className="text-[#6B8E23] mr-3 mt-1 flex-shrink-0">✓</span>
+                                <span>Full hiking experience with challenging terrain and elevation gains.</span>
+                              </li>
+                              <li className="flex items-start">
+                                <span className="text-[#6B8E23] mr-3 mt-1 flex-shrink-0">✓</span>
+                                <span>Flexible options - push your limits or enjoy at your own pace.</span>
+                              </li>
+                              <li className="flex items-start">
+                                <span className="text-[#6B8E23] mr-3 mt-1 flex-shrink-0">✓</span>
+                                <span>Experience the stunning landscapes of Mont Blanc.</span>
+                              </li>
+                              <li className="flex items-start">
+                                <span className="text-[#6B8E23] mr-3 mt-1 flex-shrink-0">✓</span>
+                                <span>Daily yoga sessions to complement your hiking adventures.</span>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Acknowledgment Checkbox */}
+                      <div className="bg-[#2E4A34]/50 rounded-xl p-6 border-2 border-[#6B8E23]/50">
+                        <label className="flex items-start cursor-pointer group">
+                          <input
+                            type="checkbox"
+                            checked={termsAccepted}
+                            onChange={(e) => setTermsAccepted(e.target.checked)}
+                            className="mt-1 w-5 h-5 rounded border-2 border-[#6B8E23] bg-[#2E4A34] text-[#C65D2B] focus:ring-2 focus:ring-[#C65D2B] focus:ring-offset-0 cursor-pointer"
+                          />
+                          <span className="ml-3 text-[#DCCCA3] text-sm leading-relaxed group-hover:text-[#F7F5EB] transition-colors">
+                            I understand that this is an adventure activity and will follow all safety instructions and guidelines provided by the guides.
+                          </span>
+                        </label>
+                      </div>
+                    </>
                   ) : (
-                    // Original message for users with hiking experience
+                    // Original message for users with hiking experience on August retreat
                     <>
                       <div className="text-center mb-6 sm:mb-8">
                         <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-red-600/20 border-2 border-red-600 mb-4 sm:mb-6">
@@ -532,7 +857,7 @@ const BookingPage = () => {
                   {/* Retreat Summary */}
                   <div className="bg-[#C65D2B]/10 border border-[#C65D2B]/30 rounded-xl p-6 mb-6">
                     <h3 className="text-xl font-bold text-[#F7F5EB] mb-3">{formData.retreat}</h3>
-                    <div className="grid md:grid-cols-2 gap-3 text-sm">
+                    <div className="grid md:grid-cols-2 gap-3 text-sm mb-4">
                       <div>
                         <span className="text-[#DCCCA3]">Dates:</span>
                         <p className="text-[#F7F5EB] font-semibold">{retreat.dates}</p>
@@ -545,10 +870,46 @@ const BookingPage = () => {
                         <span className="text-[#DCCCA3]">Location:</span>
                         <p className="text-[#F7F5EB] font-semibold">{retreat.location}</p>
                       </div>
-                      <div>
-                        <span className="text-[#DCCCA3]">Price:</span>
-                        <p className="text-[#F7F5EB] font-semibold">£{retreat.price} per person</p>
-                      </div>
+                      {formData.accommodationType && (
+                        <div>
+                          <span className="text-[#DCCCA3]">Accommodation:</span>
+                          <p className="text-[#F7F5EB] font-semibold">{formData.accommodationType}</p>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Price Display */}
+                    <div className="border-t border-[#C65D2B]/30 pt-4">
+                      {retreat.hasAccommodationOptions && formData.accommodationType ? (
+                        // Show selected accommodation pricing
+                        (() => {
+                          const selectedAccom = retreat.accommodationOptions.find(opt => opt.name === formData.accommodationType);
+                          return (
+                            <div className="grid md:grid-cols-2 gap-3 text-sm">
+                              <div>
+                                <span className="text-[#DCCCA3]">Total Price:</span>
+                                <p className="text-[#F7F5EB] font-semibold">£{selectedAccom.price} per person</p>
+                              </div>
+                              <div>
+                                <span className="text-[#DCCCA3]">Deposit Required:</span>
+                                <p className="text-[#F7F5EB] font-semibold">£{selectedAccom.deposit} per person</p>
+                              </div>
+                            </div>
+                          );
+                        })()
+                      ) : (
+                        // Default pricing
+                        <div className="grid md:grid-cols-2 gap-3 text-sm">
+                          <div>
+                            <span className="text-[#DCCCA3]">Total Price:</span>
+                            <p className="text-[#F7F5EB] font-semibold">£{retreat.price} per person</p>
+                          </div>
+                          <div>
+                            <span className="text-[#DCCCA3]">Deposit Required:</span>
+                            <p className="text-[#F7F5EB] font-semibold">£{retreat.deposit} per person</p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                   
@@ -580,16 +941,50 @@ const BookingPage = () => {
                         <span className="text-[#DCCCA3] text-sm">Hiking Experience:</span>
                         <p className="text-[#F7F5EB] text-lg">{formData.hikingExperience}</p>
                       </div>
+                      <div>
+                        <span className="text-[#DCCCA3] text-sm">Traveling:</span>
+                        <p className="text-[#F7F5EB] text-lg">{formData.travelingAloneOrGroup}</p>
+                      </div>
+                      {formData.numberOfPeople && (
+                        <div>
+                          <span className="text-[#DCCCA3] text-sm">Number of People:</span>
+                          <p className="text-[#F7F5EB] text-lg">{formData.numberOfPeople}</p>
+                        </div>
+                      )}
                     </div>
                     
                     <div className="border-t border-[#6B8E23]/30 pt-4 mt-4">
-                      <div className="flex justify-between items-center">
-                        <span className="text-[#DCCCA3] text-xl">Total Amount:</span>
-                        <p className="text-[#C65D2B] text-3xl font-bold">£{calculateTotal().toLocaleString()}</p>
+                      <div className="space-y-3">
+                        {(() => {
+                          // Get the selected accommodation pricing
+                          let fullPrice = retreat.price;
+                          let deposit = retreat.deposit;
+                          
+                          if (retreat.hasAccommodationOptions && formData.accommodationType) {
+                            const selectedAccom = retreat.accommodationOptions.find(opt => opt.name === formData.accommodationType);
+                            if (selectedAccom) {
+                              fullPrice = selectedAccom.price;
+                              deposit = selectedAccom.deposit;
+                            }
+                          }
+                          
+                          return (
+                            <>
+                              <div className="flex justify-between items-center">
+                                <span className="text-[#DCCCA3] text-lg">Deposit to Pay Today:</span>
+                                <p className="text-[#C65D2B] text-3xl font-bold">£{deposit}</p>
+                              </div>
+                              <div className="flex justify-between items-center pt-2 border-t border-[#6B8E23]/20">
+                                <span className="text-[#DCCCA3] text-sm">Full Price: £{fullPrice}</span>
+                                <span className="text-[#DCCCA3] text-sm">Remaining Balance: £{fullPrice - deposit}</span>
+                              </div>
+                              <p className="text-[#DCCCA3] text-sm mt-4 italic">
+                                You'll pay the remaining balance closer to the retreat date
+                              </p>
+                            </>
+                          );
+                        })()}
                       </div>
-                      <p className="text-[#DCCCA3] text-sm mt-2 text-right">
-                        Single person booking
-                      </p>
                     </div>
                   </div>
                 </div>
@@ -599,24 +994,22 @@ const BookingPage = () => {
                 {step > 1 && (
                   <Button
                     type="button"
-                    onClick={() => {
-                      setStep(step - 1);
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
+                    onClick={() => setStep(step - 1)}
                     variant="outline"
                     className="border-[#6B8E23] text-[#F7F5EB] hover:bg-[#6B8E23]/20 w-full sm:w-auto px-6 py-3 text-base sm:text-lg touch-manipulation"
                   >
                     Back
                   </Button>
                 )}
-                {/* Only show next/continue button if user has hiking experience or is not on step 2 */}
-                {step < 3 && !(step === 2 && formData.beenHiking === 'No') ? (
+                {/* Only show next/continue button if user has hiking experience OR is on beginner-friendly retreat OR is not on step 2 */}
+                {step < 3 && !(step === 2 && formData.beenHiking === 'No' && !retreat.beginnerFriendly) ? (
                   <Button
                     type="button"
                     onClick={handleNextStep}
-                    className="bg-[#C65D2B] hover:bg-[#C65D2B]/90 text-[#F7F5EB] w-full sm:w-auto sm:ml-auto px-6 py-3 text-base sm:text-lg touch-manipulation"
+                    disabled={step === 2 && !termsAccepted}
+                    className="bg-[#C65D2B] hover:bg-[#C65D2B]/90 disabled:opacity-50 disabled:cursor-not-allowed text-[#F7F5EB] w-full sm:w-auto sm:ml-auto px-6 py-3 text-base sm:text-lg touch-manipulation"
                   >
-                    {step === 2 ? 'I Understand - Continue' : 'Next Step'}
+                    {step === 2 && retreat.beginnerFriendly && formData.beenHiking === 'No' ? 'Sounds Great - Continue' : step === 2 ? 'I Understand - Continue' : 'Next Step'}
                   </Button>
                 ) : step === 3 ? (
                   <Button

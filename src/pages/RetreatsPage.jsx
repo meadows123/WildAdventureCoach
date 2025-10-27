@@ -13,36 +13,86 @@ const RetreatsPage = () => {
     transition: { duration: 0.6 }
   };
 
-  const retreat = {
-    id: 'august-retreat',
-    title: 'Hiking and Yoga Retreat - August',
-    location: 'Mont Blanc (France and Italy)',
-    duration: '6 Days',
-    dates: 'August 30 - September 4, 2026',
-    participants: '8-10 people',
-    description: '4 iconic stages of the Tour du Mont Blanc covering 65 km across France and Italy. 15 km each day and 1000 D+ each day. Good fitness level is required.',
-    status: 'upcoming',
-    price: '£1,250',
-    priceNote: 'per person',
-    included: [
-      '5 nights accommodation',
-      '3 meals / day',
-      '4 guided hiking days',
-      'Daily yoga & mindfulness sessions'
-    ],
-    notIncluded: [
+  const retreats = [
+    {
+      id: 'july-retreat',
+      title: 'Hiking and Yoga Retreat - July',
+      location: 'Mont Blanc (France and Italy)',
+      duration: '6 Days',
+      dates: 'July 15 - 20, 2026',
+      participants: '8-10 people',
+      description: 'A beginner-friendly adventure through the stunning landscapes of Mont Blanc. This retreat offers the flexibility of cable transportation options, making it suitable for all fitness levels. Experience the same breathtaking views at your own pace.',
+      status: 'upcoming',
+      price: '£1,250',
+      priceNote: 'per person',
+      beginnerFriendly: true,
+      included: [
+        '5 nights accommodation',
+        '3 meals / day',
+        '4 guided hiking days with cable transportation options',
+        'Daily yoga & mindfulness sessions',
+        'Flexible difficulty levels'
+      ],
+      notIncluded: [
       'Flights & transfer to Chamonix',
       'Hiking & yoga equipment',
-      'Snacks and drinks'
+      'Snacks and drinks',
+      'Cable transportation fees (optional)'
     ],
-    images: [
-      '/images/retreat/1.jpg',
-      '/images/retreat/2.jpg',
-      '/images/retreat/3.jpg',
-      '/images/retreat/4.png',
-      '/images/retreat/5.jpg'
-    ]
-  };
+      images: [
+        '/images/retreat/6.jpg',
+        '/images/retreat/2.jpg',
+        '/images/retreat/3.jpg',
+        '/images/retreat/4.png',
+        '/images/retreat/5.jpg'
+      ],
+      accommodationOptions: [
+        {
+          name: 'Standard Accommodation',
+          price: 1250,
+          deposit: 375,
+          description: 'Comfortable shared mountain lodges with all essential amenities'
+        },
+        {
+          name: 'Premium Quarters',
+          price: 1430,
+          deposit: 375,
+          description: 'Luxury mountain tents with private facilities and enhanced comfort'
+        }
+      ]
+    },
+    {
+      id: 'august-retreat',
+      title: 'Hiking and Yoga Retreat - August',
+      location: 'Mont Blanc (France and Italy)',
+      duration: '6 Days',
+      dates: 'August 30 - September 4, 2026',
+      participants: '8-10 people',
+      description: '4 iconic stages of the Tour du Mont Blanc covering 65 km across France and Italy. 15 km each day and 1000 D+ each day. Good fitness level is required.',
+      status: 'upcoming',
+      price: '£1,250',
+      priceNote: 'per person',
+      beginnerFriendly: false,
+      included: [
+        '5 nights accommodation',
+        '3 meals / day',
+        '4 guided hiking days',
+        'Daily yoga & mindfulness sessions'
+      ],
+      notIncluded: [
+        'Flights & transfer to Chamonix',
+        'Hiking & yoga equipment',
+        'Snacks and drinks'
+      ],
+      images: [
+        '/images/retreat/1.jpg',
+        '/images/retreat/2.jpg',
+        '/images/retreat/3.jpg',
+        '/images/retreat/4.png',
+        '/images/retreat/5.jpg'
+      ]
+    }
+  ];
 
   // API URL - since backend serves the frontend, use relative URLs in production
   const API_URL = import.meta.env.VITE_API_URL || '';
@@ -143,11 +193,18 @@ const RetreatsPage = () => {
         <div className="p-4 sm:p-6 md:p-8 lg:p-12">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-3">
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#F7F5EB] leading-tight">{retreat.title}</h2>
-            {retreat.status === 'upcoming' && (
-              <span className="px-4 py-2 text-sm font-semibold text-[#F7F5EB] bg-[#C65D2B] rounded-full">
-                UPCOMING
-              </span>
-            )}
+            <div className="flex flex-wrap gap-2">
+              {retreat.status === 'upcoming' && (
+                <span className="px-4 py-2 text-sm font-semibold text-[#F7F5EB] bg-[#C65D2B] rounded-full">
+                  UPCOMING
+                </span>
+              )}
+              {retreat.beginnerFriendly && (
+                <span className="px-4 py-2 text-sm font-semibold text-[#1a2d20] bg-[#6B8E23] rounded-full">
+                  BEGINNER FRIENDLY
+                </span>
+              )}
+            </div>
           </div>
           
           {/* Featured Date Display */}
@@ -212,9 +269,10 @@ const RetreatsPage = () => {
                 Early Bird
               </div>
               
-              <p className="text-xs text-[#DCCCA3] uppercase font-semibold mb-2">Early Bird Price</p>
-              <p className="text-4xl md:text-5xl font-bold text-[#F7F5EB] mb-1">{retreat.price}</p>
-              <p className="text-sm text-[#DCCCA3] mb-4">{retreat.priceNote}</p>
+              <div className="mb-4">
+                <p className="text-xs text-[#DCCCA3] uppercase font-semibold mb-2">Early Bird Deposit</p>
+                <p className="text-4xl md:text-5xl font-bold text-[#F7F5EB]">£375 deposit</p>
+              </div>
               
               {/* Early Bird Warning - Cleaner design */}
               <div className="bg-gradient-to-r from-[#C65D2B]/20 to-[#C65D2B]/10 border border-[#C65D2B]/50 rounded-lg px-4 py-3">
@@ -223,7 +281,42 @@ const RetreatsPage = () => {
                   <p className="text-[#F7F5EB] font-semibold text-sm">Limited Time Offer</p>
                 </div>
                 <p className="text-[#DCCCA3] text-xs leading-relaxed">
-                  This early bird rate won't be available for long. Book now to secure your spot at this special price!
+                  This early bird rate won't be available for long. Book now to secure your spot at this special price! Pay a deposit today and the remaining balance closer to the retreat date.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Accommodation Options - Only for July retreat */}
+          {retreat.accommodationOptions && (
+            <div className="mb-8">
+              <h3 className="text-2xl font-bold text-[#F7F5EB] mb-4">Choose Your Accommodation</h3>
+              <div className="grid md:grid-cols-2 gap-4">
+                {retreat.accommodationOptions.map((option, index) => (
+                  <div
+                    key={index}
+                    className="bg-[#6B8E23]/10 border-2 border-[#6B8E23]/30 rounded-lg p-6 hover:border-[#C65D2B]/50 transition-all"
+                  >
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-bold text-[#F7F5EB] text-lg">{option.name}</h4>
+                        <div className="flex flex-col items-end gap-1">
+                          <span className="text-2xl font-bold text-[#C65D2B]">£{option.deposit}</span>
+                          <span className="text-sm text-[#DCCCA3]">deposit</span>
+                        </div>
+                      </div>
+                      <p className="text-[#DCCCA3] text-sm">{option.description}</p>
+                      <div className="flex items-center justify-between pt-2 border-t border-[#6B8E23]/20">
+                        <span className="text-[#DCCCA3] text-sm">Full Price:</span>
+                        <span className="text-[#F7F5EB] font-semibold">£{option.price}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="bg-[#6B8E23]/20 border border-[#6B8E23]/40 rounded-lg px-4 py-3 mt-4">
+                <p className="text-center text-[#DCCCA3] text-sm">
+                  Both options secure your spot with a £375 deposit. You'll select your preferred accommodation during booking.
                 </p>
               </div>
             </div>
@@ -263,7 +356,7 @@ const RetreatsPage = () => {
             </div>
           )}
           
-          <Link to="/booking" className="block" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+          <Link to={`/booking?retreat=${encodeURIComponent(retreat.title)}`} className="block" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
             <Button 
               disabled={soldOut}
               className={`w-full text-base sm:text-lg md:text-xl py-4 sm:py-6 md:py-8 rounded-full shadow-lg transition-all touch-manipulation ${
@@ -296,15 +389,17 @@ const RetreatsPage = () => {
             className="text-center mb-16"
           >
             <h1 className="text-5xl md:text-6xl font-bold mb-4 text-[#F7F5EB]">
-              Our Retreat
+              Our Retreats
             </h1>
             <p className="text-xl text-[#DCCCA3] max-w-3xl mx-auto">
               Join us for an unforgettable adventure through the stunning landscapes of Mont Blanc
             </p>
           </motion.div>
 
-          <div className="max-w-5xl mx-auto">
-            <RetreatCard retreat={retreat} />
+          <div className="max-w-5xl mx-auto space-y-12">
+            {retreats.map((retreat) => (
+              <RetreatCard key={retreat.id} retreat={retreat} />
+            ))}
           </div>
         </div>
 

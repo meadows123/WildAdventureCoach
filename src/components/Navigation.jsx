@@ -32,7 +32,7 @@ const Navigation = () => {
 
   const navLinks = [
     { path: '/', label: 'Home' },
-    { path: '/retreats', label: 'Retreat' },
+    { path: '/retreats', label: 'Retreats' },
     { path: 'https://wa.me/447549214155', label: 'Contact', isExternal: true, icon: WhatsAppIcon }
   ];
 
