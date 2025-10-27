@@ -675,7 +675,7 @@ const BookingPage = () => {
                         </div>
                       ) : (
                         <div className="bg-[#6B8E23]/20 border-2 border-[#6B8E23] rounded-lg p-6 mt-6">
-                          <h3 className="text-xl font-bold text-[#F7F5EB] mb-4 text-center">Find Your Perfect Fit</h3>
+                          <h3 className="text-xl font-bold text-[#C65D2B] mb-4 text-center">Find Your Perfect Fit</h3>
                           <p className="text-[#DCCCA3] mb-6 text-center">
                             Leave your contact details and we'll help you find a retreat that's perfect for your experience level!
                           </p>
