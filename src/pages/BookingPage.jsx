@@ -103,6 +103,12 @@ const BookingPage = () => {
     beenHiking: '',
     hikingExperience: ''
   });
+  
+  // State for "not suitable" contact form
+  const [contactEmail, setContactEmail] = useState('');
+  const [contactPhone, setContactPhone] = useState('');
+  const [isSubmittingContact, setIsSubmittingContact] = useState(false);
+  const [contactSubmitted, setContactSubmitted] = useState(false);
 
   // Scroll to top when component mounts
   useEffect(() => {
@@ -660,6 +666,61 @@ const BookingPage = () => {
                           </div>
                         </div>
                       </div>
+                      
+                      {/* Contact Form for Unsuitable Users */}
+                      {contactSubmitted ? (
+                        <div className="bg-[#6B8E23]/30 border border-[#6B8E23] rounded-lg p-6 text-center">
+                          <p className="text-[#6B8E23] font-semibold text-lg">✓ Thank you!</p>
+                          <p className="text-[#DCCCA3] mt-2">We'll reach out soon to find the perfect adventure for you.</p>
+                        </div>
+                      ) : (
+                        <div className="bg-[#6B8E23]/20 border-2 border-[#6B8E23] rounded-lg p-6 mt-6">
+                          <h3 className="text-xl font-bold text-[#F7F5EB] mb-4 text-center">Find Your Perfect Fit</h3>
+                          <p className="text-[#DCCCA3] mb-6 text-center">
+                            Leave your contact details and we'll help you find a retreat that's perfect for your experience level!
+                          </p>
+                          <form onSubmit={(e) => {
+                            e.preventDefault();
+                            setIsSubmittingContact(true);
+                            // For now, just log it and show success
+                            console.log('Contact request:', { email: contactEmail, phone: contactPhone, retreat: retreat.name });
+                            setContactSubmitted(true);
+                            setIsSubmittingContact(false);
+                          }} className="space-y-4">
+                            <div>
+                              <Label htmlFor="contactEmail" className="text-[#DCCCA3] mb-2 block">Email *</Label>
+                              <Input
+                                id="contactEmail"
+                                type="email"
+                                value={contactEmail}
+                                onChange={(e) => setContactEmail(e.target.value)}
+                                placeholder="your@email.com"
+                                required
+                                className="bg-[#2E4A34] border-[#6B8E23] text-[#F7F5EB]"
+                              />
+                            </div>
+                            <div>
+                              <Label htmlFor="contactPhone" className="text-[#DCCCA3] mb-2 block">Phone Number *</Label>
+                              <Input
+                                id="contactPhone"
+                                type="tel"
+                                value={contactPhone}
+                                onChange={(e) => setContactPhone(e.target.value)}
+                                placeholder="+44 123 456 789"
+                                required
+                                className="bg-[#2E4A34] border-[#6B8E23] text-[#F7F5EB]"
+                              />
+                            </div>
+                            <Button
+                              type="submit"
+                              disabled={isSubmittingContact}
+                              className="w-full bg-[#C65D2B] hover:bg-[#C65D2B]/90 text-[#F7F5EB] py-3 disabled:opacity-50"
+                            >
+                              {isSubmittingContact ? 'Submitting...' : 'Submit'}
+                            </Button>
+                          </form>
+                        </div>
+                      )}
                     </>
                   ) : formData.beenHiking === 'No' && retreat.beginnerFriendly ? (
                     // Message for beginners on the July retreat
