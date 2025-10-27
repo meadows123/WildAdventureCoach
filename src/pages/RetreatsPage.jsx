@@ -101,6 +101,7 @@ const RetreatsPage = () => {
   const RetreatCard = ({ retreat }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [availableSpots, setAvailableSpots] = useState(null);
+    const [maxCapacity, setMaxCapacity] = useState(9);
     const [soldOut, setSoldOut] = useState(false);
     const [waitlistEmail, setWaitlistEmail] = useState('');
     const [waitlistSubmitting, setWaitlistSubmitting] = useState(false);
@@ -167,6 +168,7 @@ const RetreatsPage = () => {
         .then(data => {
           console.log('Capacity data received:', data);
           setAvailableSpots(data.availableSpots);
+          setMaxCapacity(data.maxCapacity || 9);
           setSoldOut(data.soldOut);
         })
         .catch(error => {
@@ -277,20 +279,20 @@ const RetreatsPage = () => {
                       <span className="text-[#C65D2B] font-bold text-lg">🔴 SOLD OUT</span>
                     </div>
                   ) : (
-                    <div className="bg-[#6B8E23]/30 rounded-lg p-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[#F7F5EB] font-semibold text-lg">Spots Remaining:</span>
-                        <span className="text-[#F7F5EB] text-2xl font-bold">
-                          {availableSpots} / 9
-                        </span>
-                      </div>
-                      <div className="w-full bg-[#2E4A34] rounded-full h-3 mt-2 overflow-hidden">
-                        <div 
-                          className="h-full bg-[#C65D2B] rounded-full transition-all duration-300"
-                          style={{ width: `${(availableSpots / 9) * 100}%` }}
-                        ></div>
-                      </div>
+                  <div className="bg-[#6B8E23]/30 rounded-lg p-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[#F7F5EB] font-semibold text-lg">Spots Remaining:</span>
+                      <span className="text-[#F7F5EB] text-2xl font-bold">
+                        {availableSpots} / {maxCapacity}
+                      </span>
                     </div>
+                    <div className="w-full bg-[#2E4A34] rounded-full h-3 mt-2 overflow-hidden">
+                      <div 
+                        className="h-full bg-[#C65D2B] rounded-full transition-all duration-300"
+                        style={{ width: `${(availableSpots / maxCapacity) * 100}%` }}
+                      ></div>
+                    </div>
+                  </div>
                   )}
                 </>
               ) : (

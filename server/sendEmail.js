@@ -69,50 +69,50 @@ export async function sendBookingConfirmationEmail(booking) {
       <h2>📋 Your Booking Details</h2>
       
       <div class="detail-row">
-        <span class="detail-label">Retreat</span>
+        <span class="detail-label">Retreat:</span>
         <span class="detail-value">${booking.retreat_name}</span>
       </div>
       
       <div class="detail-row">
-        <span class="detail-label">Name</span>
+        <span class="detail-label">Name:</span>
         <span class="detail-value">${booking.first_name} ${booking.last_name}</span>
       </div>
       
       <div class="detail-row">
-        <span class="detail-label">Email</span>
+        <span class="detail-label">Email:</span>
         <span class="detail-value">${booking.email}</span>
       </div>
       
       ${booking.gender ? `
       <div class="detail-row">
-        <span class="detail-label">Gender</span>
+        <span class="detail-label">Gender:</span>
         <span class="detail-value">${booking.gender}</span>
       </div>
       ` : ''}
       
       ${booking.age ? `
       <div class="detail-row">
-        <span class="detail-label">Age</span>
+        <span class="detail-label">Age:</span>
         <span class="detail-value">${booking.age}</span>
       </div>
       ` : ''}
       
       ${booking.been_hiking ? `
       <div class="detail-row">
-        <span class="detail-label">Been Hiking Before</span>
+        <span class="detail-label">Been Hiking Before:</span>
         <span class="detail-value">${booking.been_hiking}</span>
       </div>
       ` : ''}
       
       ${booking.hiking_experience ? `
       <div class="detail-row">
-        <span class="detail-label">Hiking Experience</span>
+        <span class="detail-label">Hiking Experience:</span>
         <span class="detail-value">${booking.hiking_experience}</span>
       </div>
       ` : ''}
       
       <div class="detail-row" style="border-top: 2px solid #C65D2B; margin-top: 15px; padding-top: 15px;">
-        <span class="detail-label" style="font-size: 18px;">Total Paid</span>
+        <span class="detail-label" style="font-size: 18px;">Total Paid:</span>
         <span class="highlight">£${amountInPounds}</span>
       </div>
     </div>
