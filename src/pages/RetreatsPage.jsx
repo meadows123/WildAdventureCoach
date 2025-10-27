@@ -40,8 +40,8 @@ const RetreatsPage = () => {
       'Cable transportation fees (optional)'
     ],
       images: [
-        '/images/retreat/1.jpg',
         '/images/retreat/6.jpg',
+        '/images/retreat/1.jpg',
         '/images/retreat/2.jpg',
         '/images/retreat/3.jpg',
         '/images/retreat/4.png'
@@ -102,6 +102,9 @@ const RetreatsPage = () => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [availableSpots, setAvailableSpots] = useState(null);
     const [soldOut, setSoldOut] = useState(false);
+    const [waitlistEmail, setWaitlistEmail] = useState('');
+    const [waitlistSubmitting, setWaitlistSubmitting] = useState(false);
+    const [waitlistSuccess, setWaitlistSuccess] = useState(false);
 
     const nextImage = () => {
       setCurrentImageIndex((prevIndex) => 
@@ -119,16 +122,58 @@ const RetreatsPage = () => {
       setCurrentImageIndex(index);
     };
 
+    const handleWaitlistSubmit = async (e) => {
+      e.preventDefault();
+      setWaitlistSubmitting(true);
+      
+      try {
+        const response = await fetch(`${API_URL}/waitlist`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: waitlistEmail,
+            retreat: retreat.title
+          }),
+        });
+
+        if (response.ok) {
+          setWaitlistSuccess(true);
+          setWaitlistEmail('');
+          setTimeout(() => setWaitlistSuccess(false), 5000);
+        } else {
+          throw new Error('Failed to join waitlist');
+        }
+      } catch (error) {
+        console.error('Error joining waitlist:', error);
+        alert('Failed to join waitlist. Please try again.');
+      } finally {
+        setWaitlistSubmitting(false);
+      }
+    };
+
     // Fetch available spots on page load
     useEffect(() => {
+      console.log('Fetching capacity for:', retreat.title);
       fetch(`${API_URL}/retreat-capacity/${retreat.title}`)
-        .then(res => res.json())
+        .then(res => {
+          console.log('Response status:', res.status);
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+          }
+          return res.json();
+        })
         .then(data => {
+          console.log('Capacity data received:', data);
           setAvailableSpots(data.availableSpots);
           setSoldOut(data.soldOut);
         })
         .catch(error => {
           console.error('Error fetching capacity:', error);
+          // Set default values if fetch fails
+          setAvailableSpots(9);
+          setSoldOut(false);
         });
     }, [retreat.title, API_URL]);
 
@@ -224,22 +269,39 @@ const RetreatsPage = () => {
             </div>
             
             {/* Available Spots Indicator */}
-            {availableSpots !== null && (
-              <div className="mt-4 pt-4 border-t border-[#6B8E23]/40">
-                {soldOut ? (
-                  <div className="flex items-center justify-center">
-                    <span className="text-[#C65D2B] font-bold text-lg">🔴 SOLD OUT</span>
-                  </div>
-                ) : (
+            <div className="mt-4 pt-4 border-t border-[#6B8E23]/40">
+              {availableSpots !== null ? (
+                <>
+                  {soldOut ? (
+                    <div className="flex items-center justify-center">
+                      <span className="text-[#C65D2B] font-bold text-lg">🔴 SOLD OUT</span>
+                    </div>
+                  ) : (
+                    <div className="bg-[#6B8E23]/30 rounded-lg p-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[#F7F5EB] font-semibold text-lg">Spots Remaining:</span>
+                        <span className="text-[#F7F5EB] text-2xl font-bold">
+                          {availableSpots} / 9
+                        </span>
+                      </div>
+                      <div className="w-full bg-[#2E4A34] rounded-full h-3 mt-2 overflow-hidden">
+                        <div 
+                          className="h-full bg-[#C65D2B] rounded-full transition-all duration-300"
+                          style={{ width: `${(availableSpots / 9) * 100}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="bg-[#6B8E23]/30 rounded-lg p-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[#DCCCA3] text-sm">Availability:</span>
-                    <span className="text-[#F7F5EB] font-semibold">
-                      {availableSpots} spot{availableSpots === 1 ? '' : 's'} remaining
-                    </span>
+                    <span className="text-[#F7F5EB] font-semibold text-lg">Spots Remaining:</span>
+                    <span className="text-[#DCCCA3] text-lg">Loading...</span>
                   </div>
-                )}
-              </div>
-            )}
+                </div>
+              )}
+            </div>
           </div>
           
           <p className="text-[#DCCCA3] text-lg mb-8 leading-relaxed">{retreat.description}</p>
@@ -356,18 +418,46 @@ const RetreatsPage = () => {
             </div>
           )}
           
-          <Link to={`/booking?retreat=${encodeURIComponent(retreat.title)}`} className="block" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            <Button 
-              disabled={soldOut}
-              className={`w-full text-base sm:text-lg md:text-xl py-4 sm:py-6 md:py-8 rounded-full shadow-lg transition-all touch-manipulation ${
-                soldOut 
-                  ? 'bg-gray-500 cursor-not-allowed opacity-60' 
-                  : 'bg-[#C65D2B] hover:bg-[#C65D2B]/90 hover:shadow-xl active:scale-98'
-              } text-[#F7F5EB]`}
-            >
-              {soldOut ? 'Sold Out - Join Waitlist' : 'Book This Retreat'}
-            </Button>
-          </Link>
+          {soldOut ? (
+            <div className="space-y-4">
+              <div className="text-center">
+                <p className="text-[#C65D2B] font-bold text-xl mb-4">🔴 Sold Out</p>
+                <p className="text-[#DCCCA3] mb-6">Join our waitlist to be notified when spots become available or new dates are added!</p>
+              </div>
+              
+              {waitlistSuccess ? (
+                <div className="bg-[#6B8E23]/30 border border-[#6B8E23] rounded-lg p-4 text-center">
+                  <p className="text-[#6B8E23] font-semibold">✓ Success! We'll keep you posted.</p>
+                </div>
+              ) : (
+                <form onSubmit={handleWaitlistSubmit} className="space-y-4">
+                  <input
+                    type="email"
+                    value={waitlistEmail}
+                    onChange={(e) => setWaitlistEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    required
+                    className="w-full px-4 py-3 rounded-lg bg-[#2E4A34] border border-[#6B8E23] text-[#F7F5EB] placeholder:text-[#DCCCA3] focus:outline-none focus:ring-2 focus:ring-[#C65D2B]"
+                  />
+                  <Button
+                    type="submit"
+                    disabled={waitlistSubmitting}
+                    className="w-full bg-[#C65D2B] hover:bg-[#C65D2B]/90 text-[#F7F5EB] py-4 rounded-full disabled:opacity-50"
+                  >
+                    {waitlistSubmitting ? 'Joining...' : 'Join Waitlist'}
+                  </Button>
+                </form>
+              )}
+            </div>
+          ) : (
+            <Link to={`/booking?retreat=${encodeURIComponent(retreat.title)}`} className="block" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+              <Button 
+                className="w-full text-base sm:text-lg md:text-xl py-4 sm:py-6 md:py-8 rounded-full shadow-lg transition-all touch-manipulation bg-[#C65D2B] hover:bg-[#C65D2B]/90 hover:shadow-xl active:scale-98 text-[#F7F5EB]"
+              >
+                Book This Retreat
+              </Button>
+            </Link>
+          )}
         </div>
       </motion.div>
     );

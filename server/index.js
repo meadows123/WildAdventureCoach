@@ -182,10 +182,35 @@ app.get('/checkout-session/:sessionId', async (req, res) => {
 // Get retreat capacity and available spots
 app.get('/retreat-capacity/:retreatName', async (req, res) => {
   try {
+    console.log('📊 Fetching capacity for:', req.params.retreatName);
     const stats = await getRetreatStats(req.params.retreatName);
+    console.log('📊 Stats returned:', stats);
     res.json(stats);
   } catch (error) {
-    console.error('Error fetching capacity:', error);
+    console.error('❌ Error fetching capacity:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Waitlist endpoint
+app.post('/waitlist', async (req, res) => {
+  const { email, retreat } = req.body;
+  
+  if (!email || !retreat) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  try {
+    // Here you would typically save to a database
+    // For now, just log it and return success
+    console.log('✅ Waitlist signup:', { email, retreat, timestamp: new Date().toISOString() });
+    
+    // TODO: Save to waitlist table in Supabase
+    // You could create a 'waitlist' table with columns: email, retreat_name, created_at
+    
+    res.json({ success: true, message: 'Successfully joined waitlist' });
+  } catch (error) {
+    console.error('❌ Error joining waitlist:', error);
     res.status(500).json({ error: error.message });
   }
 });

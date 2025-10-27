@@ -116,12 +116,12 @@ export async function getRetreatStats(retreatName) {
   const totalRevenue = bookings?.reduce((sum, b) => sum + b.amount_paid, 0) || 0;
 
   return {
-    maxCapacity: retreat?.max_capacity || 10,
+    maxCapacity: retreat?.max_capacity || 9,
     currentBookings: totalParticipants,
-    availableSpots: (retreat?.max_capacity || 10) - totalParticipants,
+    availableSpots: (retreat?.max_capacity || 9) - totalParticipants,
     totalBookings: bookings?.length || 0,
     totalRevenue: totalRevenue,
-    soldOut: totalParticipants >= (retreat?.max_capacity || 10)
+    soldOut: totalParticipants >= (retreat?.max_capacity || 9)
   };
 }
 
