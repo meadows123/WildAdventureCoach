@@ -127,7 +127,7 @@ const BookingPage = () => {
 
   // Fetch available spots on page load
   useEffect(() => {
-    fetch(`${API_URL}/retreat-capacity/Hiking and Yoga Retreat - August`)
+    fetch(`${API_URL}/retreat-capacity/${retreat.name}`)
       .then(res => res.json())
       .then(data => {
         setAvailableSpots(data.availableSpots);
@@ -145,7 +145,7 @@ const BookingPage = () => {
       .catch(error => {
         console.error('Error fetching capacity:', error);
       });
-  }, [toast]);
+  }, [retreat.name, toast]);
 
   const handleInputChange = (e) => {
     setFormData({
