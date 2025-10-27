@@ -40,7 +40,7 @@ const RetreatsPage = () => {
       'Cable transportation fees (optional)'
     ],
       images: [
-        '/images/retreat/6.jpg',
+        'https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=1999&auto=format&fit=crop',
         '/images/retreat/1.jpg',
         '/images/retreat/2.jpg',
         '/images/retreat/3.jpg',

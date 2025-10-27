@@ -50,6 +50,8 @@ export async function addBooking(bookingData) {
  * Get available spots for a retreat
  */
 export async function getAvailableSpots(retreatName) {
+  console.log('🔍 getAvailableSpots called for:', retreatName);
+  
   // Get the retreat capacity
   const { data: retreat, error: retreatError } = await supabase
     .from('retreat_capacity')
@@ -58,9 +60,12 @@ export async function getAvailableSpots(retreatName) {
     .single();
 
   if (retreatError) {
-    console.error('Error fetching retreat:', retreatError);
-    return 0;
+    console.error('❌ Error fetching retreat capacity:', retreatError);
+    console.log('⚠️ Retreat not found in database, defaulting to 9 available spots');
+    return 9; // Default to 9 spots if retreat not found
   }
+  
+  console.log('✅ Retreat found with capacity:', retreat.max_capacity);
 
   // Get total participants booked
   const { data: bookings, error: bookingsError } = await supabase
@@ -75,7 +80,9 @@ export async function getAvailableSpots(retreatName) {
   }
 
   const totalBooked = bookings.reduce((sum, booking) => sum + booking.participants, 0);
-  return retreat.max_capacity - totalBooked;
+  const availableSpots = retreat.max_capacity - totalBooked;
+  console.log('📊 Total booked:', totalBooked, 'Available:', availableSpots);
+  return availableSpots;
 }
 
 /**

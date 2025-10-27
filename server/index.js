@@ -66,15 +66,18 @@ app.post('/create-checkout-session', async (req, res) => {
 
   // CHECK CAPACITY BEFORE ALLOWING BOOKING (single person booking)
   try {
+    console.log('🔍 Checking capacity for retreat:', retreat);
     const availableSpots = await getAvailableSpots(retreat);
+    console.log('📊 Available spots:', availableSpots);
     
     if (availableSpots < 1) {
+      console.log('❌ Retreat is sold out');
       return res.status(400).json({ 
         error: 'Sorry, this retreat is sold out!'
       });
     }
   } catch (capacityError) {
-    console.error('Capacity check error:', capacityError);
+    console.error('❌ Capacity check error:', capacityError);
     // Continue anyway if capacity check fails (better to allow booking than block)
   }
 
