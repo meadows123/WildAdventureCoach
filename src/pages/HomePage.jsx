@@ -150,7 +150,7 @@ const HomePage = () => {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 text-[#DCCCA3] px-2"
             >
-              Experience the Alps by re-connecting with yourself, amazing people and nature
+              Step outside the ordinary - move, breathe, and rediscover your wild side
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 30 }}

@@ -25,47 +25,59 @@ const BookingPage = () => {
   
   // Define retreat configurations
   const retreats = {
-    'Hiking and Yoga Retreat - July': {
-      name: 'Hiking and Yoga Retreat - July',
+    'Hiking and Yoga Retreat in Chamonix': {
+      name: 'Hiking & Yoga Retreat Chamonix',
       beginnerFriendly: true,
       hasAccommodationOptions: true,
       accommodationOptions: [
         {
-          name: 'Standard Accommodation',
+          name: 'Basic Single',
           price: 1250,
-          deposit: 375,
-          description: 'Comfortable shared mountain lodges with all essential amenities'
+          deposit: 250,
+          description: 'Single bed in a shared room (up to 3 total), ensuite bathroom'
         },
         {
-          name: 'Premium Quarters',
-          price: 1430,
-          deposit: 375,
-          description: 'Luxury mountain tents with private facilities and enhanced comfort'
+          name: 'Economy Single',
+          price: 1450,
+          deposit: 250,
+          description: 'One bed in a shared twin, same-gender accommodation'
+        },
+        {
+          name: 'Double',
+          price: 1700,
+          deposit: 250,
+          description: 'Single occupancy in a double room'
         }
       ],
       // Default values for backward compatibility
       price: 1250,
-      deposit: 375,
-      dates: 'July 15 - 20, 2026',
-      duration: '6 Days',
-      location: 'Mont Blanc (France and Italy)',
-      description: 'A beginner-friendly adventure through the stunning landscapes of Mont Blanc. This retreat offers the flexibility of cable transportation options, making it suitable for all fitness levels. Experience the same breathtaking views at your own pace.',
+      deposit: 250,
+      dates: 'June 4 - 9, 2026',
+      duration: '6 days / 5 nights',
+      location: 'Chamonix, French Alps',
+      description: '',
+      participants: 'Up to 10 like-minded professionals',
       included: [
-        '5 nights accommodation',
-        '3 meals / day',
-        '4 guided hiking days with cable transportation options',
-        'Daily yoga & mindfulness sessions',
-        'Flexible difficulty levels'
+        "Accommodation",
+        "Daily Guided Hikes & Yoga Sessions",
+        "Meditation & Self-Reflection Sessions",
+        "Introduction to Climbing",
+        "All Meals, Packed Lunches & Tea/Coffee",
+        "Honesty Bar at the Chalet"
+      ],
+      optional: [
+        "Airport Transfers & Local Transport",
+        "Optional Activities"
       ],
       notIncluded: [
-        'Flights & transfer to Chamonix',
-        'Hiking & yoga equipment',
-        'Snacks and drinks',
-        'Cable transportation fees (optional)'
+        'Flights',
+        'Airport transfer',
+        'Insurance',
+        'Personal gear'
       ]
     },
     'Hiking and Yoga Retreat - August': {
-      name: 'Hiking and Yoga Retreat - August',
+      name: 'Hiking & Yoga Retreat Chamonix',
       beginnerFriendly: false,
       price: 1250,
       deposit: 375,
@@ -291,9 +303,6 @@ const BookingPage = () => {
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4 text-[#F7F5EB] leading-tight px-2">
               Book Your Adventure
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-[#DCCCA3] px-2">
-              Hiking and Yoga Retreat - August 30 - September 4, 2026
-            </p>
           </motion.div>
 
           <div className="flex justify-center mb-8 sm:mb-12 overflow-x-auto px-2">
@@ -350,9 +359,12 @@ const BookingPage = () => {
                           return (
                             <>
                               <span className="text-xl sm:text-2xl font-bold text-[#C65D2B]">£{depositToShow} deposit</span>
-                              {retreat.hasAccommodationOptions ? (
-                                <p className="text-xs text-[#DCCCA3] mt-1">Full price: £{retreat.price} or £{retreat.accommodationOptions[1].price}</p>
-                              ) : (
+                              {retreat.hasAccommodationOptions ? (() => {
+                                const prices = retreat.accommodationOptions.map(o => o.price);
+                                const min = Math.min(...prices);
+                                const max = Math.max(...prices);
+                                return <p className="text-xs text-[#DCCCA3] mt-1">Full price: £{min}–£{max}</p>;
+                              })() : (
                                 <p className="text-xs text-[#DCCCA3] mt-1">Full price: £{priceToShow}</p>
                               )}
                             </>
@@ -409,6 +421,20 @@ const BookingPage = () => {
                         ))}
                       </ul>
                       
+                      {retreat.optional && retreat.optional.length > 0 && (
+                        <>
+                          <p className="text-sm font-semibold text-[#F7F5EB] mb-3 mt-4">Optional (costs may apply):</p>
+                          <ul className="grid md:grid-cols-2 gap-2 mb-4">
+                            {retreat.optional.map((item, index) => (
+                              <li key={index} className="flex items-start text-[#DCCCA3] text-sm">
+                                <CheckCircle className="w-4 h-4 mr-2 text-[#6B8E23] flex-shrink-0 mt-0.5" />
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </>
+                      )}
+                      
                       <p className="text-sm font-semibold text-[#F7F5EB] mb-3 mt-4">Not Included:</p>
                       <ul className="grid md:grid-cols-2 gap-2">
                         {retreat.notIncluded.map((item, index) => (
@@ -429,10 +455,10 @@ const BookingPage = () => {
                         {retreat.accommodationOptions.map((option, index) => (
                           <label
                             key={index}
-                            className={`cursor-pointer border-2 rounded-lg p-4 transition-all ${
+                            className={`relative cursor-pointer border-2 rounded-lg p-4 transition-all ${index === 2 ? 'md:col-start-1 md:col-span-2 md:max-w-md md:mx-auto' : ''} ${
                               formData.accommodationType === option.name
-                                ? 'border-[#C65D2B] bg-[#C65D2B]/20'
-                                : 'border-[#6B8E23] bg-[#6B8E23]/10 hover:border-[#C65D2B]/50'
+                                ? 'border-[#C65D2B] bg-[#C65D2B]/30 ring-2 ring-[#C65D2B] shadow-lg'
+                                : 'border-[#6B8E23] bg-[#6B8E23]/10 hover:border-[#C65D2B] hover:bg-[#C65D2B]/10'
                             }`}
                           >
                             <input
@@ -443,11 +469,13 @@ const BookingPage = () => {
                               onChange={(e) => setFormData({...formData, accommodationType: e.target.value})}
                               className="hidden"
                             />
+                            {formData.accommodationType === option.name && (
+                              <span className="absolute bottom-2 right-2 bg-[#C65D2B] text-[#F7F5EB] text-xs font-bold px-2 py-1 rounded-full">Selected</span>
+                            )}
                             <div className="space-y-2">
                               <div className="flex items-center justify-between">
                                 <h3 className="font-bold text-[#F7F5EB] text-lg">{option.name}</h3>
                                 <div className="flex items-baseline gap-2">
-                                  <span className="text-lg text-[#DCCCA3] line-through">£{retreat.price}</span>
                                   <span className="text-2xl font-bold text-[#C65D2B]">£{option.price}</span>
                                 </div>
                               </div>
@@ -739,7 +767,7 @@ const BookingPage = () => {
                           </p>
                           
                           <p className="text-lg">
-                            This experience includes <strong className="text-[#6B8E23]">cable transportation options</strong> to make it accessible for all fitness levels. You'll still experience the same stunning landscapes and breathtaking views at your own pace.
+                            This experience is designed to be accessible for all fitness levels. You'll experience stunning landscapes and breathtaking views at your own pace.
                           </p>
                           
                           <div className="my-6 pt-6 border-t border-[#6B8E23]/30">
@@ -747,7 +775,7 @@ const BookingPage = () => {
                             <ul className="space-y-3 text-[#DCCCA3]">
                               <li className="flex items-start">
                                 <span className="text-[#6B8E23] mr-3 mt-1 flex-shrink-0">✓</span>
-                                <span>Optional cable transportation for challenging sections - hike as much or as little as you like.</span>
+                                <span>Flexible hiking distances - hike as much or as little as you like.</span>
                               </li>
                               <li className="flex items-start">
                                 <span className="text-[#6B8E23] mr-3 mt-1 flex-shrink-0">✓</span>
@@ -766,7 +794,7 @@ const BookingPage = () => {
                           
                           <div className="bg-[#2E4A34] rounded-lg p-4 border border-[#6B8E23]/50">
                             <p className="text-[#DCCCA3] text-sm italic">
-                              You'll experience the same stunning landscapes of Mont Blanc, but with the flexibility to choose your adventure level. Whether you hike every step or take advantage of cable transportation, you'll have an unforgettable experience!
+                              You'll experience the same stunning landscapes of Mont Blanc, but with the flexibility to choose your adventure level. You'll have an unforgettable experience!
                             </p>
                           </div>
                         </div>
@@ -804,30 +832,9 @@ const BookingPage = () => {
                           </p>
                           
                           <p className="text-lg">
-                            Whether you want to challenge yourself on full hiking days or take advantage of cable transportation for a more relaxed pace, you'll have an amazing experience in Mont Blanc.
+                            Whether you want to challenge yourself on full hiking days or take a more relaxed pace, you'll have an amazing experience in Mont Blanc.
                           </p>
                           
-                          <div className="my-6 pt-6 border-t border-[#6B8E23]/30">
-                            <p className="text-lg font-semibold text-[#6B8E23] mb-4">What you can expect:</p>
-                            <ul className="space-y-3 text-[#DCCCA3]">
-                              <li className="flex items-start">
-                                <span className="text-[#6B8E23] mr-3 mt-1 flex-shrink-0">✓</span>
-                                <span>Full hiking experience with challenging terrain and elevation gains.</span>
-                              </li>
-                              <li className="flex items-start">
-                                <span className="text-[#6B8E23] mr-3 mt-1 flex-shrink-0">✓</span>
-                                <span>Flexible options - push your limits or enjoy at your own pace.</span>
-                              </li>
-                              <li className="flex items-start">
-                                <span className="text-[#6B8E23] mr-3 mt-1 flex-shrink-0">✓</span>
-                                <span>Experience the stunning landscapes of Mont Blanc.</span>
-                              </li>
-                              <li className="flex items-start">
-                                <span className="text-[#6B8E23] mr-3 mt-1 flex-shrink-0">✓</span>
-                                <span>Daily yoga sessions to complement your hiking adventures.</span>
-                              </li>
-                            </ul>
-                          </div>
                         </div>
                       </div>
 
