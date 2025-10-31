@@ -93,6 +93,9 @@ const BookingSuccessPage = () => {
             <h1 className="text-5xl md:text-6xl font-bold mb-4 text-[#F7F5EB]">
               Booking Confirmed!
             </h1>
+            <p className="text-2xl md:text-3xl font-bold text-[#F7F5EB] mb-3">
+              Check your Spam Folder
+            </p>
             <p className="text-xl text-[#DCCCA3]">
               Your adventure awaits! We're excited to have you join us.
             </p>

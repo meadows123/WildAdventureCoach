@@ -207,6 +207,7 @@ const BookingPage = () => {
     
     if (step < 3) {
       setStep(step + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -1095,7 +1096,7 @@ const BookingPage = () => {
                         Processing...
                       </>
                     ) : (
-                      'Proceed to Payment'
+                      'Checkout'
                     )}
                   </Button>
                 ) : null}
