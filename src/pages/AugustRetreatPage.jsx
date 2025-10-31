@@ -127,19 +127,19 @@ const AugustRetreatPage = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-center mb-12"
           >
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 text-[#F7F5EB]">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4 text-[#F7F5EB] px-4">
               Tour du Mont Blanc
             </h1>
-            <p className="text-xl text-[#DCCCA3] max-w-3xl mx-auto leading-relaxed mb-2">
+            <p className="text-lg sm:text-xl text-[#DCCCA3] max-w-3xl mx-auto leading-relaxed mb-2 px-4">
               Conquer Iconic Alpine Stages
             </p>
-            <div className="w-24 h-1 bg-[#C65D2B] mx-auto rounded-full mb-4"></div>
-            <p className="text-lg text-[#DCCCA3] max-w-3xl mx-auto leading-relaxed">
+            <div className="w-24 h-1 bg-[#C65D2B] mx-auto rounded-full mb-3 sm:mb-4"></div>
+            <p className="text-base sm:text-lg text-[#DCCCA3] max-w-3xl mx-auto leading-relaxed px-4">
               4 iconic stages of the Tour du Mont Blanc covering 65 km across France and Italy. 15 km each day and 1000 D+ each day
             </p>
             <div className="mt-6">
               <Link to="/booking?retreat=Hiking and Yoga Retreat - August" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                <Button className="text-base sm:text-lg md:text-xl py-4 px-8 rounded-full shadow-lg transition-all touch-manipulation bg-[#C65D2B] hover:bg-[#C65D2B]/90 hover:shadow-xl active:scale-98 text-[#F7F5EB]">
+                <Button className="text-base sm:text-lg md:text-xl py-3 sm:py-4 px-6 sm:px-8 rounded-full shadow-lg transition-all touch-manipulation bg-[#C65D2B] hover:bg-[#C65D2B]/90 hover:shadow-xl active:scale-98 text-[#F7F5EB] w-full sm:w-auto">
                   Join the Experience
                 </Button>
               </Link>
@@ -147,13 +147,13 @@ const AugustRetreatPage = () => {
           </motion.div>
 
           {/* Overview */}
-          <motion.div {...fadeInUp} className="mb-12">
-            <div className="bg-[#6B8E23]/10 border border-[#6B8E23]/30 rounded-lg p-8">
-              <h2 className="text-3xl font-bold text-[#F7F5EB] mb-4">Overview</h2>
-              <p className="text-lg text-[#DCCCA3] leading-relaxed mb-6">
+          <motion.div {...fadeInUp} className="mb-8 sm:mb-12">
+            <div className="bg-[#6B8E23]/10 border border-[#6B8E23]/30 rounded-lg p-4 sm:p-6 md:p-8">
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-3 sm:mb-4">Overview</h2>
+              <p className="text-base sm:text-lg text-[#DCCCA3] leading-relaxed mb-4 sm:mb-6">
                 Experience the challenge and beauty of the Tour du Mont Blanc. This intensive hiking retreat combines demanding alpine terrain with restorative yoga and mindfulness practices. Good fitness level is required
               </p>
-              <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
                 <div className="flex items-start">
                   <Calendar className="w-6 h-6 mr-4 text-[#C65D2B] flex-shrink-0 mt-1" />
                   <div>
@@ -207,10 +207,10 @@ const AugustRetreatPage = () => {
           </motion.div>
 
           {/* What to Expect */}
-          <motion.div {...fadeInUp} className="mb-12">
-            <h2 className="text-3xl font-bold text-[#F7F5EB] mb-6">What to Expect</h2>
-            <div className="bg-[#6B8E23]/10 border border-[#6B8E23]/30 rounded-lg p-8">
-              <div className="grid md:grid-cols-2 gap-6">
+          <motion.div {...fadeInUp} className="mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-4 sm:mb-6">What to Expect</h2>
+            <div className="bg-[#6B8E23]/10 border border-[#6B8E23]/30 rounded-lg p-4 sm:p-6 md:p-8">
+              <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
                 <div className="flex items-start text-[#DCCCA3]">
                   <span className="text-3xl mr-4">🏔</span>
                   <div>
@@ -244,9 +244,9 @@ const AugustRetreatPage = () => {
           </motion.div>
 
           {/* Sample Daily Schedule */}
-          <motion.div {...fadeInUp} className="mb-12">
-            <h2 className="text-3xl font-bold text-[#F7F5EB] mb-6">Sample Daily Schedule</h2>
-            <div className="bg-[#6B8E23]/10 border border-[#6B8E23]/30 rounded-lg p-8">
+          <motion.div {...fadeInUp} className="mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-4 sm:mb-6">Sample Daily Schedule</h2>
+            <div className="bg-[#6B8E23]/10 border border-[#6B8E23]/30 rounded-lg p-4 sm:p-6 md:p-8">
               <div className="space-y-4">
                 <div className="flex items-center text-[#DCCCA3]">
                   <span className="w-32 font-semibold text-[#F7F5EB]">7:00</span>

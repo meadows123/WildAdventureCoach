@@ -127,19 +127,19 @@ const ChamonixRetreatPage = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-center mb-12"
           >
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 text-[#F7F5EB]">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4 text-[#F7F5EB] px-4">
               Hiking & Yoga in Chamonix
             </h1>
-            <p className="text-xl text-[#DCCCA3] max-w-3xl mx-auto leading-relaxed mb-2">
+            <p className="text-lg sm:text-xl text-[#DCCCA3] max-w-3xl mx-auto leading-relaxed mb-2 px-4">
               Reconnect with Nature and Yourself
             </p>
-            <div className="w-24 h-1 bg-[#C65D2B] mx-auto rounded-full mb-4"></div>
-            <p className="text-lg text-[#DCCCA3] max-w-3xl mx-auto leading-relaxed">
+            <div className="w-24 h-1 bg-[#C65D2B] mx-auto rounded-full mb-3 sm:mb-4"></div>
+            <p className="text-base sm:text-lg text-[#DCCCA3] max-w-3xl mx-auto leading-relaxed px-4">
               A transformative 6-day alpine adventure combining mindful movement, breathtaking hikes, introduction to climbing and daily restorative yoga
             </p>
             <div className="mt-6">
               <Link to="/booking?retreat=Hiking and Yoga Retreat in Chamonix" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                <Button className="text-base sm:text-lg md:text-xl py-4 px-8 rounded-full shadow-lg transition-all touch-manipulation bg-[#C65D2B] hover:bg-[#C65D2B]/90 hover:shadow-xl active:scale-98 text-[#F7F5EB]">
+                <Button className="text-base sm:text-lg md:text-xl py-3 sm:py-4 px-6 sm:px-8 rounded-full shadow-lg transition-all touch-manipulation bg-[#C65D2B] hover:bg-[#C65D2B]/90 hover:shadow-xl active:scale-98 text-[#F7F5EB] w-full sm:w-auto">
                   Join the Experience
                 </Button>
               </Link>
@@ -148,12 +148,12 @@ const ChamonixRetreatPage = () => {
 
           {/* Overview */}
           <motion.div {...fadeInUp} className="mb-12">
-            <div className="bg-[#6B8E23]/10 border border-[#6B8E23]/30 rounded-lg p-8">
-              <h2 className="text-3xl font-bold text-[#F7F5EB] mb-4">Overview</h2>
-              <p className="text-lg text-[#DCCCA3] leading-relaxed mb-6">
+            <div className="bg-[#6B8E23]/10 border border-[#6B8E23]/30 rounded-lg p-4 sm:p-6 md:p-8">
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-3 sm:mb-4">Overview</h2>
+              <p className="text-base sm:text-lg text-[#DCCCA3] leading-relaxed mb-4 sm:mb-6">
                 Escape the noise of daily life. Immerse yourself in an environment that challenges the body, clears the mind, and creates space for meaningful connection. Designed for busy professionals seeking clarity, adventure, and renewal
               </p>
-              <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
                 <div className="flex items-start">
                   <Calendar className="w-6 h-6 mr-4 text-[#C65D2B] flex-shrink-0 mt-1" />
                   <div>
@@ -208,9 +208,9 @@ const ChamonixRetreatPage = () => {
 
           {/* What to Expect */}
           <motion.div {...fadeInUp} className="mb-12">
-            <h2 className="text-3xl font-bold text-[#F7F5EB] mb-6">What to Expect</h2>
-            <div className="bg-[#6B8E23]/10 border border-[#6B8E23]/30 rounded-lg p-8">
-              <div className="grid md:grid-cols-2 gap-6">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-4 sm:mb-6">What to Expect</h2>
+            <div className="bg-[#6B8E23]/10 border border-[#6B8E23]/30 rounded-lg p-4 sm:p-6 md:p-8">
+              <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
                 <div className="flex items-start text-[#DCCCA3]">
                   <span className="text-3xl mr-4">🏔</span>
                   <div>
@@ -251,9 +251,9 @@ const ChamonixRetreatPage = () => {
           </motion.div>
 
           {/* Sample Daily Schedule */}
-          <motion.div {...fadeInUp} className="mb-12">
-            <h2 className="text-3xl font-bold text-[#F7F5EB] mb-6">Sample Daily Schedule</h2>
-            <div className="bg-[#6B8E23]/10 border border-[#6B8E23]/30 rounded-lg p-8">
+          <motion.div {...fadeInUp} className="mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-4 sm:mb-6">Sample Daily Schedule</h2>
+            <div className="bg-[#6B8E23]/10 border border-[#6B8E23]/30 rounded-lg p-4 sm:p-6 md:p-8">
               <div className="space-y-4">
                 <div className="flex items-center text-[#DCCCA3]">
                   <span className="w-32 font-semibold text-[#F7F5EB]">7:30</span>
@@ -288,15 +288,15 @@ const ChamonixRetreatPage = () => {
           </motion.div>
 
           {/* Accommodation & Meals */}
-          <motion.div {...fadeInUp} className="mb-12">
-            <h2 className="text-3xl font-bold text-[#F7F5EB] mb-6">Accommodation & Meals</h2>
-            <div className="bg-[#6B8E23]/10 border border-[#6B8E23]/30 rounded-lg p-8">
-              <p className="text-lg text-[#DCCCA3] leading-relaxed mb-6">
+          <motion.div {...fadeInUp} className="mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-4 sm:mb-6">Accommodation & Meals</h2>
+            <div className="bg-[#6B8E23]/10 border border-[#6B8E23]/30 rounded-lg p-4 sm:p-6 md:p-8">
+              <p className="text-base sm:text-lg text-[#DCCCA3] leading-relaxed mb-4 sm:mb-6">
                 Stay in a cozy alpine chalet with panoramic Mont Blanc views. Meals are crafted by our <span className="text-[#F7F5EB] font-semibold">private chef</span>, using wholesome, locally sourced ingredients to energize and delight. Healthy snacks and natural energy bars are available anytime at the chalet's <span className="text-[#F7F5EB] font-semibold">honesty bar</span>. Shared spaces encourage authentic conversations and a sense of community.
               </p>
               
               {/* Accommodation Options */}
-              <div className="grid md:grid-cols-3 gap-4">
+              <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <div className="bg-[#2E4A34]/50 rounded-lg p-4 border-2 border-[#6B8E23]/30">
                   <p className="font-semibold text-[#F7F5EB] mb-2">Basic Single</p>
                   <p className="text-sm text-[#DCCCA3]">Shared room (up to 3 total)</p>
@@ -325,14 +325,14 @@ const ChamonixRetreatPage = () => {
           </motion.div>
 
           {/* Who It's For */}
-          <motion.div {...fadeInUp} className="mb-12">
-            <h2 className="text-3xl font-bold text-[#F7F5EB] mb-6">Who It's For</h2>
-            <div className="bg-[#6B8E23]/10 border border-[#6B8E23]/30 rounded-lg p-8">
-              <p className="text-lg text-[#DCCCA3] mb-4">This retreat is designed for:</p>
+          <motion.div {...fadeInUp} className="mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-4 sm:mb-6">Who It's For</h2>
+            <div className="bg-[#6B8E23]/10 border border-[#6B8E23]/30 rounded-lg p-4 sm:p-6 md:p-8">
+              <p className="text-base sm:text-lg text-[#DCCCA3] mb-3 sm:mb-4">This retreat is designed for:</p>
               <ul className="space-y-3 text-[#DCCCA3]">
                 <li className="flex items-start">
                   <span className="text-[#C65D2B] mr-3 text-xl">•</span>
-                  <span className="text-lg">Busy professionals craving space to think, breathe, and reset</span>
+                  <span className="text-base sm:text-lg">Busy professionals craving space to think, breathe, and reset</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-[#C65D2B] mr-3 text-xl">•</span>
@@ -343,20 +343,20 @@ const ChamonixRetreatPage = () => {
                   <span className="text-lg">Solo travelers looking for meaningful connections and memorable experiences</span>
                 </li>
               </ul>
-              <p className="text-lg text-[#F7F5EB] font-semibold mt-6">
+              <p className="text-base sm:text-lg text-[#F7F5EB] font-semibold mt-4 sm:mt-6">
                 No prior yoga or climbing experience required — bring an open mind and readiness for growth
               </p>
             </div>
           </motion.div>
 
           {/* What's Included */}
-          <motion.div {...fadeInUp} className="mb-12">
-            <h2 className="text-3xl font-bold text-[#F7F5EB] mb-6">What's Included</h2>
-            <div className="bg-[#6B8E23]/10 border border-[#6B8E23]/30 rounded-lg p-8">
+          <motion.div {...fadeInUp} className="mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-4 sm:mb-6">What's Included</h2>
+            <div className="bg-[#6B8E23]/10 border border-[#6B8E23]/30 rounded-lg p-4 sm:p-6 md:p-8">
               <ul className="space-y-4">
                 <li className="flex items-start text-[#DCCCA3]">
                   <span className="text-[#C65D2B] mr-3 text-xl">✓</span>
-                  <span className="text-lg"><span className="text-[#F7F5EB] font-semibold">Accommodation</span> – Stay in a cozy alpine chalet with breathtaking views and modern comfort</span>
+                  <span className="text-base sm:text-lg"><span className="text-[#F7F5EB] font-semibold">Accommodation</span> – Stay in a cozy alpine chalet with breathtaking views and modern comfort</span>
                 </li>
                 <li className="flex items-start text-[#DCCCA3]">
                   <span className="text-[#C65D2B] mr-3 text-xl">✓</span>

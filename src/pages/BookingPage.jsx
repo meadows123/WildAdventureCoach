@@ -1108,7 +1108,7 @@ const BookingPage = () => {
                             <>
                               <div className="flex justify-between items-center">
                                 <span className="text-[#DCCCA3] text-lg">Deposit to Pay Today:</span>
-                                <p className="text-[#C65D2B] text-3xl font-bold">£{deposit}</p>
+                                <p className="text-[#C65D2B] text-2xl sm:text-3xl font-bold">£{deposit}</p>
                               </div>
                               <div className="flex justify-between items-center pt-2 border-t border-[#6B8E23]/20">
                                 <span className="text-[#DCCCA3] text-sm">Full Price: £{fullPrice}</span>

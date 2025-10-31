@@ -125,10 +125,10 @@ const ContactPage = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h1 className="text-5xl md:text-6xl font-bold mb-4 text-[#F7F5EB]">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4 text-[#F7F5EB] px-4">
               Get In Touch
             </h1>
-            <p className="text-xl text-[#DCCCA3] max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-[#DCCCA3] max-w-2xl mx-auto px-4">
               Have questions about our mountain retreat? Ready to start your adventure? 
               We'd love to hear from you!
             </p>
@@ -138,11 +138,11 @@ const ContactPage = () => {
             {/* Contact Form */}
             <motion.div
               {...fadeInLeft}
-              className="bg-[#6B8E23]/10 backdrop-blur-sm rounded-2xl p-8 border border-[#6B8E23]/30"
+              className="bg-[#6B8E23]/10 backdrop-blur-sm rounded-2xl p-4 sm:p-6 md:p-8 border border-[#6B8E23]/30"
             >
-              <h2 className="text-3xl font-bold text-[#F7F5EB] mb-6">Send a Message</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-4 sm:mb-6">Send a Message</h2>
               
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                 <div>
                   <Label htmlFor="name" className="text-[#DCCCA3] mb-2 block">Your Name *</Label>
                   <Input
@@ -169,14 +169,14 @@ const ContactPage = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="message" className="text-[#DCCCA3] mb-2 block">Your Message *</Label>
+                  <Label htmlFor="message" className="text-[#DCCCA3] mb-2 block text-sm sm:text-base">Your Message *</Label>
                   <textarea
                     id="message"
                     name="message"
                     value={formData.message}
                     onChange={handleInputChange}
-                    rows="6"
-                    className="w-full bg-[#2E4A34] border border-[#6B8E23] rounded-md p-3 text-[#F7F5EB] focus:border-[#C65D2B] focus:outline-none focus:ring-2 focus:ring-[#C65D2B]/50"
+                    rows="5"
+                    className="w-full bg-[#2E4A34] border border-[#6B8E23] rounded-md p-3 text-base sm:text-lg text-[#F7F5EB] focus:border-[#C65D2B] focus:outline-none focus:ring-2 focus:ring-[#C65D2B]/50 min-h-[120px]"
                     required
                   />
                 </div>
@@ -184,7 +184,7 @@ const ContactPage = () => {
                 <Button
                   type="submit"
                   disabled={isSending}
-                  className="w-full bg-[#C65D2B] hover:bg-[#C65D2B]/90 text-[#F7F5EB] text-lg py-6 rounded-full disabled:opacity-50"
+                  className="w-full bg-[#C65D2B] hover:bg-[#C65D2B]/90 text-[#F7F5EB] text-base sm:text-lg py-4 sm:py-6 rounded-full disabled:opacity-50 touch-manipulation"
                 >
                   {isSending ? (
                     <>
@@ -212,8 +212,8 @@ const ContactPage = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
-                <h2 className="text-3xl font-bold text-[#F7F5EB] mb-6">Contact Information</h2>
-                <p className="text-[#DCCCA3] text-lg mb-8">
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-4 sm:mb-6">Contact Information</h2>
+                <p className="text-[#DCCCA3] text-base sm:text-lg mb-6 sm:mb-8">
                   Reach out to us directly or fill out the form. We typically respond within 24 hours.
                 </p>
               </motion.div>
@@ -229,11 +229,11 @@ const ContactPage = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.1 }}
                   whileHover={{ scale: 1.05 }}
-                  className="inline-flex items-center gap-3 px-6 py-4 bg-[#25D366] border-2 border-white text-white font-semibold rounded-full hover:bg-[#1ebe57] transition-all duration-200 w-full justify-center"
+                  className="inline-flex items-center gap-3 px-6 py-4 bg-[#25D366] border-2 border-white text-white font-semibold rounded-full hover:bg-[#1ebe57] transition-all duration-200 w-full justify-center touch-manipulation min-h-[48px]"
                   title="Contact us on WhatsApp"
                 >
-                  <WhatsAppIcon className="w-6 h-6" />
-                  <span className="text-lg font-bold">WHATSAPP</span>
+                  <WhatsAppIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+                  <span className="text-base sm:text-lg font-bold">WHATSAPP</span>
                 </motion.a>
 
                 {/* Instagram Button */}
@@ -246,18 +246,18 @@ const ContactPage = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.2 }}
                   whileHover={{ scale: 1.05 }}
-                  className="inline-flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 border-2 border-white text-white font-semibold rounded-full hover:opacity-90 transition-all duration-200 w-full justify-center"
+                  className="inline-flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 border-2 border-white text-white font-semibold rounded-full hover:opacity-90 transition-all duration-200 w-full justify-center touch-manipulation min-h-[48px]"
                   title="Follow us on Instagram"
                 >
-                  <Instagram className="w-6 h-6" />
-                  <span className="text-lg font-bold">INSTAGRAM</span>
+                  <Instagram className="w-5 h-5 sm:w-6 sm:h-6" />
+                  <span className="text-base sm:text-lg font-bold">INSTAGRAM</span>
                 </motion.a>
               </div>
 
               {/* Additional Info */}
-              <div className="bg-[#C65D2B]/10 border border-[#C65D2B]/30 rounded-xl p-6 mt-8">
-                <h3 className="text-[#F7F5EB] font-semibold mb-3">Questions About the Retreat?</h3>
-                <p className="text-[#DCCCA3] text-sm">
+              <div className="bg-[#C65D2B]/10 border border-[#C65D2B]/30 rounded-xl p-4 sm:p-6 mt-6 sm:mt-8">
+                <h3 className="text-[#F7F5EB] font-semibold mb-2 sm:mb-3 text-base sm:text-lg">Questions About the Retreat?</h3>
+                <p className="text-[#DCCCA3] text-sm sm:text-base">
                   Whether you're wondering about fitness requirements, what to pack, dietary accommodations, 
                   or anything else - we're here to help! Send us a message and we'll answer all your questions.
                 </p>

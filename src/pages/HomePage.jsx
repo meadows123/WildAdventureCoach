@@ -223,13 +223,13 @@ const HomePage = () => {
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <motion.div {...fadeInLeft}>
                 <img 
-                  className="rounded-2xl shadow-2xl w-full h-[500px] object-cover"
+                  className="rounded-2xl shadow-2xl w-full h-[300px] sm:h-[400px] md:h-[500px] object-cover"
                   alt="Adventure coach leading group in nature"
                  src="/images/journey/journey.jpg" />
               </motion.div>
               
               <motion.div {...fadeInRight}>
-                <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[#F7F5EB]">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 text-[#F7F5EB]">
                   Your Journey Starts Here
                 </h2>
                 <motion.p 
@@ -237,7 +237,7 @@ const HomePage = () => {
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.3 }}
-                  className="text-lg text-[#DCCCA3] mb-6"
+                  className="text-base sm:text-lg text-[#DCCCA3] mb-4 sm:mb-6"
                 >
                   Our retreats are designed to push your boundaries, reconnect you with nature, 
                   and help you discover strengths you never knew you had.
@@ -247,7 +247,7 @@ const HomePage = () => {
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.5 }}
-                  className="text-lg text-[#DCCCA3] mb-8"
+                  className="text-base sm:text-lg text-[#DCCCA3] mb-6 sm:mb-8"
                 >
                   Whether you're seeking adventure, personal growth, or simply a break from 
                   the everyday, we create transformative experiences in stunning natural settings.
@@ -260,7 +260,7 @@ const HomePage = () => {
               className="space-y-4 text-center"
             >
               <Link to="/retreats" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                <Button className="bg-[#C65D2B] hover:bg-[#C65D2B]/90 text-[#F7F5EB] text-lg px-8 py-6 rounded-full">
+                <Button className="bg-[#C65D2B] hover:bg-[#C65D2B]/90 text-[#F7F5EB] text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 rounded-full w-full sm:w-auto touch-manipulation">
                   Start Your Adventure
                 </Button>
               </Link>
@@ -277,7 +277,7 @@ const HomePage = () => {
           <div className="max-w-6xl mx-auto">
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <motion.div {...fadeInLeft}>
-                <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[#F7F5EB]">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 text-[#F7F5EB]">
                   Meet Your Host
                 </h2>
                 <motion.p 
@@ -285,7 +285,7 @@ const HomePage = () => {
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.3 }}
-                  className="text-lg text-[#DCCCA3] mb-6"
+                  className="text-base sm:text-lg text-[#DCCCA3] mb-4 sm:mb-6"
                 >
                   Get to know Rugile, your experienced guide on this transformative journey
                 </motion.p>
@@ -296,12 +296,12 @@ const HomePage = () => {
                   transition={{ duration: 0.6, delay: 0.5 }}
                   className="space-y-4"
                 >
-                  <h3 className="text-2xl md:text-3xl font-bold text-[#F7F5EB]">Rugile</h3>
-                  <p className="text-[#C65D2B] font-semibold text-lg">Adventure Host & Guide</p>
-                  <p className="text-lg text-[#DCCCA3]">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#F7F5EB]">Rugile</h3>
+                  <p className="text-[#C65D2B] font-semibold text-base sm:text-lg">Adventure Host & Guide</p>
+                  <p className="text-base sm:text-lg text-[#DCCCA3]">
                     An experienced hiker with a deep passion for nature and human connection, Rugile brings years of expertise navigating some of the world's most breathtaking trails. Her love for the mountains is matched only by her commitment to creating meaningful experiences that bring people together.
                   </p>
-                  <p className="text-lg text-[#DCCCA3]">
+                  <p className="text-base sm:text-lg text-[#DCCCA3]">
                     Through shared adventures in nature's most stunning landscapes, Rugile believes in the transformative power of connection—with the wilderness, with others, and with ourselves. Her guided retreats are designed to challenge you physically while nurturing your spirit and fostering authentic human bonds that last long after you return home.
                   </p>
                 </motion.div>
@@ -311,7 +311,7 @@ const HomePage = () => {
                 <img 
                   src="/images/homepage/rugile.jpg" 
                   alt="Rugile - Adventure Host"
-                  className="rounded-2xl shadow-2xl w-full h-[500px] object-cover"
+                  className="rounded-2xl shadow-2xl w-full h-[300px] sm:h-[400px] md:h-[500px] object-cover"
                   onError={(e) => {
                     // Fallback if image not found
                     e.target.src = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop";
@@ -328,10 +328,10 @@ const HomePage = () => {
               {...fadeInUp}
               className="text-center mb-16"
             >
-              <h2 className="text-4xl md:text-5xl font-bold mb-4 text-[#F7F5EB]">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 text-[#F7F5EB]">
                 What Our Adventurers Say
               </h2>
-              <p className="text-lg text-[#DCCCA3] max-w-2xl mx-auto">
+              <p className="text-base sm:text-lg text-[#DCCCA3] max-w-2xl mx-auto px-4">
                 Hear from those who've experienced the transformative power of our retreats
               </p>
             </motion.div>
@@ -433,10 +433,10 @@ const HomePage = () => {
               {...fadeInUp}
               className="text-center mb-12"
             >
-              <h2 className="text-4xl md:text-5xl font-bold mb-4 text-[#F7F5EB]">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 text-[#F7F5EB]">
                 Follow Our Adventures
               </h2>
-              <p className="text-lg text-[#DCCCA3] max-w-2xl mx-auto mb-8">
+              <p className="text-base sm:text-lg text-[#DCCCA3] max-w-2xl mx-auto mb-6 sm:mb-8 px-4">
                 Join our community on Instagram for daily inspiration, behind-the-scenes moments, 
                 and stunning photos from our wilderness retreats around the world.
               </p>
@@ -445,8 +445,8 @@ const HomePage = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button className="bg-gradient-to-r from-purple-600 via-pink-600 to-orange-600 hover:from-purple-700 hover:via-pink-700 hover:to-orange-700 text-white text-lg px-10 py-6 rounded-full">
-                  <Instagram className="mr-2 w-6 h-6" />
+                <Button className="bg-gradient-to-r from-purple-600 via-pink-600 to-orange-600 hover:from-purple-700 hover:via-pink-700 hover:to-orange-700 text-white text-base sm:text-lg px-6 sm:px-10 py-4 sm:py-6 rounded-full w-full sm:w-auto touch-manipulation">
+                  <Instagram className="mr-2 w-5 h-5 sm:w-6 sm:h-6" />
                   Follow @wildadventurecoach
                 </Button>
               </a>

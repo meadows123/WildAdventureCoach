@@ -121,7 +121,7 @@ const RetreatsPage = () => {
     return (
       <motion.div
         {...fadeInUp}
-        className="bg-[#6B8E23]/10 backdrop-blur-sm rounded-xl overflow-visible border border-[#6B8E23]/30 flex flex-col sm:flex-row h-[200px] sm:h-[180px] md:h-[200px] relative"
+        className="bg-[#6B8E23]/10 backdrop-blur-sm rounded-xl overflow-visible border border-[#6B8E23]/30 flex flex-col sm:flex-row min-h-[240px] sm:h-[180px] md:h-[200px] relative"
       >
         {/* Single Image - Left Side */}
         <div className="w-full sm:w-40 md:w-48 h-full flex-shrink-0 rounded-l-xl relative">
@@ -153,7 +153,7 @@ const RetreatsPage = () => {
           {/* Left Column: Title and Info */}
           <div className="flex-1 min-w-0">
             {/* Retreat Name */}
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#C65D2B] mb-3 sm:mb-2">
+            <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-[#C65D2B] mb-2 sm:mb-2 leading-tight">
               {retreat.title}
             </h2>
             
@@ -227,10 +227,10 @@ const RetreatsPage = () => {
               transition={{ duration: 0.8 }}
             className="text-center mb-8 sm:mb-12"
             >
-            <h1 className="text-5xl md:text-6xl font-bold mb-4 text-[#F7F5EB]">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4 text-[#F7F5EB] px-4">
               Our Retreats
             </h1>
-            <p className="text-xl text-[#DCCCA3] max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-[#DCCCA3] max-w-3xl mx-auto px-4">
               Join us for an unforgettable adventure through the stunning landscapes of Mont Blanc
             </p>
           </motion.div>

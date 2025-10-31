@@ -90,13 +90,13 @@ const BookingSuccessPage = () => {
             <div className="inline-flex items-center justify-center w-24 h-24 bg-green-500/20 rounded-full mb-6">
               <CheckCircle className="w-16 h-16 text-green-500" />
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold mb-4 text-[#F7F5EB]">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4 text-[#F7F5EB] px-4">
               Booking Confirmed!
             </h1>
-            <p className="text-2xl md:text-3xl font-bold text-[#F7F5EB] mb-3">
+            <p className="text-xl sm:text-2xl md:text-3xl font-bold text-[#F7F5EB] mb-2 sm:mb-3 px-4">
               Check your Spam Folder
             </p>
-            <p className="text-xl text-[#DCCCA3]">
+            <p className="text-base sm:text-lg md:text-xl text-[#DCCCA3] px-4">
               Your adventure awaits! We're excited to have you join us.
             </p>
           </motion.div>
@@ -105,13 +105,13 @@ const BookingSuccessPage = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-[#6B8E23]/10 backdrop-blur-sm rounded-2xl p-8 border border-[#6B8E23]/30 mb-8"
+            className="bg-[#6B8E23]/10 backdrop-blur-sm rounded-2xl p-4 sm:p-6 md:p-8 border border-[#6B8E23]/30 mb-6 sm:mb-8"
           >
-            <h2 className="text-3xl font-bold text-[#F7F5EB] mb-6">Booking Details</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-4 sm:mb-6">Booking Details</h2>
             
             <div className="space-y-6">
-              <div className="bg-[#2E4A34]/50 rounded-xl p-6">
-                <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-[#2E4A34]/50 rounded-xl p-4 sm:p-6">
+                <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
                   <div>
                     <span className="text-[#DCCCA3] text-sm">Retreat</span>
                     <p className="text-[#F7F5EB] text-lg font-semibold">{metadata?.retreat}</p>
@@ -169,14 +169,14 @@ const BookingSuccessPage = () => {
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
             <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-              <Button className="bg-[#DCCCA3] hover:bg-[#6B8E23]/90 text-[#F7F5EB] px-8 py-6 text-lg">
-                Back to Home
-              </Button>
+                <Button className="bg-[#DCCCA3] hover:bg-[#6B8E23]/90 text-[#F7F5EB] px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg w-full sm:w-auto touch-manipulation">
+                  Back to Home
+                </Button>
             </Link>
             <Link to="/retreats" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               <Button 
                 variant="outline" 
-                className="border-[#C65D2B] text-[#F7F5EB] hover:bg-[#C65D2B]/20 px-8 py-6 text-lg"
+                className="border-[#C65D2B] text-[#F7F5EB] hover:bg-[#C65D2B]/20 px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg w-full sm:w-auto touch-manipulation"
               >
                 View Retreat Details
               </Button>
