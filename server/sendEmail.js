@@ -393,3 +393,118 @@ export async function sendAdminNotification(booking) {
   }
 }
 
+/**
+ * Send contact form email via SendGrid
+ */
+export async function sendContactEmail(contactData) {
+  console.log('📧 Attempting to send contact email from:', FROM_EMAIL);
+  if (!SENDGRID_API_KEY) {
+    console.warn('⚠️  SendGrid API key not configured. Skipping email.');
+    return { success: false, error: 'SendGrid not configured' };
+  }
+
+  try {
+    const emailHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #F7F5EB; max-width: 600px; margin: 0 auto; background: #1a2d20; }
+    .email-wrapper { background: #1a2d20; padding: 20px; }
+    .header { background: linear-gradient(135deg, #2E4A34 0%, #6B8E23 100%); color: #F7F5EB; padding: 30px 20px; text-align: center; border-radius: 15px 15px 0 0; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+    .header h1 { margin: 0; font-size: 32px; color: #F7F5EB; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+    .content { padding: 30px 20px; background: #2E4A34; }
+    .contact-info { background: #1a2d20; padding: 25px; border-radius: 12px; margin: 20px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border: 2px solid #6B8E23; }
+    .contact-info h2 { color: #F7F5EB; margin-top: 0; font-size: 24px; border-bottom: 2px solid #C65D2B; padding-bottom: 10px; }
+    .detail { margin: 15px 0; padding: 15px; background: #2E4A34; border-radius: 8px; color: #DCCCA3; }
+    .label { font-weight: bold; color: #6B8E23; margin-right: 10px; }
+    .value { color: #F7F5EB; }
+    .message-box { background: #1a2d20; padding: 20px; border-radius: 12px; margin: 20px 0; border-left: 4px solid #C65D2B; }
+    .message-box p { color: #DCCCA3; margin: 0; line-height: 1.8; }
+    .footer { text-align: center; padding: 20px; color: #DCCCA3; font-size: 13px; background: #1a2d20; border-radius: 0 0 15px 15px; border-top: 2px solid #6B8E23; }
+  </style>
+</head>
+<body>
+  <div class="email-wrapper">
+  <div class="header">
+    <h1>📧 New Contact Form Submission</h1>
+  </div>
+  
+  <div class="content">
+    <div class="contact-info">
+      <h2 style="margin-top: 0; color: #F7F5EB;">Contact Details</h2>
+      
+      <div class="detail">
+        <span class="label">Name:</span> <span class="value">${contactData.name}</span>
+      </div>
+      
+      <div class="detail">
+        <span class="label">Email:</span> <span class="value">${contactData.email}</span>
+      </div>
+      
+      <div class="message-box">
+        <h3 style="color: #F7F5EB; margin-top: 0; margin-bottom: 15px;">Message:</h3>
+        <p>${contactData.message.replace(/\n/g, '<br>')}</p>
+      </div>
+      
+      <div class="detail" style="margin-top: 20px; padding: 10px; background: #1a2d20; font-size: 13px; color: #DCCCA3;">
+        <strong style="color: #6B8E23;">Received:</strong> ${new Date().toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'long' })}
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <p>© 2025 Wild Adventure Coach. All rights reserved.</p>
+    <p style="margin-top: 10px;">
+      <a href="https://wildadventurecoach.onrender.com" style="color: #C65D2B; text-decoration: none;">wildadventurecoach.onrender.com</a>
+    </p>
+  </div>
+  </div>
+</body>
+</html>
+    `;
+
+    const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${SENDGRID_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        personalizations: [
+          {
+            to: [{ email: 'wildadventurecoach@gmail.com', name: 'Wild Adventure Coach' }],
+            subject: `New Contact Form Message from ${contactData.name}`,
+          },
+        ],
+        from: {
+          email: FROM_EMAIL,
+          name: 'Wild Adventure Coach Website',
+        },
+        reply_to: {
+          email: contactData.email,
+          name: contactData.name,
+        },
+        content: [
+          {
+            type: 'text/html',
+            value: emailHtml,
+          },
+        ],
+      }),
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      console.error('❌ SendGrid error:', error);
+      throw new Error(`SendGrid API error: ${response.status}`);
+    }
+
+    console.log('✅ Contact email sent successfully to wildadventurecoach@gmail.com');
+    return { success: true };
+  } catch (error) {
+    console.error('❌ Error sending contact email:', error.message);
+    return { success: false, error: error.message };
+  }
+}
+

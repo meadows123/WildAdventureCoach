@@ -249,7 +249,7 @@ const HomePage = () => {
                 </Button>
               </Link>
               <p className="text-[#6B8E23] font-semibold">
-                💳 Secure your spot with just £375 deposit
+                💳 Secure your spot with just £250 deposit
               </p>
             </motion.div>
               </motion.div>
@@ -259,86 +259,48 @@ const HomePage = () => {
 
         <section className="py-20 px-4 bg-[#1a2d20]">
           <div className="max-w-6xl mx-auto">
-            <motion.div
-              {...fadeInUp}
-              className="text-center mb-16"
-            >
-              <h2 className="text-4xl md:text-5xl font-bold mb-4 text-[#F7F5EB]">
-                Meet Our Team
-              </h2>
-              <p className="text-lg text-[#DCCCA3] max-w-2xl mx-auto">
-                Get to know the passionate professionals who will guide your transformative journey
-              </p>
-            </motion.div>
-
-            <div className="grid md:grid-cols-3 gap-8">
-              {/* Rugile Ba - Guide */}
-              <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-                whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                className="bg-[#6B8E23]/20 backdrop-blur-sm p-6 rounded-2xl border border-[#6B8E23]/30 hover:border-[#C65D2B]/50 transition-all text-center"
-              >
-                <div className="mb-6">
-                  <img 
-                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop" 
-                    alt="Rugile Ba - Adventure Guide"
-                    className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-[#C65D2B]/50"
-                  />
-                </div>
-                <h3 className="text-xl font-bold mb-2 text-[#F7F5EB]">Rugile Ba</h3>
-                <p className="text-[#C65D2B] font-semibold mb-3">Adventure Guide</p>
-                <p className="text-[#DCCCA3] text-sm leading-relaxed">
-                  With years of experience navigating the world's most challenging trails, Rugile brings expertise, passion, and unwavering safety consciousness to every retreat.
-                </p>
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <motion.div {...fadeInLeft}>
+                <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[#F7F5EB]">
+                  Meet Your Host
+                </h2>
+                <motion.p 
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  className="text-lg text-[#DCCCA3] mb-6"
+                >
+                  Get to know Rugile, your experienced guide on this transformative journey
+                </motion.p>
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.5 }}
+                  className="space-y-4"
+                >
+                  <h3 className="text-2xl md:text-3xl font-bold text-[#F7F5EB]">Rugile</h3>
+                  <p className="text-[#C65D2B] font-semibold text-lg">Adventure Host & Guide</p>
+                  <p className="text-lg text-[#DCCCA3]">
+                    An experienced hiker with a deep passion for nature and human connection, Rugile brings years of expertise navigating some of the world's most breathtaking trails. Her love for the mountains is matched only by her commitment to creating meaningful experiences that bring people together.
+                  </p>
+                  <p className="text-lg text-[#DCCCA3]">
+                    Through shared adventures in nature's most stunning landscapes, Rugile believes in the transformative power of connection—with the wilderness, with others, and with ourselves. Her guided retreats are designed to challenge you physically while nurturing your spirit and fostering authentic human bonds that last long after you return home.
+                  </p>
+                </motion.div>
               </motion.div>
-
-              {/* Kate Moss - Yoga Instructor */}
-              <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-                whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                className="bg-[#6B8E23]/20 backdrop-blur-sm p-6 rounded-2xl border border-[#6B8E23]/30 hover:border-[#C65D2B]/50 transition-all text-center"
-              >
-                <div className="mb-6">
-                  <img 
-                    src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop" 
-                    alt="Kate Moss - Yoga Instructor"
-                    className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-[#C65D2B]/50"
-                  />
-                </div>
-                <h3 className="text-xl font-bold mb-2 text-[#F7F5EB]">Kate Moss</h3>
-                <p className="text-[#C65D2B] font-semibold mb-3">Yoga Instructor</p>
-                <p className="text-[#DCCCA3] text-sm leading-relaxed">
-                  Kate combines mindfulness and movement to help you find balance and inner strength during your adventure. Her calming presence enhances every retreat experience.
-                </p>
-              </motion.div>
-
-              {/* Keanu Reeves - Chef */}
-              <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-                whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                className="bg-[#6B8E23]/20 backdrop-blur-sm p-6 rounded-2xl border border-[#6B8E23]/30 hover:border-[#C65D2B]/50 transition-all text-center"
-              >
-                <div className="mb-6">
-                  <img 
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop" 
-                    alt="Keanu Reeves - Chef"
-                    className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-[#C65D2B]/50"
-                  />
-                </div>
-                <h3 className="text-xl font-bold mb-2 text-[#F7F5EB]">Keanu Reeves</h3>
-                <p className="text-[#C65D2B] font-semibold mb-3">Chef</p>
-                <p className="text-[#DCCCA3] text-sm leading-relaxed">
-                  Keanu prepares nutritious, delicious meals that fuel your adventure. His culinary expertise ensures you're well-nourished throughout your retreat journey.
-                </p>
+              
+              <motion.div {...fadeInRight}>
+                <img 
+                  src="/images/homepage/rugile.jpg" 
+                  alt="Rugile - Adventure Host"
+                  className="rounded-2xl shadow-2xl w-full h-[500px] object-cover"
+                  onError={(e) => {
+                    // Fallback if image not found
+                    e.target.src = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop";
+                  }}
+                />
               </motion.div>
             </div>
           </div>
@@ -449,7 +411,7 @@ const HomePage = () => {
           </div>
         </section>
 
-        <section className="py-20 px-4 bg-[#2E4A34]">
+        <section className="pt-0 pb-20 px-4 bg-[#2E4A34] -mt-10">
           <div className="max-w-6xl mx-auto">
             <motion.div
               {...fadeInUp}

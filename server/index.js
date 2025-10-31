@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { addBooking, getAvailableSpots, getRetreatStats } from './supabase.js';
-import { sendBookingConfirmationEmail, sendAdminNotification } from './sendEmail.js';
+import { sendBookingConfirmationEmail, sendAdminNotification, sendContactEmail } from './sendEmail.js';
 
 dotenv.config();
 
@@ -220,7 +220,7 @@ app.post('/waitlist', async (req, res) => {
 
 // Contact form endpoint
 app.post('/send-contact', async (req, res) => {
-  const { name, email, phone, message } = req.body;
+  const { name, email, message } = req.body;
   
   if (!name || !email || !message) {
     return res.status(400).json({ error: 'Missing required fields' });
@@ -232,21 +232,24 @@ app.post('/send-contact', async (req, res) => {
     console.log('─────────────────────────────────');
     console.log('Name:', name);
     console.log('Email:', email);
-    console.log('Phone:', phone || 'Not provided');
     console.log('Message:', message);
     console.log('Timestamp:', new Date().toLocaleString());
     console.log('─────────────────────────────────\n');
 
-    // TODO: Set up email sending with nodemailer
-    // For now, we're logging to console
-    // In production, you would send an email here to: wildadventurecoach@gmail.com
+    // Send email to wildadventurecoach@gmail.com
+    const emailResult = await sendContactEmail({ name, email, message });
+    
+    if (!emailResult.success) {
+      console.error('❌ Failed to send contact email:', emailResult.error);
+      // Still return success to user, but log the error
+    }
     
     res.json({ 
       success: true, 
-      message: 'Contact form received. Currently logging to console. Configure email service to send emails.' 
+      message: 'Thank you for contacting us! We\'ll get back to you soon.' 
     });
   } catch (error) {
-    console.error('Contact form error:', error);
+    console.error('❌ Contact form error:', error);
     res.status(500).json({ error: 'Failed to process contact form' });
   }
 });

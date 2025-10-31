@@ -428,6 +428,89 @@ const ChamonixRetreatPage = () => {
             </div>
           </motion.div>
 
+          {/* Meet Our Team */}
+          <motion.div {...fadeInUp} className="mb-12">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#F7F5EB]">
+                Meet Our Team
+              </h2>
+              <p className="text-lg text-[#DCCCA3] max-w-2xl mx-auto">
+                Get to know the passionate professionals who will guide your transformative journey
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              {/* Rugile Ba - Guide */}
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+                whileHover={{ y: -10, transition: { duration: 0.3 } }}
+                className="bg-[#6B8E23]/20 backdrop-blur-sm p-6 rounded-2xl border border-[#6B8E23]/30 hover:border-[#C65D2B]/50 transition-all text-center"
+              >
+                <div className="mb-6">
+                  <img 
+                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop" 
+                    alt="Rugile Ba - Adventure Guide"
+                    className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-[#C65D2B]/50"
+                  />
+                </div>
+                <h3 className="text-xl font-bold mb-2 text-[#F7F5EB]">Rugile Ba</h3>
+                <p className="text-[#C65D2B] font-semibold mb-3">Adventure Guide</p>
+                <p className="text-[#DCCCA3] text-sm leading-relaxed">
+                  With years of experience navigating the world's most challenging trails, Rugile brings expertise, passion, and unwavering safety consciousness to every retreat.
+                </p>
+              </motion.div>
+
+              {/* Kate Moss - Yoga Instructor */}
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+                whileHover={{ y: -10, transition: { duration: 0.3 } }}
+                className="bg-[#6B8E23]/20 backdrop-blur-sm p-6 rounded-2xl border border-[#6B8E23]/30 hover:border-[#C65D2B]/50 transition-all text-center"
+              >
+                <div className="mb-6">
+                  <img 
+                    src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop" 
+                    alt="Kate Moss - Yoga Instructor"
+                    className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-[#C65D2B]/50"
+                  />
+                </div>
+                <h3 className="text-xl font-bold mb-2 text-[#F7F5EB]">Kate Moss</h3>
+                <p className="text-[#C65D2B] font-semibold mb-3">Yoga Instructor</p>
+                <p className="text-[#DCCCA3] text-sm leading-relaxed">
+                  Kate combines mindfulness and movement to help you find balance and inner strength during your adventure. Her calming presence enhances every retreat experience.
+                </p>
+              </motion.div>
+
+              {/* Keanu Reeves - Chef */}
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+                whileHover={{ y: -10, transition: { duration: 0.3 } }}
+                className="bg-[#6B8E23]/20 backdrop-blur-sm p-6 rounded-2xl border border-[#6B8E23]/30 hover:border-[#C65D2B]/50 transition-all text-center"
+              >
+                <div className="mb-6">
+                  <img 
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop" 
+                    alt="Keanu Reeves - Chef"
+                    className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-[#C65D2B]/50"
+                  />
+                </div>
+                <h3 className="text-xl font-bold mb-2 text-[#F7F5EB]">Keanu Reeves</h3>
+                <p className="text-[#C65D2B] font-semibold mb-3">Chef</p>
+                <p className="text-[#DCCCA3] text-sm leading-relaxed">
+                  Keanu prepares nutritious, delicious meals that fuel your adventure. His culinary expertise ensures you're well-nourished throughout your retreat journey.
+                </p>
+              </motion.div>
+            </div>
+          </motion.div>
+
           {/* CTA Button */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -445,6 +528,32 @@ const ChamonixRetreatPage = () => {
           </motion.div>
         </div>
       </div>
+
+      {/* Floating Book Now Button */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+        className="fixed bottom-6 left-0 right-0 z-50 flex justify-center"
+      >
+        <Link to="/booking?retreat=Hiking and Yoga Retreat in Chamonix" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+          <motion.div
+            whileHover={{ scale: 1.06 }}
+            whileTap={{ scale: 0.96 }}
+            animate={{ y: [0, -4, 0] }}
+            transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+            className="relative group"
+          >
+            {/* Glow/Pulse behind button */}
+            <span className="absolute inset-0 blur-xl rounded-full bg-[#C65D2B]/40 opacity-70 group-hover:opacity-90 transition-opacity"></span>
+            <span className="absolute inset-0 blur-2xl rounded-full bg-[#C65D2B]/30 animate-pulse"></span>
+
+            <div className="relative bg-gradient-to-r from-[#C65D2B] to-[#E07B4B] hover:from-[#C65D2B] hover:to-[#cf6f43] text-[#F7F5EB] px-8 py-5 rounded-full shadow-2xl font-semibold text-xl transition-all cursor-pointer flex items-center gap-3 ring-2 ring-[#C65D2B]/40">
+              <span>🍃 Book Now</span>
+            </div>
+          </motion.div>
+        </Link>
+      </motion.div>
     </>
   );
 };
