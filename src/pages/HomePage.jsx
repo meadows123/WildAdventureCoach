@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -8,6 +8,22 @@ import { Button } from '@/components/ui/button';
 const HomePage = () => {
   const [currentReview, setCurrentReview] = useState(0);
   const [widgetKey, setWidgetKey] = useState(0);
+
+  // Load Behold.so widget script
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.type = 'module';
+    script.src = 'https://w.behold.so/widget.js';
+    document.head.appendChild(script);
+
+    return () => {
+      // Cleanup script on unmount
+      const existingScript = document.querySelector('script[src="https://w.behold.so/widget.js"]');
+      if (existingScript) {
+        existingScript.remove();
+      }
+    };
+  }, []);
 
   // Animation variants for scroll effects
   const fadeInUp = {
@@ -447,7 +463,7 @@ const HomePage = () => {
                 <div className="relative">
                   <behold-widget 
                     key={widgetKey}
-                    feed-id="pg2M1fTnorRu2OfgR819"
+                    feed-id="HCORB1MWEwlLPlGxkCWB"
                     className="rounded-lg overflow-hidden"
                     style={{ minHeight: '400px' }}
                   ></behold-widget>
@@ -459,7 +475,7 @@ const HomePage = () => {
                       // Also try to refresh the widget directly
                       const widget = document.querySelector('behold-widget');
                       if (widget) {
-                        widget.setAttribute('feed-id', 'pg2M1fTnorRu2OfgR819');
+                        widget.setAttribute('feed-id', 'HCORB1MWEwlLPlGxkCWB');
                       }
                     }}
                     className="absolute top-2 right-2 bg-[#C65D2B] hover:bg-[#C65D2B]/90 text-white p-2 rounded-full transition-all duration-200 hover:scale-110"
