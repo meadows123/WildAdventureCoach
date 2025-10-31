@@ -330,9 +330,16 @@ const BookingPage = () => {
             className="bg-[#6B8E23]/10 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 border border-[#6B8E23]/30"
           >
             <form
-              onSubmit={handleSubmit}
+              onSubmit={(e) => {
+                e.preventDefault();
+                // Only allow submission if explicitly clicking the Checkout button on step 3
+                if (step === 3) {
+                  // Prevent form submission - will be handled by button click only
+                  return false;
+                }
+              }}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' && step === 3 && e.target.tagName !== 'BUTTON') {
+                if (e.key === 'Enter') {
                   e.preventDefault();
                 }
               }}
@@ -1089,7 +1096,8 @@ const BookingPage = () => {
                   </Button>
                 ) : step === 3 ? (
                   <Button
-                    type="submit"
+                    type="button"
+                    onClick={handleSubmit}
                     disabled={isProcessing || soldOut}
                     className={`w-full sm:w-auto sm:ml-auto disabled:opacity-50 px-6 py-3 text-base sm:text-lg touch-manipulation ${
                       soldOut ? 'bg-gray-500 cursor-not-allowed' : 'bg-[#C65D2B] hover:bg-[#C65D2B]/90'
