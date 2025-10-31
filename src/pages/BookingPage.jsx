@@ -16,6 +16,7 @@ const BookingPage = () => {
   const [availableSpots, setAvailableSpots] = useState(null);
   const [soldOut, setSoldOut] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [ageAccepted, setAgeAccepted] = useState(false);
   
   // API URL - since backend serves the frontend, use relative URLs in production
   const API_URL = import.meta.env.VITE_API_URL || '';
@@ -199,6 +200,16 @@ const BookingPage = () => {
         toast({
           title: "Acknowledgment Required",
           description: "You must read and accept the terms before proceeding",
+          variant: "destructive"
+        });
+        return;
+      }
+      
+      // Check age acceptance for Chamonix retreat
+      if (retreatParam === 'Hiking and Yoga Retreat in Chamonix' && !ageAccepted) {
+        toast({
+          title: "Age Confirmation Required",
+          description: "You must confirm that you are over 18 and under 70 years of age",
           variant: "destructive"
         });
         return;
@@ -808,12 +819,33 @@ const BookingPage = () => {
                             </ul>
                           </div>
                           
-                          <div className="bg-[#2E4A34] rounded-lg p-4 border border-[#6B8E23]/50">
+                          <div className="mt-6 pt-6 border-t border-[#6B8E23]/30">
+                            <p className="text-lg">
+                              <strong className="text-red-400">Important:</strong> This adventure is <strong className="text-red-400">not suitable for people under 18 or over 70 years of age</strong> due to the physical demands and safety requirements.
+                            </p>
+                          </div>
+                          
+                          <div className="bg-[#2E4A34] rounded-lg p-4 border border-[#6B8E23]/50 mt-4">
                             <p className="text-[#DCCCA3] text-sm italic">
                               You'll experience the same stunning landscapes of Mont Blanc, but with the flexibility to choose your adventure level. You'll have an unforgettable experience!
                             </p>
                           </div>
                         </div>
+                      </div>
+
+                      {/* Age Confirmation Checkbox */}
+                      <div className="bg-[#2E4A34]/50 rounded-xl p-6 border-2 border-[#6B8E23]/50">
+                        <label className="flex items-start cursor-pointer group">
+                          <input
+                            type="checkbox"
+                            checked={ageAccepted}
+                            onChange={(e) => setAgeAccepted(e.target.checked)}
+                            className="mt-1 w-5 h-5 rounded border-2 border-[#6B8E23] bg-[#2E4A34] text-[#C65D2B] focus:ring-2 focus:ring-[#C65D2B] focus:ring-offset-0 cursor-pointer"
+                          />
+                          <span className="ml-3 text-[#DCCCA3] text-sm leading-relaxed group-hover:text-[#F7F5EB] transition-colors">
+                            I am over 18 and under 70 years of age
+                          </span>
+                        </label>
                       </div>
 
                       {/* Acknowledgment Checkbox for beginner-friendly retreat */}
@@ -851,7 +883,27 @@ const BookingPage = () => {
                             Whether you want to challenge yourself on full hiking days or take a more relaxed pace, you'll have an amazing experience in Mont Blanc.
                           </p>
                           
+                          <div className="mt-6 pt-6 border-t border-[#6B8E23]/30">
+                            <p className="text-lg">
+                              <strong className="text-red-400">Important:</strong> This adventure is <strong className="text-red-400">not suitable for people under 18 or over 70 years of age</strong> due to the physical demands and safety requirements.
+                            </p>
+                          </div>
                         </div>
+                      </div>
+
+                      {/* Age Confirmation Checkbox */}
+                      <div className="bg-[#2E4A34]/50 rounded-xl p-6 border-2 border-[#6B8E23]/50">
+                        <label className="flex items-start cursor-pointer group">
+                          <input
+                            type="checkbox"
+                            checked={ageAccepted}
+                            onChange={(e) => setAgeAccepted(e.target.checked)}
+                            className="mt-1 w-5 h-5 rounded border-2 border-[#6B8E23] bg-[#2E4A34] text-[#C65D2B] focus:ring-2 focus:ring-[#C65D2B] focus:ring-offset-0 cursor-pointer"
+                          />
+                          <span className="ml-3 text-[#DCCCA3] text-sm leading-relaxed group-hover:text-[#F7F5EB] transition-colors">
+                            I am over 18 and under 70 years of age
+                          </span>
+                        </label>
                       </div>
 
                       {/* Acknowledgment Checkbox */}
@@ -1093,7 +1145,7 @@ const BookingPage = () => {
                   <Button
                     type="button"
                     onClick={handleNextStep}
-                    disabled={step === 2 && !termsAccepted}
+                    disabled={step === 2 && (!termsAccepted || (retreatParam === 'Hiking and Yoga Retreat in Chamonix' && !ageAccepted))}
                     className="bg-[#C65D2B] hover:bg-[#C65D2B]/90 disabled:opacity-50 disabled:cursor-not-allowed text-[#F7F5EB] w-full sm:w-auto sm:ml-auto px-6 py-3 text-base sm:text-lg touch-manipulation"
                   >
                     {step === 2 && retreat.beginnerFriendly && formData.beenHiking === 'No' ? 'Sounds Great - Continue' : step === 2 ? 'I Understand - Continue' : 'Next Step'}

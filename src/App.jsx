@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
 import Navigation from '@/components/Navigation';
+import ScrollToTop from '@/components/ScrollToTop';
 import HomePage from '@/pages/HomePage';
 import RetreatsPage from '@/pages/RetreatsPage';
 import BookingPage from '@/pages/BookingPage';
@@ -21,6 +22,7 @@ function App() {
 
   return (
     <div className="min-h-screen">
+      <ScrollToTop />
       <Navigation />
       <Routes>
         <Route path="/" element={<HomePage />} />

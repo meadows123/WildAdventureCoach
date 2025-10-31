@@ -1,17 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Calendar, MapPin, Users, Instagram } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const RetreatsPage = () => {
-  const location = useLocation();
-  
-  // Scroll to top when component mounts or route changes
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [location.pathname]);
 
   const fadeInUp = {
     initial: { opacity: 0, y: 60 },

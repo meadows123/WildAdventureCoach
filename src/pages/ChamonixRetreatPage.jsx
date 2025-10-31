@@ -1,23 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Calendar, MapPin, Users, Mountain, WifiOff, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const ChamonixRetreatPage = () => {
-  const location = useLocation();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [availableSpots, setAvailableSpots] = useState(null);
   const [maxCapacity, setMaxCapacity] = useState(9);
 
   // API URL - since backend serves the frontend, use relative URLs in production
   const API_URL = import.meta.env.VITE_API_URL || '';
-
-  // Scroll to top when component mounts or route changes
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [location.pathname]);
 
   // Fetch available spots on page load
   useEffect(() => {
