@@ -27,7 +27,8 @@ const retreatPrices = {
   'Hiking and Yoga Retreat - August': 125000, // £1,250.00 (125000 pence)
   'Hiking and Yoga Retreat - July': 125000, // £1,250.00 (125000 pence)
   'Hiking and Yoga Retreat - July - Standard Accommodation': 125000, // £1,250.00
-  'Hiking and Yoga Retreat - July - Premium Quarters': 143000 // £1,430.00 (143000 pence)
+  'Hiking and Yoga Retreat - July - Premium Quarters': 143000, // £1,430.00 (143000 pence)
+  'Hiking & Yoga Retreat Chamonix': 125000 // £1,250.00 (125000 pence)
 };
 
 // Define retreat deposit prices (in pence for GBP)
@@ -35,13 +36,15 @@ const retreatDeposits = {
   'Hiking and Yoga Retreat - August': 37500, // £375.00 (37500 pence)
   'Hiking and Yoga Retreat - July': 37500, // £375.00 (37500 pence)
   'Hiking and Yoga Retreat - July - Standard Accommodation': 37500, // £375.00
-  'Hiking and Yoga Retreat - July - Premium Quarters': 37500 // £375.00
+  'Hiking and Yoga Retreat - July - Premium Quarters': 37500, // £375.00
+  'Hiking & Yoga Retreat Chamonix': 25000 // £250.00 (25000 pence)
 };
 
 // Define retreat currencies
 const retreatCurrencies = {
   'Hiking and Yoga Retreat - August': 'gbp',
-  'Hiking and Yoga Retreat - July': 'gbp'
+  'Hiking and Yoga Retreat - July': 'gbp',
+  'Hiking & Yoga Retreat Chamonix': 'gbp'
 };
 
 // Create Stripe Checkout Session
