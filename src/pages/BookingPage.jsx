@@ -724,6 +724,7 @@ const BookingPage = () => {
                           </p>
                           <form onSubmit={(e) => {
                             e.preventDefault();
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
                             setIsSubmittingContact(true);
                             // For now, just log it and show success
                             console.log('Contact request:', { email: contactEmail, phone: contactPhone, retreat: retreat.name });
@@ -1077,7 +1078,10 @@ const BookingPage = () => {
                 {step > 1 && (
                   <Button
                     type="button"
-                    onClick={() => setStep(step - 1)}
+                    onClick={() => {
+                      setStep(step - 1);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
                     variant="outline"
                     className="border-[#6B8E23] text-[#F7F5EB] hover:bg-[#6B8E23]/20 w-full sm:w-auto px-6 py-3 text-base sm:text-lg touch-manipulation"
                   >

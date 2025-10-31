@@ -69,6 +69,7 @@ const ContactPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     setIsSending(true);
 
     try {
