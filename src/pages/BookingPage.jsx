@@ -329,7 +329,14 @@ const BookingPage = () => {
             {...fadeInUp}
             className="bg-[#6B8E23]/10 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 border border-[#6B8E23]/30"
           >
-            <form onSubmit={handleSubmit}>
+            <form
+              onSubmit={handleSubmit}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && step === 3 && e.target.tagName !== 'BUTTON') {
+                  e.preventDefault();
+                }
+              }}
+            >
               {step === 1 && (
                 <div className="space-y-6">
                   {/* Retreat Package Overview */}
