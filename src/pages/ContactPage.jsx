@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
 import { Send, Instagram } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -23,7 +24,14 @@ const WhatsAppIcon = ({ className = 'w-5 h-5' }) => (
 
 const ContactPage = () => {
   const { toast } = useToast();
+  const location = useLocation();
   const API_URL = import.meta.env.VITE_API_URL || '';
+  
+  // Scroll to top when component mounts or route changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [location.pathname]);
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
