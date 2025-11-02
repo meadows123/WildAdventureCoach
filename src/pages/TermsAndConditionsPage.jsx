@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
-import { Hiking, Heart, Backpack, Home, AlertTriangle, Shield, Clock, CreditCard, XCircle, RefreshCw, Lock, FileText, Mail, Phone } from 'lucide-react';
+import { Mountain, Heart, Backpack, Home, AlertTriangle, Shield, Clock, CreditCard, XCircle, RefreshCw, Lock, FileText, Mail, Phone } from 'lucide-react';
 
 const TermsAndConditionsPage = () => {
   const fadeInUp = {
@@ -58,7 +58,7 @@ const TermsAndConditionsPage = () => {
             {/* 1. Retreat Types */}
             <div>
               <div className="flex items-center mb-4">
-                <Hiking className="w-6 h-6 text-[#C65D2B] mr-3 flex-shrink-0" />
+                <Mountain className="w-6 h-6 text-[#C65D2B] mr-3 flex-shrink-0" />
                 <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB]">1. Retreat Types</h2>
               </div>
               <div className="space-y-4 text-[#DCCCA3] leading-relaxed">
