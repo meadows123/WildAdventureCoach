@@ -2,5 +2,6 @@
 - [Adventure Retreat - Wild Adventure Coach](/retreats): Explore our transformative adventure retreat. Join us for an unforgettable journey through the stunning landscapes of Mont Blanc.
 - [Book Your Adventure - Wild Adventure Coach](/booking): Reserve your spot on a transformative adventure retreat. Simple booking process to start your journey.
 - [Booking Confirmed - Wild Adventure Coach](/bookingsuccess): Your adventure retreat booking has been confirmed!
-- [Contact - Wild Adventure Coach](/contact): Get in touch with Wild Adventure Coach. Have questions about our retreats? We
-- [Wild Adventure Coach - Transform Your Life Through Nature](/home): Join our transformative adventure retreats. Reconnect with nature, discover your inner strength, and embark on life-changing journeys.
+- [Hiking & Yoga Retreat - Tour du Mont Blanc - Wild Adventure Coach](/augustretreat): Join us on a 6-day journey along iconic stages of the Tour du Mont Blanc, covering 65 km across France and Italy. Daily yoga and mindfulness sessions included.
+- [Hiking & Yoga Retreat in Chamonix - Wild Adventure Coach](/chamonixretreat): A transformative 6-day alpine adventure combining mindful movement, breathtaking hikes, an introduction to climbing and daily restorative yoga in Chamonix, French Alps.
+- [Terms & Conditions | Wild Adventure Retreat](/termsandconditions): Read our terms and conditions for Wild Adventure Retreat experiences
