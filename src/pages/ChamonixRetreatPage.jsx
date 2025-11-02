@@ -38,7 +38,8 @@ const ChamonixRetreatPage = () => {
     '/images/retreat/Kitchen.webp',
     '/images/retreat/Hallway.webp',
     '/images/retreat/Bedroom.webp',
-    '/images/retreat/Bedroom1.webp'
+    '/images/retreat/Bedroom1.webp',
+    '/images/retreat/Bathroom1.webp'
   ];
 
   const nextImage = () => {

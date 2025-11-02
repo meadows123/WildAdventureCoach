@@ -17,6 +17,33 @@ const Navigation = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Close dropdowns when route changes
+  useEffect(() => {
+    setIsRetreatDropdownOpen(false);
+    setIsMobileMenuOpen(false);
+  }, [location]);
+
+  // Force close dropdown on /retreats page
+  useEffect(() => {
+    if (location.pathname === '/retreats') {
+      setIsRetreatDropdownOpen(false);
+    }
+  }, [location.pathname]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.retreat-dropdown-container')) {
+        setIsRetreatDropdownOpen(false);
+      }
+    };
+
+    if (isRetreatDropdownOpen) {
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [isRetreatDropdownOpen]);
+
   const navLinks = [
     { path: '/', label: 'Home' },
     { path: '/retreats', label: 'Retreats', hasDropdown: true },
@@ -35,20 +62,20 @@ const Navigation = () => {
         isScrolled ? 'bg-[#2E4A34]/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16 sm:h-20 w-full">
-          <Link to="/" className="flex items-center" onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 overflow-hidden">
+        <div className="flex justify-between items-center h-16 sm:h-20 w-full min-w-0">
+          <Link to="/" className="flex items-center flex-shrink-0" onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
             <img 
               src="/images/logo/logo.png" 
               alt="Wild Adventure Coach Logo" 
-              className="h-16 sm:h-20 md:h-24 w-auto"
+              className="h-16 sm:h-20 md:h-24 w-auto max-w-[200px] sm:max-w-[240px]"
             />
           </Link>
 
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-8 flex-shrink-0">
             {navLinks.map((link) => (
               link.hasDropdown ? (
-                <div key={link.path} className="relative group">
+                <div key={link.path} className="relative group retreat-dropdown-container">
                   <div className="flex items-center gap-1">
                     <Link
                       to={link.path}
@@ -62,18 +89,22 @@ const Navigation = () => {
                       {link.label}
                     </Link>
                     <button
-                      onClick={() => setIsRetreatDropdownOpen(!isRetreatDropdownOpen)}
+                      onClick={() => {
+                        if (location.pathname !== '/retreats') {
+                          setIsRetreatDropdownOpen(!isRetreatDropdownOpen);
+                        }
+                      }}
                       className={`text-lg font-medium transition-colors ${
-                        isRetreatDropdownOpen ? 'text-[#DCCCA3]' : 'text-[#F7F5EB] hover:text-[#DCCCA3]'
+                        isRetreatDropdownOpen && location.pathname !== '/retreats' ? 'text-[#DCCCA3]' : 'text-[#F7F5EB] hover:text-[#DCCCA3]'
                       }`}
                     >
-                      <svg className={`w-4 h-4 transform transition-transform ${isRetreatDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className={`w-4 h-4 transform transition-transform ${isRetreatDropdownOpen && location.pathname !== '/retreats' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
                   </div>
                   
-                  {isRetreatDropdownOpen && (
+                  {isRetreatDropdownOpen && location.pathname !== '/retreats' && (
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -130,7 +161,7 @@ const Navigation = () => {
 
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden text-[#F7F5EB] p-2 touch-manipulation active:scale-95 transition-transform"
+            className="md:hidden text-[#F7F5EB] p-2 touch-manipulation active:scale-95 transition-transform flex-shrink-0"
             aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? <X size={32} /> : <Menu size={32} />}
@@ -148,7 +179,7 @@ const Navigation = () => {
           <div className="px-4 py-6 space-y-2">
             {navLinks.map((link) => (
               link.hasDropdown ? (
-                <div key={link.path}>
+                <div key={link.path} className="retreat-dropdown-container">
                   <div className="flex items-center justify-between">
                     <Link
                       to={link.path}

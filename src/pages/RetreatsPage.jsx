@@ -47,11 +47,18 @@ const RetreatsPage = () => {
         'Personal gear'
       ],
       images: [
-        'https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=1999&auto=format&fit=crop',
+        '/images/retreat/4.png',
         '/images/retreat/1.jpg',
         '/images/retreat/2.jpg',
-        '/images/retreat/3.jpg',
-        '/images/retreat/4.png'
+        '/images/retreat/5.jpg',
+        '/images/retreat/Train.webp',
+        '/images/retreat/Outside1.webp',
+        '/images/retreat/Outside3.webp',
+        '/images/retreat/Kitchen.webp',
+        '/images/retreat/Hallway.webp',
+        '/images/retreat/Bedroom.webp',
+        '/images/retreat/Bedroom1.webp',
+        '/images/retreat/Bathroom1.webp'
       ],
       accommodationOptions: [
         {
@@ -235,7 +242,7 @@ const RetreatsPage = () => {
             </p>
           </motion.div>
 
-          <div className="max-w-6xl mx-auto space-y-4 sm:space-y-6 mb-16 sm:mb-24">
+          <div className="space-y-4 sm:space-y-6 mb-16 sm:mb-24">
             {retreats.map((retreat) => (
               <RetreatCard key={retreat.id} retreat={retreat} />
             ))}
