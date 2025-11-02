@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
-import { Scale, Shield, AlertCircle } from 'lucide-react';
+import { Hiking, Heart, Backpack, Home, AlertTriangle, Shield, Clock, CreditCard, XCircle, RefreshCw, Lock, FileText, Mail, Phone } from 'lucide-react';
 
 const TermsAndConditionsPage = () => {
   const fadeInUp = {
@@ -43,158 +43,214 @@ const TermsAndConditionsPage = () => {
             
             {/* Introduction */}
             <div className="pb-6 border-b border-[#6B8E23]/20">
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-4">Retreat Terms & Conditions – Hiking & Yoga Retreat 2026</h2>
+              <p className="text-[#DCCCA3] leading-relaxed mb-4">
+                Welcome to the Hiking and Yoga Retreat 2026.
+              </p>
+              <p className="text-[#DCCCA3] leading-relaxed mb-2">
+                Please read these Terms and Conditions carefully before confirming your booking.
+              </p>
               <p className="text-[#DCCCA3] leading-relaxed">
-                These terms and conditions govern your booking and participation in Wild Adventure Retreat experiences. 
-                By making a booking, you agree to be bound by these terms.
+                By proceeding with payment, you acknowledge that you have read, understood, and agreed to these terms.
               </p>
             </div>
 
-            {/* Booking and Payment */}
+            {/* 1. Retreat Types */}
             <div>
               <div className="flex items-center mb-4">
-                <Scale className="w-6 h-6 text-[#C65D2B] mr-3" />
-                <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB]">Booking and Payment</h2>
+                <Hiking className="w-6 h-6 text-[#C65D2B] mr-3 flex-shrink-0" />
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB]">1. Retreat Types</h2>
               </div>
               <div className="space-y-4 text-[#DCCCA3] leading-relaxed">
                 <p>
-                  <strong className="text-[#F7F5EB]">Deposit:</strong> A non-refundable deposit is required to secure your place. 
-                  The deposit amount varies by retreat and accommodation option.
+                  <strong className="text-[#F7F5EB]">Traveling Retreat:</strong> Multi-day guided hike through mountain regions, staying in different accommodations (chalets, refuges, or mountain lodges).
                 </p>
                 <p>
-                  <strong className="text-[#F7F5EB]">Balance Payment:</strong> The remaining balance must be paid at least 30 days before 
-                  the retreat start date. Full payment is required for bookings made within 30 days of the retreat.
+                  <strong className="text-[#F7F5EB]">Stationary Retreat:</strong> Hosted at a single accommodation with daily yoga, meditation, and local hiking activities.
                 </p>
                 <p>
-                  <strong className="text-[#F7F5EB]">Payment Methods:</strong> We accept all major credit and debit cards through our 
-                  secure payment gateway.
+                  Both retreat types require good fitness, appropriate gear, and active participation.
                 </p>
               </div>
             </div>
 
-            {/* Cancellation Policy */}
+            {/* 2. Fitness & Preparedness */}
             <div>
               <div className="flex items-center mb-4">
-                <Shield className="w-6 h-6 text-[#C65D2B] mr-3" />
-                <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB]">Cancellation Policy</h2>
+                <Heart className="w-6 h-6 text-[#C65D2B] mr-3 flex-shrink-0" />
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB]">2. Fitness & Preparedness</h2>
+              </div>
+              <div className="space-y-4 text-[#DCCCA3] leading-relaxed">
+                <p>You are responsible for ensuring you are physically fit to participate.</p>
+                <p>The traveling retreat includes up to 8–9 hours of hiking per day on mountainous terrain.</p>
+                <p>Adequate preparation and training before arrival are required for your safety and enjoyment.</p>
+              </div>
+            </div>
+
+            {/* 3. Equipment & Gear */}
+            <div>
+              <div className="flex items-center mb-4">
+                <Backpack className="w-6 h-6 text-[#C65D2B] mr-3 flex-shrink-0" />
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB]">3. Equipment & Gear</h2>
+              </div>
+              <div className="space-y-4 text-[#DCCCA3] leading-relaxed">
+                <p>You must bring all required personal equipment as listed in the provided packing list.</p>
+                <p>For the traveling retreat, all belongings must be carried personally (recommended maximum 8 kg).</p>
+                <p>The organizers are not responsible for issues arising from missing, unsuitable, or damaged equipment.</p>
+              </div>
+            </div>
+
+            {/* 4. Accommodation & Meals */}
+            <div>
+              <div className="flex items-center mb-4">
+                <Home className="w-6 h-6 text-[#C65D2B] mr-3 flex-shrink-0" />
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB]">4. Accommodation & Meals</h2>
+              </div>
+              <div className="space-y-4 text-[#DCCCA3] leading-relaxed">
+                <p>Accommodation and meal arrangements differ by retreat type and may include shared rooms.</p>
+                <p>Meals as listed in the retreat program are included. Snacks, extra food, and drinking water are your responsibility.</p>
+              </div>
+            </div>
+
+            {/* 5. Safety & Personal Responsibility */}
+            <div>
+              <div className="flex items-center mb-4">
+                <AlertTriangle className="w-6 h-6 text-[#C65D2B] mr-3 flex-shrink-0" />
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB]">5. Safety & Personal Responsibility</h2>
+              </div>
+              <div className="space-y-4 text-[#DCCCA3] leading-relaxed">
+                <p>Hiking and outdoor activities carry inherent risks including terrain challenges, altitude, and weather changes.</p>
+                <p>You participate voluntarily and accept full responsibility for your own safety and belongings.</p>
+                <p>You agree to follow all instructions from guides and teachers during the retreat.</p>
+                <p>The organizers are not liable for accidents, injuries, or losses except in cases of proven negligence.</p>
+              </div>
+            </div>
+
+            {/* 6. Insurance & Medical Emergencies */}
+            <div>
+              <div className="flex items-center mb-4">
+                <Shield className="w-6 h-6 text-[#C65D2B] mr-3 flex-shrink-0" />
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB]">6. Insurance & Medical Emergencies</h2>
+              </div>
+              <div className="space-y-4 text-[#DCCCA3] leading-relaxed">
+                <p>You must hold valid travel and health insurance covering hiking and outdoor activities.</p>
+                <p>The organizers will assist in emergencies but are not responsible for medical or evacuation costs.</p>
+                <p>You must inform the organizers of any relevant medical conditions prior to the retreat.</p>
+              </div>
+            </div>
+
+            {/* 7. Punctuality & Conduct */}
+            <div>
+              <div className="flex items-center mb-4">
+                <Clock className="w-6 h-6 text-[#C65D2B] mr-3 flex-shrink-0" />
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB]">7. Punctuality & Conduct</h2>
+              </div>
+              <div className="space-y-4 text-[#DCCCA3] leading-relaxed">
+                <p>Retreat activities start and end on fixed schedules.</p>
+                <p>Late arrivals or missed sessions are non-refundable.</p>
+                <p>Participants are expected to respect group timings and conduct themselves responsibly.</p>
+              </div>
+            </div>
+
+            {/* 8. Payment Policy */}
+            <div>
+              <div className="flex items-center mb-4">
+                <CreditCard className="w-6 h-6 text-[#C65D2B] mr-3 flex-shrink-0" />
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB]">8. Payment Policy</h2>
+              </div>
+              <div className="space-y-4 text-[#DCCCA3] leading-relaxed">
+                <p>A non-refundable deposit is required to confirm your booking.</p>
+                <p>This covers insurance, accommodation, and operational pre-booking costs.</p>
+                <p>The remaining balance must be paid by the stated deadline (typically 90 days before the retreat start).</p>
+                <p>If payment is not received by the deadline, your spot may be reassigned.</p>
+              </div>
+            </div>
+
+            {/* 9. Cancellation Policy */}
+            <div>
+              <div className="flex items-center mb-4">
+                <XCircle className="w-6 h-6 text-[#C65D2B] mr-3 flex-shrink-0" />
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB]">9. Cancellation Policy</h2>
               </div>
               <div className="space-y-4 text-[#DCCCA3] leading-relaxed">
                 <p>
-                  <strong className="text-[#F7F5EB]">By You:</strong>
+                  <strong className="text-[#F7F5EB]">Deposit:</strong> Non-refundable under all circumstances.
                 </p>
+                <p>
+                  <strong className="text-[#F7F5EB]">Full Payment:</strong> Once paid, it is non-refundable.
+                </p>
+                <p>If you cannot attend, you may transfer your place to another participant (subject to organizer approval).</p>
+                <p>Refunds are not provided for late arrival, early departure, or non-participation in activities.</p>
+              </div>
+            </div>
+
+            {/* 10. Changes or Cancellations by Organizer */}
+            <div>
+              <div className="flex items-center mb-4">
+                <RefreshCw className="w-6 h-6 text-[#C65D2B] mr-3 flex-shrink-0" />
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB]">10. Changes or Cancellations by Organizer</h2>
+              </div>
+              <div className="space-y-4 text-[#DCCCA3] leading-relaxed">
+                <p>In case of unforeseen events (e.g., extreme weather, border closures, force majeure), the organizer may adjust or reschedule the retreat.</p>
+                <p>Credits or partial refunds will be considered only for unrecoverable costs.</p>
+                <p>The organizer is not responsible for additional expenses (flights, insurance, personal gear, etc.) incurred by participants.</p>
+              </div>
+            </div>
+
+            {/* 11. Privacy & Data Protection */}
+            <div>
+              <div className="flex items-center mb-4">
+                <Lock className="w-6 h-6 text-[#C65D2B] mr-3 flex-shrink-0" />
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB]">11. Privacy & Data Protection</h2>
+              </div>
+              <div className="space-y-4 text-[#DCCCA3] leading-relaxed">
+                <p>Your personal data will be used solely for retreat communication and emergency purposes.</p>
+                <p>Data will not be shared externally except when necessary for logistics or safety.</p>
+                <p>You may request modification or deletion of your data at any time by contacting the organizer.</p>
+              </div>
+            </div>
+
+            {/* 12. Liability Waiver */}
+            <div>
+              <div className="flex items-center mb-4">
+                <FileText className="w-6 h-6 text-[#C65D2B] mr-3 flex-shrink-0" />
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB]">12. Liability Waiver</h2>
+              </div>
+              <div className="space-y-4 text-[#DCCCA3] leading-relaxed">
+                <p>By joining this retreat, you acknowledge and accept that:</p>
                 <ul className="list-disc pl-6 space-y-2">
-                  <li>More than 60 days before retreat: Full refund minus deposit</li>
-                  <li>30-60 days before retreat: 50% refund</li>
-                  <li>Less than 30 days before retreat: No refund</li>
+                  <li>Participation involves inherent risks.</li>
+                  <li>You are responsible for your own safety, decisions, and well-being.</li>
+                  <li>The organizers, guides, and teachers are not liable for personal injury, loss, or damage except in cases of proven negligence.</li>
                 </ul>
-                <p>
-                  <strong className="text-[#F7F5EB]">By Us:</strong> In the unlikely event that we need to cancel a retreat, 
-                  you will receive a full refund or the option to transfer to another retreat date.
-                </p>
               </div>
             </div>
 
-            {/* Health and Safety */}
-            <div>
-              <div className="flex items-center mb-4">
-                <AlertCircle className="w-6 h-6 text-[#C65D2B] mr-3" />
-                <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB]">Health and Safety</h2>
-              </div>
-              <div className="space-y-4 text-[#DCCCA3] leading-relaxed">
-                <p>
-                  <strong className="text-[#F7F5EB]">Physical Requirements:</strong> Participants must be in good physical condition 
-                  and over 18 years of age. Some retreats may have specific age restrictions or fitness requirements.
-                </p>
-                <p>
-                  <strong className="text-[#F7F5EB]">Medical Conditions:</strong> You must inform us of any medical conditions, 
-                  allergies, or medications that may affect your participation before booking.
-                </p>
-                <p>
-                  <strong className="text-[#F7F5EB]">Personal Responsibility:</strong> All activities are undertaken at your own risk. 
-                  You are responsible for following all safety instructions provided by guides.
-                </p>
-              </div>
-            </div>
-
-            {/* Travel Insurance */}
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-4">Travel Insurance</h2>
-              <div className="space-y-4 text-[#DCCCA3] leading-relaxed">
-                <p>
-                  We strongly recommend that you have comprehensive travel insurance covering adventure activities, 
-                  cancellation, and medical emergencies for your retreat.
-                </p>
-              </div>
-            </div>
-
-            {/* Changes to Itinerary */}
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-4">Changes to Itinerary</h2>
-              <div className="space-y-4 text-[#DCCCA3] leading-relaxed">
-                <p>
-                  While we aim to follow our advertised itinerary, we reserve the right to make changes due to weather 
-                  conditions, safety concerns, or other circumstances beyond our control. Alternative activities will be 
-                  provided where possible.
-                </p>
-              </div>
-            </div>
-
-            {/* Participant Conduct */}
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-4">Participant Conduct</h2>
-              <div className="space-y-4 text-[#DCCCA3] leading-relaxed">
-                <p>
-                  Participants must conduct themselves respectfully towards other participants, guides, and the local environment. 
-                  We reserve the right to remove any participant whose behavior is unsafe, disruptive, or inappropriate.
-                </p>
-              </div>
-            </div>
-
-            {/* Liability */}
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-4">Liability</h2>
-              <div className="space-y-4 text-[#DCCCA3] leading-relaxed">
-                <p>
-                  To the maximum extent permitted by law, Wild Adventure Retreat shall not be liable for any personal injury, 
-                  loss or damage to property, or other loss arising from participation in our retreats.
-                </p>
-              </div>
-            </div>
-
-            {/* Photography */}
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-4">Photography and Media</h2>
-              <div className="space-y-4 text-[#DCCCA3] leading-relaxed">
-                <p>
-                  By participating, you consent to photographs and videos being taken during the retreat. These may be used 
-                  for marketing purposes unless you notify us otherwise in writing.
-                </p>
-              </div>
-            </div>
-
-            {/* Force Majeure */}
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-4">Force Majeure</h2>
-              <div className="space-y-4 text-[#DCCCA3] leading-relaxed">
-                <p>
-                  We shall not be liable for any failure to perform our obligations due to circumstances beyond our reasonable 
-                  control, including natural disasters, pandemics, acts of government, or other events.
-                </p>
-              </div>
-            </div>
-
-            {/* Contact */}
+            {/* Organizer Contact */}
             <div className="pt-6 border-t border-[#6B8E23]/20">
-              <p className="text-[#DCCCA3] leading-relaxed">
-                <strong className="text-[#F7F5EB]">Questions?</strong> If you have any questions about these terms and conditions, 
-                please <a href="/contact" className="text-[#C65D2B] hover:text-[#C65D2B]/80 underline">contact us</a> before booking.
-              </p>
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-4">Organizer Contact:</h2>
+              <div className="space-y-3 text-[#DCCCA3]">
+                <p className="font-semibold text-[#F7F5EB]">Rugilė Bazytė</p>
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                  <a href="tel:+447549214155" className="flex items-center text-[#C65D2B] hover:text-[#C65D2B]/80">
+                    <Phone className="w-5 h-5 mr-2" />
+                    <span>+44 7549 214155</span>
+                  </a>
+                  <a href="mailto:wildadventurecoach@gmail.com" className="flex items-center text-[#C65D2B] hover:text-[#C65D2B]/80">
+                    <Mail className="w-5 h-5 mr-2" />
+                    <span>wildadventurecoach@gmail.com</span>
+                  </a>
+                </div>
+              </div>
             </div>
 
-            {/* Last Updated */}
-            <div className="pt-4">
-              <p className="text-sm text-[#DCCCA3]/60 italic">
-                Last updated: {new Date().toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}
-              </p>
+            {/* Acknowledgment */}
+            <div className="pt-6 border-t border-[#6B8E23]/20">
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-4">Acknowledgment</h2>
+              <div className="space-y-4 text-[#DCCCA3] leading-relaxed">
+                <p>Proceeding with payment constitutes your full acceptance of these Terms and Conditions.</p>
+                <p className="font-semibold">If you do not agree, please do not finalize your booking.</p>
+              </div>
             </div>
           </div>
         </motion.div>
