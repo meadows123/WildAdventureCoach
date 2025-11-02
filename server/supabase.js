@@ -31,6 +31,7 @@ export async function addBooking(bookingData) {
         age: bookingData.age,
         been_hiking: bookingData.been_hiking,
         hiking_experience: bookingData.hiking_experience,
+        accommodation_type: bookingData.accommodation_type,
         participants: bookingData.participants,
         amount_paid: bookingData.amount_paid,
         payment_status: bookingData.payment_status

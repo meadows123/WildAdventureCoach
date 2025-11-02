@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import HomePage from '@/pages/HomePage';
 import RetreatsPage from '@/pages/RetreatsPage';
@@ -10,6 +11,7 @@ import BookingSuccessPage from '@/pages/BookingSuccessPage';
 import ContactPage from '@/pages/ContactPage';
 import ChamonixRetreatPage from '@/pages/ChamonixRetreatPage';
 import AugustRetreatPage from '@/pages/AugustRetreatPage';
+import TermsAndConditionsPage from '@/pages/TermsAndConditionsPage';
 
 function App() {
   // Enable smooth scrolling
@@ -21,18 +23,22 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex flex-col">
       <ScrollToTop />
       <Navigation />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/retreats" element={<RetreatsPage />} />
-        <Route path="/retreat/chamonix" element={<ChamonixRetreatPage />} />
-        <Route path="/retreat/august" element={<AugustRetreatPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/booking" element={<BookingPage />} />
-        <Route path="/booking/success" element={<BookingSuccessPage />} />
-      </Routes>
+      <main className="flex-1">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/retreats" element={<RetreatsPage />} />
+          <Route path="/retreat/chamonix" element={<ChamonixRetreatPage />} />
+          <Route path="/retreat/august" element={<AugustRetreatPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/terms" element={<TermsAndConditionsPage />} />
+          <Route path="/booking" element={<BookingPage />} />
+          <Route path="/booking/success" element={<BookingSuccessPage />} />
+        </Routes>
+      </main>
+      <Footer />
       <Toaster />
     </div>
   );

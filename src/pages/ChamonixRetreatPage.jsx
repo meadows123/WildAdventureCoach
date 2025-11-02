@@ -28,11 +28,17 @@ const ChamonixRetreatPage = () => {
   }, [API_URL]);
 
   const images = [
-    'https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=1999&auto=format&fit=crop',
+    '/images/retreat/4.png',
     '/images/retreat/1.jpg',
     '/images/retreat/2.jpg',
-    '/images/retreat/3.jpg',
-    '/images/retreat/4.png'
+    '/images/retreat/5.jpg',
+    '/images/retreat/Train.webp',
+    '/images/retreat/Outside1.webp',
+    '/images/retreat/Outside3.webp',
+    '/images/retreat/Kitchen.webp',
+    '/images/retreat/Hallway.webp',
+    '/images/retreat/Bedroom.webp',
+    '/images/retreat/Bedroom1.webp'
   ];
 
   const nextImage = () => {
@@ -62,7 +68,7 @@ const ChamonixRetreatPage = () => {
     <>
       <Helmet>
         <title>Hiking & Yoga Retreat in Chamonix - Wild Adventure Coach</title>
-        <meta name="description" content="A transformative 6-day alpine adventure combining mindful movement, breathtaking hikes, introduction to climbing and daily restorative yoga in Chamonix, French Alps." />
+        <meta name="description" content="A transformative 6-day alpine adventure combining mindful movement, breathtaking hikes, an introduction to climbing and daily restorative yoga in Chamonix, French Alps." />
       </Helmet>
 
       <div className="min-h-screen pt-20 pb-16 px-4">
@@ -135,11 +141,11 @@ const ChamonixRetreatPage = () => {
             </p>
             <div className="w-24 h-1 bg-[#C65D2B] mx-auto rounded-full mb-3 sm:mb-4"></div>
             <p className="text-base sm:text-lg text-[#DCCCA3] max-w-3xl mx-auto leading-relaxed px-4">
-              A transformative 6-day alpine adventure combining mindful movement, breathtaking hikes, introduction to climbing and daily restorative yoga
+              An transformative 6-day alpine adventure combining mindful movement, breathtaking hikes, a introduction to climbing and daily restorative yoga
             </p>
-            <div className="mt-6">
+            <div className="mt-6 sm:mt-8">
               <Link to="/booking?retreat=Hiking and Yoga Retreat in Chamonix" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                <Button className="text-base sm:text-lg md:text-xl py-3 sm:py-4 px-6 sm:px-8 rounded-full shadow-lg transition-all touch-manipulation bg-[#C65D2B] hover:bg-[#C65D2B]/90 hover:shadow-xl active:scale-98 text-[#F7F5EB] w-full sm:w-auto">
+                <Button className="text-base sm:text-lg md:text-xl py-4 sm:py-5 md:py-6 px-8 sm:px-10 md:px-12 rounded-full shadow-lg transition-all touch-manipulation bg-[#C65D2B] hover:bg-[#C65D2B]/90 hover:shadow-xl active:scale-95 text-[#F7F5EB] w-full sm:w-auto min-h-[48px]">
                   Join the Experience
                 </Button>
               </Link>
@@ -239,7 +245,7 @@ const ChamonixRetreatPage = () => {
                     <p className="text-sm">Meditation, journaling, and quiet reflection away from digital distractions</p>
                   </div>
                 </div>
-                <div className="flex items-start text-[#DCCCA3] md:col-span-2 justify-center">
+                <div className="flex items-start text-[#DCCCA3] md:col-span-2 justify-start">
                   <span className="text-3xl mr-4">🤝</span>
                   <div>
                     <p className="font-semibold text-[#F7F5EB] mb-1">Community Connection</p>
@@ -277,7 +283,7 @@ const ChamonixRetreatPage = () => {
                 </div>
                 <div className="flex items-center text-[#DCCCA3]">
                   <span className="w-32 font-semibold text-[#F7F5EB]">17:30</span>
-                  <span>Evening Yin Yoga / Meditation Circle / Journaling workshop</span>
+                  <span>Evening Yin Yoga, Meditation Circle or Journaling Workshop</span>
                 </div>
                 <div className="flex items-center text-[#DCCCA3]">
                   <span className="w-32 font-semibold text-[#F7F5EB]">19:00</span>
@@ -292,7 +298,7 @@ const ChamonixRetreatPage = () => {
             <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-4 sm:mb-6">Accommodation & Meals</h2>
             <div className="bg-[#6B8E23]/10 border border-[#6B8E23]/30 rounded-lg p-4 sm:p-6 md:p-8">
               <p className="text-base sm:text-lg text-[#DCCCA3] leading-relaxed mb-4 sm:mb-6">
-                Stay in a cozy alpine chalet with panoramic Mont Blanc views. Meals are crafted by our <span className="text-[#F7F5EB] font-semibold">private chef</span>, using wholesome, locally sourced ingredients to energize and delight. Healthy snacks and natural energy bars are available anytime at the chalet's <span className="text-[#F7F5EB] font-semibold">honesty bar</span>. Shared spaces encourage authentic conversations and a sense of community.
+                Stay in a cozy <span className="text-[#F7F5EB] font-semibold">alpine chalet</span> with panoramic Mont Blanc views. Meals are crafted by our <span className="text-[#F7F5EB] font-semibold">private chef</span>, using wholesome, locally sourced ingredients to energize and delight. Healthy snacks and natural energy bars are available anytime at the chalet's <span className="text-[#F7F5EB] font-semibold">honesty bar</span>. Shared spaces encourage authentic conversations and a sense of community.
               </p>
               
               {/* Accommodation Options */}
@@ -313,12 +319,12 @@ const ChamonixRetreatPage = () => {
                   <p className="font-semibold text-[#F7F5EB] mb-2">Double</p>
                   <p className="text-sm text-[#DCCCA3]">Single occupancy</p>
                   <p className="text-sm text-[#DCCCA3]">Double room</p>
-                  <p className="text-2xl font-bold text-[#C65D2B] mt-3">£1,700</p>
+                  <p className="text-2xl font-bold text-[#C65D2B] mt-3">£1,750</p>
                 </div>
               </div>
               <div className="bg-[#6B8E23]/20 border border-[#6B8E23]/40 rounded-lg px-4 py-3 mt-4">
                 <p className="text-center text-[#DCCCA3] text-sm">
-                  All options secure your spot with a £250 deposit. You'll select your preferred accommodation during booking.
+                  Secure your place now for £250 and decide on accommodation later.
                 </p>
               </div>
             </div>
@@ -428,11 +434,11 @@ const ChamonixRetreatPage = () => {
             </div>
           </motion.div>
 
-          {/* Meet Our Team */}
+          {/* Meet Your Hosts */}
           <motion.div {...fadeInUp} className="mb-12">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#F7F5EB]">
-                Meet Our Team
+                MEET YOUR HOSTS
               </h2>
               <p className="text-lg text-[#DCCCA3] max-w-2xl mx-auto">
                 Get to know the passionate professionals who will guide your transformative journey
@@ -440,7 +446,7 @@ const ChamonixRetreatPage = () => {
             </div>
 
             <div className="grid md:grid-cols-3 gap-8">
-              {/* Rugile Ba - Guide */}
+              {/* Rugilė Bazytė - Guide */}
               <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -451,19 +457,22 @@ const ChamonixRetreatPage = () => {
               >
                 <div className="mb-6">
                   <img 
-                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop" 
-                    alt="Rugile Ba - Adventure Guide"
+                    src="/images/homepage/rugile.jpg" 
+                    alt="Rugilė Bazytė - Adventure Guide"
                     className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-[#C65D2B]/50"
+                    onError={(e) => {
+                      e.target.src = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop";
+                    }}
                   />
                 </div>
-                <h3 className="text-xl font-bold mb-2 text-[#F7F5EB]">Rugile Ba</h3>
+                <h3 className="text-xl font-bold mb-2 text-[#F7F5EB]">Rugilė Bazytė</h3>
                 <p className="text-[#C65D2B] font-semibold mb-3">Adventure Guide</p>
                 <p className="text-[#DCCCA3] text-sm leading-relaxed">
-                  With years of experience navigating the world's most challenging trails, Rugile brings expertise, passion, and unwavering safety consciousness to every retreat.
+                  With years of experience navigating the world's most challenging trails, Rugilė brings expertise, passion, and unwavering safety consciousness to every retreat.
                 </p>
               </motion.div>
 
-              {/* Kate Moss - Yoga Instructor */}
+              {/* Maray - Yoga Instructor */}
               <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -475,18 +484,18 @@ const ChamonixRetreatPage = () => {
                 <div className="mb-6">
                   <img 
                     src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop" 
-                    alt="Kate Moss - Yoga Instructor"
+                    alt="Maray - Yoga Instructor"
                     className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-[#C65D2B]/50"
                   />
                 </div>
-                <h3 className="text-xl font-bold mb-2 text-[#F7F5EB]">Kate Moss</h3>
+                <h3 className="text-xl font-bold mb-2 text-[#F7F5EB]">Maray</h3>
                 <p className="text-[#C65D2B] font-semibold mb-3">Yoga Instructor</p>
                 <p className="text-[#DCCCA3] text-sm leading-relaxed">
-                  Kate combines mindfulness and movement to help you find balance and inner strength during your adventure. Her calming presence enhances every retreat experience.
+                  Maray combines mindfulness and movement to help you find balance and inner strength during your adventure. Her calming presence enhances every retreat experience.
                 </p>
               </motion.div>
 
-              {/* Keanu Reeves - Chef */}
+              {/* Dominykas Svirskas - Chef */}
               <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -498,14 +507,14 @@ const ChamonixRetreatPage = () => {
                 <div className="mb-6">
                   <img 
                     src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop" 
-                    alt="Keanu Reeves - Chef"
+                    alt="Dominykas Svirskas - Chef"
                     className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-[#C65D2B]/50"
                   />
                 </div>
-                <h3 className="text-xl font-bold mb-2 text-[#F7F5EB]">Keanu Reeves</h3>
+                <h3 className="text-xl font-bold mb-2 text-[#F7F5EB]">Dominykas Svirskas</h3>
                 <p className="text-[#C65D2B] font-semibold mb-3">Chef</p>
                 <p className="text-[#DCCCA3] text-sm leading-relaxed">
-                  Keanu prepares nutritious, delicious meals that fuel your adventure. His culinary expertise ensures you're well-nourished throughout your retreat journey.
+                  Dominykas prepares nutritious, delicious meals that fuel your adventure. His culinary expertise ensures you're well-nourished throughout your retreat journey.
                 </p>
               </motion.div>
             </div>

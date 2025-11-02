@@ -57,42 +57,34 @@ const HomePage = () => {
   const reviews = [
     {
       id: 1,
-      name: "Sarah M.",
-      retreat: "Mont Blanc Retreat, 2025",
-      review: "This retreat completely changed my perspective on life. The combination of challenging hikes and mindful practices helped me discover strength I never knew I had.",
-      initial: "S",
+      name: "Pauline",
+      retreat: "2025",
+      review: "I loved these few days in full deconnection from my routine. Meeting new people was refreshing and inspiring. I particularly enjoyed how Rugile and Sandra made us experiencing the mountains together and challenging ourselves with so much care ❤️",
+      initial: "P",
       rating: 5
     },
     {
       id: 2,
-      name: "Marcus L.",
-      retreat: "Rocky Mountains Retreat, 2025",
-      review: "The group dynamic was incredible. I made lifelong friends while pushing my limits in the most beautiful mountain setting. Highly recommend!",
-      initial: "M",
+      name: "Charlie",
+      retreat: "2025",
+      review: "Amazing hikes in a beautiful part of the world, complimented by well-led yoga sessions to help relax and restore the legs at the end of the day. The group had people of all sorts of backgrounds and from a range of countries, but despite this we got along so well and I'm really grateful for deciding to go.",
+      initial: "C",
       rating: 5
     },
     {
       id: 3,
-      name: "Emma R.",
-      retreat: "Yoga & Hiking Retreat, 2025",
-      review: "Perfect balance of adventure and mindfulness. The yoga sessions at sunrise were magical, and the hiking challenged me in the best way possible.",
-      initial: "E",
+      name: "Zivile",
+      retreat: "2025",
+      review: "I loved the whole travel program, the consistency, the clarity of what we would do and what would happen next. I really enjoyed the beautiful views and good weather. Rest in the rooms for two with amenities was much needed after a long day.",
+      initial: "Z",
       rating: 5
     },
     {
       id: 4,
-      name: "James K.",
-      retreat: "Mont Blanc Retreat, 2025",
-      review: "Absolutely incredible experience! The guides were knowledgeable and supportive. The views were breathtaking and the group atmosphere was amazing.",
-      initial: "J",
-      rating: 5
-    },
-    {
-      id: 5,
-      name: "Lisa T.",
-      retreat: "Rocky Mountains Retreat, 2025",
-      review: "Life-changing experience! I pushed myself beyond what I thought possible and came back with new confidence and lifelong memories.",
-      initial: "L",
+      name: "Rhoda",
+      retreat: "2025",
+      review: "For me, the retreat was a whole new way of experiencing the Alps. Rugile and Sandra brought a balanced approach of connecting with the environment, with the fellow hikers in the group and within myself. The routes and schedule were rewarding and challenging, in perfect measures and I made lasting new friendships and special memories.",
+      initial: "R",
       rating: 5
     }
   ];
@@ -139,24 +131,24 @@ const HomePage = () => {
              src="https://images.unsplash.com/photo-1612003023592-7b989fc384ea" />
           </div>
           
-          <div className="relative z-10 text-center px-4 sm:px-6 max-w-4xl mx-auto">
+          <div className="relative z-10 text-center px-4 sm:px-6 md:px-8 max-w-4xl mx-auto py-8 sm:py-12">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="mb-3 sm:mb-4"
+              className="mb-4 sm:mb-4 md:mb-6"
             >
               <img 
                 src="/images/homepage/ChatGPT Image Oct 14, 2025 at 04_56_40 PM.png" 
                 alt="Wild Adventure Coach" 
-                className="h-24 sm:h-32 md:h-40 w-auto mx-auto"
+                className="h-24 sm:h-32 md:h-40 lg:h-44 w-auto mx-auto"
               />
             </motion.div>
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-4 sm:mb-6 text-[#F7F5EB] leading-tight"
+              className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6 md:mb-8 text-[#F7F5EB] leading-tight px-2"
             >
               Wild Adventure Coach
             </motion.h1>
@@ -164,7 +156,7 @@ const HomePage = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 text-[#DCCCA3] px-2"
+              className="text-base sm:text-xl md:text-2xl lg:text-3xl mb-8 sm:mb-10 md:mb-12 text-[#DCCCA3] px-3 sm:px-4"
             >
               Step outside the ordinary - move, breathe, and rediscover your wild side
             </motion.p>
@@ -174,24 +166,24 @@ const HomePage = () => {
               transition={{ duration: 0.8, delay: 0.6 }}
             >
               <Link to="/retreats" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                <Button className="bg-[#C65D2B] hover:bg-[#C65D2B]/90 text-[#F7F5EB] text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 rounded-full w-auto touch-manipulation">
-                  Explore Retreats <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
+                <Button className="bg-[#C65D2B] hover:bg-[#C65D2B]/90 text-[#F7F5EB] text-base sm:text-lg md:text-xl px-8 sm:px-10 md:px-12 py-4 sm:py-5 md:py-6 rounded-full w-auto touch-manipulation min-h-[48px] active:scale-95 transition-transform">
+                  Explore Retreats <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
                 </Button>
               </Link>
             </motion.div>
           </div>
         </section>
 
-        <section className="py-20 px-4 bg-[#2E4A34]">
+        <section className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-8 bg-[#2E4A34]">
           <div className="max-w-6xl mx-auto">
             <motion.h2
               {...scaleIn}
-              className="text-4xl md:text-5xl font-bold text-center mb-16 text-[#F7F5EB]"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-12 sm:mb-16 md:mb-20 text-[#F7F5EB]"
             >
               Why Choose Wild Adventure
             </motion.h2>
             
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-10">
               {features.map((feature, index) => (
                 <motion.div
                   key={index}
@@ -200,7 +192,7 @@ const HomePage = () => {
                   viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: 0.6, delay: index * 0.15, ease: "easeOut" }}
                   whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                  className="bg-[#6B8E23]/20 backdrop-blur-sm p-8 rounded-2xl border border-[#6B8E23]/30 hover:border-[#C65D2B]/50 transition-all"
+                  className="bg-[#6B8E23]/20 backdrop-blur-sm p-6 sm:p-8 md:p-10 rounded-2xl border border-[#6B8E23]/30 hover:border-[#C65D2B]/50 transition-all"
                 >
                   <motion.div
                     initial={{ scale: 0 }}
@@ -208,10 +200,10 @@ const HomePage = () => {
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: index * 0.15 + 0.3 }}
                   >
-                    <feature.icon className="w-12 h-12 text-[#C65D2B] mb-4" />
+                    <feature.icon className="w-10 h-10 sm:w-12 sm:h-12 text-[#C65D2B] mb-4" />
                   </motion.div>
-                  <h3 className="text-2xl font-bold mb-3 text-[#F7F5EB]">{feature.title}</h3>
-                  <p className="text-[#DCCCA3]">{feature.description}</p>
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 text-[#F7F5EB]">{feature.title}</h3>
+                  <p className="text-sm sm:text-base md:text-lg text-[#DCCCA3]">{feature.description}</p>
                 </motion.div>
               ))}
             </div>
@@ -287,7 +279,7 @@ const HomePage = () => {
                   transition={{ duration: 0.6, delay: 0.3 }}
                   className="text-base sm:text-lg text-[#DCCCA3] mb-4 sm:mb-6"
                 >
-                  Get to know Rugile, your experienced guide on this transformative journey
+                  Join me on this transformative journey
                 </motion.p>
                 <motion.div 
                   initial={{ opacity: 0 }}
@@ -296,13 +288,13 @@ const HomePage = () => {
                   transition={{ duration: 0.6, delay: 0.5 }}
                   className="space-y-4"
                 >
-                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#F7F5EB]">Rugile</h3>
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#F7F5EB]">Rugilė</h3>
                   <p className="text-[#C65D2B] font-semibold text-base sm:text-lg">Adventure Host & Guide</p>
                   <p className="text-base sm:text-lg text-[#DCCCA3]">
-                    An experienced hiker with a deep passion for nature and human connection, Rugile brings years of expertise navigating some of the world's most breathtaking trails. Her love for the mountains is matched only by her commitment to creating meaningful experiences that bring people together.
+                    I am an experienced hiker with a deep passion for nature and human connection. I bring years of expertise navigating some of the world's most breathtaking trails. My love for the mountains is matched only by my commitment to creating meaningful experiences that bring people together.
                   </p>
                   <p className="text-base sm:text-lg text-[#DCCCA3]">
-                    Through shared adventures in nature's most stunning landscapes, Rugile believes in the transformative power of connection—with the wilderness, with others, and with ourselves. Her guided retreats are designed to challenge you physically while nurturing your spirit and fostering authentic human bonds that last long after you return home.
+                    Through shared adventures in nature's most stunning landscapes, I believe in the transformative power of connection with the wilderness, with others, and with ourselves. My guided retreats are designed to challenge you physically while nurturing your spirit and fostering authentic human bonds that last long after you return home.
                   </p>
                 </motion.div>
               </motion.div>
@@ -310,7 +302,7 @@ const HomePage = () => {
               <motion.div {...fadeInRight}>
                 <img 
                   src="/images/homepage/rugile.jpg" 
-                  alt="Rugile - Adventure Host"
+                  alt="Rugilė - Adventure Host"
                   className="rounded-2xl shadow-2xl w-full h-[300px] sm:h-[400px] md:h-[500px] object-cover"
                   onError={(e) => {
                     // Fallback if image not found
@@ -329,7 +321,7 @@ const HomePage = () => {
               className="text-center mb-16"
             >
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 text-[#F7F5EB]">
-                What Our Adventurers Say
+                Testimonials
               </h2>
               <p className="text-base sm:text-lg text-[#DCCCA3] max-w-2xl mx-auto px-4">
                 Hear from those who've experienced the transformative power of our retreats
@@ -341,19 +333,6 @@ const HomePage = () => {
               {...fadeInUp}
               className="relative max-w-4xl mx-auto mb-12 sm:mb-16 md:mb-20 px-2 sm:px-0"
             >
-              {/* Google Logo */}
-              <div className="flex items-center justify-center mb-6 sm:mb-8">
-                <div className="flex items-center space-x-2">
-                  <svg className="w-6 h-6 sm:w-8 sm:h-8" viewBox="0 0 24 24" fill="none">
-                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                  </svg>
-                  <span className="text-[#F7F5EB] font-semibold text-base sm:text-lg md:text-xl">Google Reviews</span>
-                </div>
-              </div>
-
               {/* Review Card */}
               <div className="relative bg-[#6B8E23]/10 backdrop-blur-sm p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl border border-[#6B8E23]/30">
                 <motion.div
@@ -489,11 +468,8 @@ const HomePage = () => {
                 
                 {/* Note: Instagram feed configured with ID: wildadventurecoach */}
                 <div className="text-center mt-6 p-6 bg-[#2E4A34]/30 rounded-lg">
-                  <p className="text-[#DCCCA3] mb-4">
+                  <p className="text-[#DCCCA3] mb-6">
                     📸 Live Instagram feed from <a href="https://www.instagram.com/wildadventurecoach/" target="_blank" rel="noopener noreferrer" className="text-[#C65D2B] hover:underline font-semibold">@wildadventurecoach</a>
-                  </p>
-                  <p className="text-[#DCCCA3] text-sm mb-6">
-                    If the feed doesn't appear above, make sure you've set up your Behold.so account and connected your Instagram profile.
                   </p>
                   <a 
                     href="https://www.instagram.com/wildadventurecoach/?igsh=MW5kZ2ZpYzJwNm5nOQ%3D%3D"
@@ -512,36 +488,6 @@ const HomePage = () => {
 
           </div>
         </section>
-
-        <footer className="bg-[#1a2d20] py-12 px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="flex flex-col items-center space-y-6">
-              {/* Social Links */}
-              <div className="flex items-center space-x-6">
-                <a 
-                  href="https://www.instagram.com/wildadventurecoach/?igsh=MW5kZ2ZpYzJwNm5nOQ%3D%3D"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center space-x-2 text-[#DCCCA3] hover:text-[#C65D2B] transition-colors group"
-                >
-                  <Instagram className="w-6 h-6" />
-                  <span className="text-lg">@wildadventurecoach</span>
-                </a>
-              </div>
-
-
-            {/* Copyright */}
-            <div className="pt-6 border-t border-[#6B8E23]/30 w-full text-center">
-              <p className="text-[#DCCCA3] text-lg">
-                © 2025 Wild Adventure Coach. All rights reserved.
-              </p>
-              <p className="text-[#DCCCA3]/70 text-sm mt-3">
-                Developed by <a href="https://www.cisconnects.com" target="_blank" rel="noopener noreferrer" className="text-[#C65D2B] hover:text-[#C65D2B]/80 transition-colors underline">Cisconnects</a>
-              </p>
-            </div>
-            </div>
-          </div>
-        </footer>
       </div>
     </>
   );
