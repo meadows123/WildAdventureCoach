@@ -23,10 +23,10 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col overflow-x-hidden w-full">
       <ScrollToTop />
       <Navigation />
-      <main className="flex-1">
+      <main className="flex-1 w-full">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/retreats" element={<RetreatsPage />} />
