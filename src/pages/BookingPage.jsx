@@ -226,9 +226,41 @@ const BookingPage = () => {
     e.preventDefault();
     // Scroll to top when submitting (step 3)
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Validate all required fields before submitting
+    const needsAccommodation = retreat.hasAccommodationOptions && !formData.accommodationType;
+    const needsGroupCount = formData.travelingAloneOrGroup === 'Group' && !formData.numberOfPeople;
+    
+    if (!formData.firstName || !formData.lastName || !formData.email || 
+        !formData.gender || !formData.age || !formData.beenHiking || !formData.hikingExperience || 
+        !formData.travelingAloneOrGroup || needsAccommodation || needsGroupCount) {
+      toast({
+        title: "Missing information",
+        description: needsAccommodation ? "Please select your accommodation preference" : 
+                     needsGroupCount ? "Please enter the number of people in your group" :
+                     "Please fill in all required fields before checkout",
+        variant: "destructive",
+        duration: 5000
+      });
+      return;
+    }
+    
     setIsProcessing(true);
 
     try {
+      // Log the data being sent for debugging
+      console.log('📤 Sending checkout request:', {
+        retreat: formData.retreat,
+        accommodationType: formData.accommodationType,
+        email: formData.email,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        gender: formData.gender,
+        age: formData.age,
+        beenHiking: formData.beenHiking,
+        hikingExperience: formData.hikingExperience
+      });
+      
       const response = await fetch(`${API_URL}/create-checkout-session`, {
         method: 'POST',
         headers: {
