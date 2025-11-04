@@ -114,6 +114,7 @@ const BookingPage = () => {
     email: '',
     gender: '',
     age: '',
+    beenHiking: 'Yes', // Default to 'Yes' since we ask for hiking experience
     hikingExperience: ''
   });
 
@@ -137,6 +138,14 @@ const BookingPage = () => {
       });
     }
   }, [searchParams, toast]);
+
+  // Update formData retreat name when retreat changes
+  useEffect(() => {
+    setFormData(prev => ({
+      ...prev,
+      retreat: retreat.name
+    }));
+  }, [retreat.name]);
 
   // Fetch available spots on page load
   useEffect(() => {
@@ -235,7 +244,7 @@ const BookingPage = () => {
     const needsGroupCount = formData.travelingAloneOrGroup === 'Group' && !formData.numberOfPeople;
     
     if (!formData.firstName || !formData.lastName || !formData.email || 
-        !formData.gender || !formData.age || !formData.beenHiking || !formData.hikingExperience || 
+        !formData.gender || !formData.age || !formData.hikingExperience || 
         !formData.travelingAloneOrGroup || needsAccommodation || needsGroupCount) {
       toast({
         title: "Missing information",
@@ -251,25 +260,30 @@ const BookingPage = () => {
     setIsProcessing(true);
 
     try {
+      // Prepare data for checkout - ensure all required fields are present
+      const checkoutData = {
+        retreat: formData.retreat || retreat.name,
+        accommodationType: formData.accommodationType || '',
+        email: formData.email || '',
+        firstName: formData.firstName || '',
+        lastName: formData.lastName || '',
+        gender: formData.gender || '',
+        age: formData.age || '',
+        beenHiking: formData.beenHiking || 'Yes',
+        hikingExperience: formData.hikingExperience || '',
+        travelingAloneOrGroup: formData.travelingAloneOrGroup || '',
+        numberOfPeople: formData.numberOfPeople || ''
+      };
+      
       // Log the data being sent for debugging
-      console.log('📤 Sending checkout request:', {
-        retreat: formData.retreat,
-        accommodationType: formData.accommodationType,
-        email: formData.email,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        gender: formData.gender,
-        age: formData.age,
-        beenHiking: formData.beenHiking,
-        hikingExperience: formData.hikingExperience
-      });
+      console.log('📤 Sending checkout request:', checkoutData);
       
       const response = await fetch(`${API_URL}/create-checkout-session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(checkoutData),
       });
 
       // Check if response is ok

@@ -62,9 +62,28 @@ app.post('/create-checkout-session', async (req, res) => {
   // Build the full retreat key with accommodation if provided (and not empty string)
   const retreatKey = (accommodationType && accommodationType.trim() !== '') ? `${retreat} - ${accommodationType}` : retreat;
   
-  // Check required fields
-  if (!retreat || !email || !firstName || !lastName || !gender || !age || !beenHiking || !hikingExperience) {
-    console.log('❌ Missing required fields:', { retreat, email, firstName, lastName, gender, age, beenHiking, hikingExperience });
+  // Check required fields - treat empty strings as missing
+  const hasRetreat = retreat && retreat.trim() !== '';
+  const hasEmail = email && email.trim() !== '';
+  const hasFirstName = firstName && firstName.trim() !== '';
+  const hasLastName = lastName && lastName.trim() !== '';
+  const hasGender = gender && gender.trim() !== '';
+  const hasAge = age && String(age).trim() !== '';
+  const hasBeenHiking = beenHiking && String(beenHiking).trim() !== '';
+  const hasHikingExperience = hikingExperience && hikingExperience.trim() !== '';
+  
+  if (!hasRetreat || !hasEmail || !hasFirstName || !hasLastName || !hasGender || !hasAge || !hasBeenHiking || !hasHikingExperience) {
+    console.log('❌ Missing required fields:', { 
+      retreat: hasRetreat, 
+      email: hasEmail, 
+      firstName: hasFirstName, 
+      lastName: hasLastName, 
+      gender: hasGender, 
+      age: hasAge, 
+      beenHiking: hasBeenHiking, 
+      hikingExperience: hasHikingExperience,
+      receivedValues: { retreat, email, firstName, lastName, gender, age, beenHiking, hikingExperience }
+    });
     return res.status(400).json({ error: 'Missing required fields' });
   }
 

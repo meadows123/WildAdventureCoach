@@ -142,7 +142,7 @@ const ChamonixRetreatPage = () => {
             </p>
             <div className="w-24 h-1 bg-[#C65D2B] mx-auto rounded-full mb-3 sm:mb-4"></div>
             <p className="text-base sm:text-lg text-[#DCCCA3] max-w-3xl mx-auto leading-relaxed px-4">
-              An transformative 6-day alpine adventure combining mindful movement, breathtaking hikes, a introduction to climbing and daily restorative yoga
+              A transformative 6-day alpine adventure combining mindful movement, breathtaking hikes, an introduction to climbing and daily restorative yoga
             </p>
             <div className="mt-6 sm:mt-8">
               <Link to="/booking?retreat=Hiking and Yoga Retreat in Chamonix" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
