@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Calendar, MapPin, Users, Instagram } from 'lucide-react';
+import { Calendar, MapPin, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const RetreatsPage = () => {
@@ -22,7 +22,7 @@ const RetreatsPage = () => {
       duration: '6 days / 5 nights',
       dates: 'June 4 - 9, 2026',
       participants: 'Up to 10 people',
-      description: 'A transformative 6-day alpine adventure combining mindful movement, breathtaking hikes, introduction to climbing and daily restorative yoga. Escape the noise of daily life and immerse yourself in an environment that challenges the body, clears the mind, and creates space for meaningful connection. Designed for busy professionals seeking clarity, adventure, and renewal.',
+      description: 'An transformative 6-day alpine adventure combining mindful movement, breathtaking hikes, a introduction to climbing and daily restorative yoga. Escape the noise of daily life and immerse yourself in an environment that challenges the body, clears the mind, and creates space for meaningful connection. Designed for busy professionals seeking clarity, adventure, and renewal.',
       status: 'upcoming',
       price: '£1,250',
       priceNote: 'per person',
@@ -47,11 +47,18 @@ const RetreatsPage = () => {
         'Personal gear'
       ],
       images: [
-        'https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=1999&auto=format&fit=crop',
+        '/images/retreat/4.png',
         '/images/retreat/1.jpg',
         '/images/retreat/2.jpg',
-        '/images/retreat/3.jpg',
-        '/images/retreat/4.png'
+        '/images/retreat/5.jpg',
+        '/images/retreat/Train.webp',
+        '/images/retreat/Outside1.webp',
+        '/images/retreat/Outside3.webp',
+        '/images/retreat/Kitchen.webp',
+        '/images/retreat/Hallway.webp',
+        '/images/retreat/Bedroom.webp',
+        '/images/retreat/Bedroom1.webp',
+        '/images/retreat/Bathroom1.webp'
       ],
       accommodationOptions: [
         {
@@ -68,7 +75,7 @@ const RetreatsPage = () => {
         },
         {
           name: 'Double',
-          price: 1700,
+          price: 1750,
           deposit: 250,
           description: 'Single occupancy in a double room'
         }
@@ -154,7 +161,7 @@ const RetreatsPage = () => {
           <div className="flex-1 min-w-0">
             {/* Retreat Name */}
             <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-[#C65D2B] mb-2 sm:mb-2 leading-tight">
-              {retreat.title}
+              {retreat.title.replace('Mont Blanc', 'Mont\u00A0Blanc')}
             </h2>
             
             {/* Info Icons Row */}
@@ -168,7 +175,7 @@ const RetreatsPage = () => {
               {/* Location */}
               <div className="flex items-center gap-1.5">
                 <MapPin className="w-4 h-4 text-[#6B8E23] flex-shrink-0" />
-                <span className="text-[#F7F5EB]">{retreat.location}</span>
+                <span className="text-[#F7F5EB]">{retreat.location.replace('Mont Blanc', 'Mont\u00A0Blanc')}</span>
               </div>
               
               {/* Fitness Level */}
@@ -184,7 +191,7 @@ const RetreatsPage = () => {
             {isJune ? (
               <Link to="/retreat/chamonix" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                 <Button 
-                  className="w-full sm:w-auto text-sm sm:text-base py-2 sm:py-3 px-6 rounded-full shadow-lg transition-all touch-manipulation bg-[#C65D2B] hover:bg-[#C65D2B]/90 hover:shadow-xl active:scale-98 text-[#F7F5EB] whitespace-nowrap"
+                  className="w-full sm:w-auto text-sm sm:text-base py-3 sm:py-4 px-6 sm:px-8 rounded-full shadow-lg transition-all touch-manipulation bg-[#C65D2B] hover:bg-[#C65D2B]/90 hover:shadow-xl active:scale-95 text-[#F7F5EB] whitespace-nowrap min-h-[48px]"
                 >
                   Join The Experience
                 </Button>
@@ -192,7 +199,7 @@ const RetreatsPage = () => {
             ) : isAugust ? (
               <Link to="/contact" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                 <Button 
-                  className="w-full sm:w-auto text-sm sm:text-base py-2 sm:py-3 px-6 rounded-full shadow-lg transition-all touch-manipulation bg-[#C65D2B] hover:bg-[#C65D2B]/90 hover:shadow-xl active:scale-98 text-[#F7F5EB] whitespace-nowrap"
+                  className="w-full sm:w-auto text-sm sm:text-base py-3 sm:py-4 px-6 sm:px-8 rounded-full shadow-lg transition-all touch-manipulation bg-[#C65D2B] hover:bg-[#C65D2B]/90 hover:shadow-xl active:scale-95 text-[#F7F5EB] whitespace-nowrap min-h-[48px]"
                 >
                   Find Out More
                 </Button>
@@ -200,7 +207,7 @@ const RetreatsPage = () => {
             ) : (
               <Link to={`/booking?retreat=${encodeURIComponent(retreat.title)}`} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                 <Button 
-                  className="w-full sm:w-auto text-sm sm:text-base py-2 sm:py-3 px-6 rounded-full shadow-lg transition-all touch-manipulation bg-[#C65D2B] hover:bg-[#C65D2B]/90 hover:shadow-xl active:scale-98 text-[#F7F5EB] whitespace-nowrap"
+                  className="w-full sm:w-auto text-sm sm:text-base py-3 sm:py-4 px-6 sm:px-8 rounded-full shadow-lg transition-all touch-manipulation bg-[#C65D2B] hover:bg-[#C65D2B]/90 hover:shadow-xl active:scale-95 text-[#F7F5EB] whitespace-nowrap min-h-[48px]"
                 >
                   Join The Experience
                 </Button>
@@ -230,47 +237,17 @@ const RetreatsPage = () => {
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4 text-[#F7F5EB] px-4">
               Our Retreats
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-[#DCCCA3] max-w-3xl mx-auto px-4">
-              Join us for an unforgettable adventure through the stunning landscapes of Mont Blanc
+            <p className="text-sm sm:text-base md:text-lg text-[#DCCCA3] max-w-3xl mx-auto px-4">
+              Join us for an unforgettable adventure through the stunning landscapes of Mont&nbsp;Blanc
             </p>
           </motion.div>
 
-          <div className="max-w-6xl mx-auto space-y-4 sm:space-y-6 mb-16 sm:mb-24">
+          <div className="space-y-4 sm:space-y-6 mb-16 sm:mb-24">
             {retreats.map((retreat) => (
               <RetreatCard key={retreat.id} retreat={retreat} />
             ))}
           </div>
         </div>
-
-        <footer className="bg-[#1a2d20] py-12 px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="flex flex-col items-center space-y-6">
-              {/* Social Links */}
-              <div className="flex items-center space-x-6">
-                <a 
-                  href="https://www.instagram.com/wildadventurecoach/?igsh=MW5kZ2ZpYzJwNm5nOQ%3D%3D"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center space-x-2 text-[#DCCCA3] hover:text-[#C65D2B] transition-colors group"
-                >
-                  <Instagram className="w-6 h-6" />
-                  <span className="text-lg">@wildadventurecoach</span>
-                </a>
-                    </div>
-                    
-
-              {/* Copyright */}
-              <div className="pt-6 border-t border-[#6B8E23]/30 w-full text-center">
-            <p className="text-[#DCCCA3] text-lg">
-              © 2025 Wild Adventure Coach. All rights reserved.
-            </p>
-            <p className="text-[#DCCCA3]/70 text-sm mt-3">
-              Developed by <a href="https://www.cisconnects.com" target="_blank" rel="noopener noreferrer" className="text-[#C65D2B] hover:text-[#C65D2B]/80 transition-colors underline">Cisconnects</a>
-            </p>
-              </div>
-            </div>
-          </div>
-        </footer>
       </div>
     </>
   );

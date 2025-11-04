@@ -37,12 +37,12 @@
   * {
     @apply border-border;
   }
+  html {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
   body {
-    @apply bg-[#2E4A34] text-[#F7F5EB];
+    @apply bg-[#2E4A34] text-[#F7F5EB] overflow-x-hidden;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
-}
-
-html {
-  scroll-behavior: smooth;
 }

@@ -144,39 +144,39 @@ const ContactPage = () => {
               
               <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                 <div>
-                  <Label htmlFor="name" className="text-[#DCCCA3] mb-2 block">Your Name *</Label>
+                  <Label htmlFor="name" className="text-[#DCCCA3] mb-2 block text-base sm:text-lg">Your Name *</Label>
                   <Input
                     id="name"
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="bg-[#2E4A34] border-[#6B8E23] text-[#F7F5EB]"
+                    className="bg-[#2E4A34] border-[#6B8E23] text-[#F7F5EB] text-base sm:text-lg min-h-[48px] py-3"
                     required
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="email" className="text-[#DCCCA3] mb-2 block">Email Address *</Label>
+                  <Label htmlFor="email" className="text-[#DCCCA3] mb-2 block text-base sm:text-lg">Email Address *</Label>
                   <Input
                     id="email"
                     name="email"
                     type="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="bg-[#2E4A34] border-[#6B8E23] text-[#F7F5EB]"
+                    className="bg-[#2E4A34] border-[#6B8E23] text-[#F7F5EB] text-base sm:text-lg min-h-[48px] py-3"
                     required
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="message" className="text-[#DCCCA3] mb-2 block text-sm sm:text-base">Your Message *</Label>
+                  <Label htmlFor="message" className="text-[#DCCCA3] mb-2 block text-base sm:text-lg">Your Message *</Label>
                   <textarea
                     id="message"
                     name="message"
                     value={formData.message}
                     onChange={handleInputChange}
                     rows="5"
-                    className="w-full bg-[#2E4A34] border border-[#6B8E23] rounded-md p-3 text-base sm:text-lg text-[#F7F5EB] focus:border-[#C65D2B] focus:outline-none focus:ring-2 focus:ring-[#C65D2B]/50 min-h-[120px]"
+                    className="w-full bg-[#2E4A34] border border-[#6B8E23] rounded-md p-3 sm:p-4 text-base sm:text-lg text-[#F7F5EB] focus:border-[#C65D2B] focus:outline-none focus:ring-2 focus:ring-[#C65D2B]/50 min-h-[120px]"
                     required
                   />
                 </div>
@@ -184,7 +184,7 @@ const ContactPage = () => {
                 <Button
                   type="submit"
                   disabled={isSending}
-                  className="w-full bg-[#C65D2B] hover:bg-[#C65D2B]/90 text-[#F7F5EB] text-base sm:text-lg py-4 sm:py-6 rounded-full disabled:opacity-50 touch-manipulation"
+                  className="w-full bg-[#C65D2B] hover:bg-[#C65D2B]/90 text-[#F7F5EB] text-base sm:text-lg py-4 sm:py-6 rounded-full disabled:opacity-50 touch-manipulation min-h-[48px] active:scale-95 transition-transform"
                 >
                   {isSending ? (
                     <>
@@ -229,11 +229,11 @@ const ContactPage = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.1 }}
                   whileHover={{ scale: 1.05 }}
-                  className="inline-flex items-center gap-3 px-6 py-4 bg-[#25D366] border-2 border-white text-white font-semibold rounded-full hover:bg-[#1ebe57] transition-all duration-200 w-full justify-center touch-manipulation min-h-[48px]"
+                  className="inline-flex items-center gap-3 px-6 py-4 bg-[#25D366] border-2 border-white text-white font-semibold rounded-full hover:bg-[#1ebe57] transition-all duration-200 w-full justify-center touch-manipulation min-h-[52px] active:scale-95"
                   title="Contact us on WhatsApp"
                 >
                   <WhatsAppIcon className="w-5 h-5 sm:w-6 sm:h-6" />
-                  <span className="text-base sm:text-lg font-bold">WHATSAPP</span>
+                  <span className="text-base sm:text-lg md:text-xl font-bold">WHATSAPP</span>
                 </motion.a>
 
                 {/* Instagram Button */}
@@ -246,11 +246,11 @@ const ContactPage = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.2 }}
                   whileHover={{ scale: 1.05 }}
-                  className="inline-flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 border-2 border-white text-white font-semibold rounded-full hover:opacity-90 transition-all duration-200 w-full justify-center touch-manipulation min-h-[48px]"
+                  className="inline-flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 border-2 border-white text-white font-semibold rounded-full hover:opacity-90 transition-all duration-200 w-full justify-center touch-manipulation min-h-[52px] active:scale-95"
                   title="Follow us on Instagram"
                 >
                   <Instagram className="w-5 h-5 sm:w-6 sm:h-6" />
-                  <span className="text-base sm:text-lg font-bold">INSTAGRAM</span>
+                  <span className="text-base sm:text-lg md:text-xl font-bold">INSTAGRAM</span>
                 </motion.a>
               </div>
 
@@ -258,7 +258,7 @@ const ContactPage = () => {
               <div className="bg-[#C65D2B]/10 border border-[#C65D2B]/30 rounded-xl p-4 sm:p-6 mt-6 sm:mt-8">
                 <h3 className="text-[#F7F5EB] font-semibold mb-2 sm:mb-3 text-base sm:text-lg">Questions About the Retreat?</h3>
                 <p className="text-[#DCCCA3] text-sm sm:text-base">
-                  Whether you're wondering about fitness requirements, what to pack, dietary accommodations, 
+                  Whether you're wondering about fitness requirements, what to pack, dietary requirements, 
                   or anything else - we're here to help! Send us a message and we'll answer all your questions.
                 </p>
               </div>
@@ -266,47 +266,6 @@ const ContactPage = () => {
           </div>
         </div>
       </div>
-
-      <footer className="bg-[#1a2d20] py-12 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col items-center space-y-6">
-            {/* Contact Links */}
-            <div className="flex flex-col md:flex-row items-center gap-6">
-              <a 
-                href="https://wa.me/447549214155"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-[#25D366] border-2 border-white text-white font-semibold rounded-full hover:bg-[#1ebe57] transition-all duration-200"
-                title="Contact us on WhatsApp"
-              >
-                <WhatsAppIcon className="w-5 h-5" />
-                <span className="text-sm font-bold">WHATSAPP</span>
-              </a>
-
-              <a 
-                href="https://www.instagram.com/wildadventurecoach/?igsh=MW5kZ2ZpYzJwNm5nOQ%3D%3D"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 border-2 border-white text-white font-semibold rounded-full hover:opacity-90 transition-all duration-200"
-                title="Follow us on Instagram"
-              >
-                <Instagram className="w-5 h-5" />
-                <span className="text-sm font-bold">INSTAGRAM</span>
-              </a>
-            </div>
-
-            {/* Copyright */}
-            <div className="pt-6 border-t border-[#6B8E23]/30 w-full text-center">
-              <p className="text-[#DCCCA3] text-lg">
-                © 2025 Wild Adventure Coach. All rights reserved.
-              </p>
-              <p className="text-[#DCCCA3]/70 text-sm mt-3">
-                Developed by <a href="https://www.cisconnects.com" target="_blank" rel="noopener noreferrer" className="text-[#C65D2B] hover:text-[#C65D2B]/80 transition-colors underline">Cisconnects</a>
-              </p>
-            </div>
-          </div>
-        </div>
-      </footer>
     </>
   );
 };

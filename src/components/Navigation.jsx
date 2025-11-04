@@ -30,21 +30,21 @@ const Navigation = () => {
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 w-full overflow-x-hidden ${
         isScrolled ? 'bg-[#2E4A34]/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16 sm:h-20">
-          <Link to="/" className="flex items-center" onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 overflow-hidden">
+        <div className="flex justify-between items-center h-16 sm:h-20 w-full min-w-0">
+          <Link to="/" className="flex items-center flex-shrink-0" onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
             <img 
               src="/images/logo/logo.png" 
               alt="Wild Adventure Coach Logo" 
-              className="h-16 sm:h-20 md:h-24 w-auto"
+              className="h-16 sm:h-20 md:h-24 w-auto max-w-[200px] sm:max-w-[240px]"
             />
           </Link>
 
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-8 flex-shrink-0">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
@@ -63,7 +63,7 @@ const Navigation = () => {
 
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden text-[#F7F5EB] p-2 touch-manipulation active:scale-95 transition-transform"
+            className="md:hidden text-[#F7F5EB] p-2 touch-manipulation active:scale-95 transition-transform flex-shrink-0"
             aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? <X size={32} /> : <Menu size={32} />}

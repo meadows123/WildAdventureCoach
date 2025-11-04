@@ -66,7 +66,7 @@ dist
 
 # Gatsby files
 .cache/
-public
+
 
 # Storybook build outputs
 .out
@@ -179,3 +179,4 @@ playwright/.cache/
 
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
+node_modules

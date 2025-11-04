@@ -171,6 +171,7 @@ app.get('/checkout-session/:sessionId', async (req, res) => {
           age: parseInt(session.metadata.age),
           been_hiking: session.metadata.beenHiking || null,
           hiking_experience: session.metadata.hikingExperience || null,
+          accommodation_type: session.metadata.accommodationType || null,
           participants: 1,
           amount_paid: session.amount_total,
           payment_status: 'completed'
@@ -310,6 +311,7 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res)
           age: parseInt(session.metadata.age),
           been_hiking: session.metadata.beenHiking || null,
           hiking_experience: session.metadata.hikingExperience || null,
+          accommodation_type: session.metadata.accommodationType || null,
           participants: 1, // Single person booking
           amount_paid: session.amount_total,
           payment_status: 'completed'

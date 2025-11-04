@@ -17,144 +17,152 @@ export async function sendBookingConfirmationEmail(booking) {
   try {
     const amountInPounds = (booking.amount_paid / 100).toFixed(2);
     
+    // Get retreat dates based on retreat name
+    const retreatDatesMap = {
+      'Hiking and Yoga Retreat in Chamonix': 'June 4 - 9, 2026',
+      'Hiking & Yoga Retreat Chamonix': 'June 4 - 9, 2026',
+      'Hiking and Yoga Retreat - August': 'August 30 - September 4, 2026',
+      'Hiking & Yoga Retreat - Tour du Mont Blanc': 'August 30 - September 4, 2026'
+    };
+    
+    const retreatDates = retreatDatesMap[booking.retreat_name] || '';
+    
     const emailHtml = `
 <!DOCTYPE html>
 <html>
 <head>
   <style>
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #F7F5EB; max-width: 600px; margin: 0 auto; background: #1a2d20; }
-    .email-wrapper { background: #1a2d20; padding: 20px; }
-    .header { background: linear-gradient(135deg, #2E4A34 0%, #6B8E23 100%); color: #F7F5EB; padding: 40px 20px; text-align: center; border-radius: 15px 15px 0 0; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-    .header h1 { margin: 0; font-size: 36px; color: #F7F5EB; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
-    .header p { margin: 10px 0 0 0; font-size: 18px; opacity: 0.95; color: #DCCCA3; }
-    .content { background: #2E4A34; padding: 30px 20px; color: #DCCCA3; }
-    .booking-card { background: #1a2d20; padding: 25px; border-radius: 15px; margin: 20px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border: 2px solid #6B8E23; }
-    .booking-card h2 { color: #F7F5EB; margin-top: 0; font-size: 24px; border-bottom: 2px solid #C65D2B; padding-bottom: 10px; }
-    .detail-row { margin: 15px 0; padding: 12px; background: #2E4A34; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
-    .detail-label { font-weight: 700; color: #6B8E23; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .detail-value { color: #F7F5EB; text-align: right; font-weight: 500; }
-    .highlight { color: #C65D2B; font-weight: bold; font-size: 28px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
-    .next-steps { background: #6B8E23; padding: 25px; border-radius: 15px; margin: 20px 0; border: 2px solid #C65D2B; }
-    .next-steps h3 { color: #F7F5EB; margin-top: 0; font-size: 22px; }
-    .next-steps ul { padding-left: 20px; margin: 15px 0; }
-    .next-steps li { margin: 12px 0; color: #DCCCA3; font-size: 15px; }
-    .next-steps li strong { color: #F7F5EB; }
-    .contact-box { background: linear-gradient(135deg, #C65D2B 0%, #6B8E23 100%); border: 2px solid #F7F5EB; padding: 25px; border-radius: 15px; margin: 20px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-    .contact-box h3 { color: #F7F5EB; margin-top: 0; font-size: 20px; }
-    .contact-box p { color: #F7F5EB; margin: 10px 0; }
-    .contact-box a { color: #DCCCA3; text-decoration: none; font-weight: 700; border-bottom: 2px solid #DCCCA3; padding-bottom: 2px; }
-    .contact-box a:hover { color: #F7F5EB; border-color: #F7F5EB; }
-    .footer { text-align: center; padding: 30px 20px; color: #DCCCA3; font-size: 14px; background: #1a2d20; border-radius: 0 0 15px 15px; border-top: 2px solid #6B8E23; }
-    .footer a { color: #C65D2B; text-decoration: none; font-weight: 600; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; background: #f5f5f5; }
+    .email-wrapper { background: #ffffff; padding: 20px; border-radius: 8px; }
+    .header { background: #6B8E23; color: white; padding: 40px 20px; text-align: center; border-radius: 8px 8px 0 0; }
+    .header h1 { margin: 0; font-size: 32px; }
+    .header p { margin: 10px 0 0 0; font-size: 18px; }
+    .content { padding: 30px 20px; color: #333; }
+    .booking-card { background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #6B8E23; }
+    .booking-card h2 { color: #6B8E23; margin-top: 0; font-size: 22px; }
+    .detail-row { margin: 12px 0; padding: 8px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e0e0e0; }
+    .detail-label { font-weight: 600; color: #6B8E23; }
+    .detail-value { text-align: right; color: #333; }
+    .highlight { color: #C65D2B; font-weight: bold; font-size: 24px; }
+    .next-steps { background: #6B8E23; color: white; padding: 20px; border-radius: 8px; margin: 20px 0; }
+    .next-steps h3 { margin-top: 0; font-size: 20px; }
+    .next-steps ul { padding-left: 20px; margin: 10px 0; }
+    .next-steps li { margin: 8px 0; }
+    .button-wrapper { text-align: center; margin: 25px 0; }
+    .button { display: inline-block; background: #C65D2B; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: 600; }
+    .footer { text-align: center; padding: 20px; color: #666; font-size: 14px; border-top: 2px solid #6B8E23; background: #f9f9f9; border-radius: 0 0 8px 8px; }
+    .footer a { color: #C65D2B; text-decoration: none; }
     .footer a:hover { text-decoration: underline; }
-    .greeting { color: #F7F5EB; font-size: 17px; }
-    .body-text { color: #DCCCA3; font-size: 16px; line-height: 1.8; }
-    .signature { color: #F7F5EB; font-size: 16px; }
-    .signature strong { color: #C65D2B; }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>🏔️ Booking Confirmed!</h1>
-    <p>Your adventure awaits, ${booking.first_name}!</p>
-  </div>
-  
   <div class="email-wrapper">
-  <div class="content">
-    <p class="greeting">Dear ${booking.first_name},</p>
-    
-    <p class="body-text">Thank you for booking with <strong style="color: #F7F5EB;">Wild Adventure Coach</strong>! We're thrilled to have you join us for an unforgettable adventure in the stunning landscapes of Mont Blanc.</p>
-    
-    <div class="booking-card">
-      <h2>📋 Your Booking Details</h2>
-      
-      <div class="detail-row">
-        <span class="detail-label">Retreat: </span>
-        <span class="detail-value">${booking.retreat_name}</span>
-      </div>
-      
-      <div class="detail-row">
-        <span class="detail-label">Name: </span>
-        <span class="detail-value">${booking.first_name} ${booking.last_name}</span>
-      </div>
-      
-      <div class="detail-row">
-        <span class="detail-label">Email: </span>
-        <span class="detail-value">${booking.email}</span>
-      </div>
-      
-      ${booking.gender ? `
-      <div class="detail-row">
-        <span class="detail-label">Gender: </span>
-        <span class="detail-value">${booking.gender}</span>
-      </div>
-      ` : ''}
-      
-      ${booking.age ? `
-      <div class="detail-row">
-        <span class="detail-label">Age: </span>
-        <span class="detail-value">${booking.age}</span>
-      </div>
-      ` : ''}
-      
-      ${booking.been_hiking ? `
-      <div class="detail-row">
-        <span class="detail-label">Been Hiking Before: </span>
-        <span class="detail-value">${booking.been_hiking}</span>
-      </div>
-      ` : ''}
-      
-      ${booking.hiking_experience ? `
-      <div class="detail-row">
-        <span class="detail-label">Hiking Experience: </span>
-        <span class="detail-value">${booking.hiking_experience}</span>
-      </div>
-      ` : ''}
-      
-      <div class="detail-row" style="border-top: 2px solid #C65D2B; margin-top: 15px; padding-top: 15px;">
-        <span class="detail-label" style="font-size: 18px;">Total Paid: </span>
-        <span class="highlight">£${amountInPounds}</span>
-      </div>
+    <div class="header">
+      <h1>🏔️ Booking Confirmed!</h1>
+      <p>Your adventure awaits, ${booking.first_name}!</p>
     </div>
     
-    <div class="next-steps">
-      <h3>✅ What Happens Next?</h3>
-      <ul>
-        <li><strong>Within 48 hours:</strong> You'll receive a detailed itinerary for your retreat</li>
-        <li><strong>2 weeks before:</strong> We'll send you a comprehensive packing list</li>
-        <li><strong>1 week before:</strong> Meeting point and logistics details</li>
-        <li><strong>3 days before:</strong> Final reminders and emergency contacts</li>
-      </ul>
-    </div>
-    
-    <div class="contact-box">
-      <h3>📞 Questions or Need Help?</h3>
-      <p style="margin: 10px 0; color: #856404;">
-        <strong>WhatsApp:</strong> <a href="https://wa.me/447549214155">+44 7549 214155</a><br>
-        <strong>Instagram:</strong> <a href="https://www.instagram.com/wildadventurecoach/">@wildadventurecoach</a><br>
-        <strong>Email:</strong> <a href="mailto:wildadventurecoach@gmail.com">wildadventurecoach@gmail.com</a>
+    <div class="content">
+      <p>Dear ${booking.first_name},</p>
+      
+      <p>Thank you for booking with <strong>Wild Adventure Coach</strong>! We're thrilled to have you join us for an unforgettable adventure in the stunning landscapes of Mont Blanc.</p>
+      
+      <div class="booking-card">
+        <h2>📋 Your Booking Details</h2>
+        
+        <div class="detail-row">
+          <span class="detail-label">Retreat: </span>
+          <span class="detail-value">${booking.retreat_name}</span>
+        </div>
+        
+        ${retreatDates ? `
+        <div class="detail-row">
+          <span class="detail-label">Dates: </span>
+          <span class="detail-value">${retreatDates}</span>
+        </div>
+        ` : ''}
+        
+        ${booking.accommodation_type ? `
+        <div class="detail-row">
+          <span class="detail-label">Accommodation: </span>
+          <span class="detail-value">${booking.accommodation_type}</span>
+        </div>
+        ` : ''}
+        
+        <div class="detail-row">
+          <span class="detail-label">Name: </span>
+          <span class="detail-value">${booking.first_name} ${booking.last_name}</span>
+        </div>
+        
+        <div class="detail-row">
+          <span class="detail-label">Email: </span>
+          <span class="detail-value">${booking.email}</span>
+        </div>
+        
+        ${booking.gender ? `
+        <div class="detail-row">
+          <span class="detail-label">Gender: </span>
+          <span class="detail-value">${booking.gender}</span>
+        </div>
+        ` : ''}
+        
+        ${booking.age ? `
+        <div class="detail-row">
+          <span class="detail-label">Age: </span>
+          <span class="detail-value">${booking.age}</span>
+        </div>
+        ` : ''}
+        
+        ${booking.been_hiking ? `
+        <div class="detail-row">
+          <span class="detail-label">Been Hiking Before: </span>
+          <span class="detail-value">${booking.been_hiking}</span>
+        </div>
+        ` : ''}
+        
+        ${booking.hiking_experience ? `
+        <div class="detail-row">
+          <span class="detail-label">Hiking Experience: </span>
+          <span class="detail-value">${booking.hiking_experience}</span>
+        </div>
+        ` : ''}
+        
+        <div class="detail-row" style="border-top: 2px solid #C65D2B; margin-top: 15px; padding-top: 15px; border-bottom: none;">
+          <span class="detail-label" style="font-size: 18px;">Total Paid: </span>
+          <span class="highlight">£${amountInPounds}</span>
+        </div>
+      </div>
+      
+      <div class="next-steps">
+        <h3>✅ What Happens Next?</h3>
+        <ul>
+          <li><strong>Within 48 hours:</strong> You will receive a detailed itinerary, general information and transportation options</li>
+          <li><strong>3 Months before:</strong> You will receive a comprehensive packing list, recommended training plan and consent form to sign.</li>
+          <li><strong>2 Months before:</strong> The final payment is due.</li>
+          <li><strong>1 Month before:</strong> You will be invited to an info session and an optional simulation hike.</li>
+        </ul>
+      </div>
+      
+      <div class="button-wrapper">
+        <a href="https://wa.me/447549214155" class="button">📞 Get in Touch</a>
+      </div>
+      
+      <p style="margin-top: 25px;">We can't wait to see you on the trails and help you create memories that will last a lifetime!</p>
+      
+      <p style="margin-top: 25px;">
+        Best regards,<br>
+        <strong>The Wild Adventure Coach Team</strong> 🥾⛰️
       </p>
     </div>
     
-    <p class="body-text" style="margin-top: 30px;">We can't wait to see you on the trails and help you create memories that will last a lifetime!</p>
-    
-    <p class="signature" style="margin-top: 25px;">
-      Best regards,<br>
-      <strong>The Wild Adventure Coach Team</strong> 🥾⛰️
-    </p>
-  </div>
-  
-  <div class="footer">
-    <p style="margin: 5px 0;"><strong style="color: #F7F5EB;">Wild Adventure Coach</strong></p>
-    <p style="margin: 10px 0;">
-      <a href="https://wildadventurecoach.onrender.com">wildadventurecoach.onrender.com</a> | 
-      <a href="https://www.instagram.com/wildadventurecoach/">@wildadventurecoach</a>
-    </p>
-    <p style="margin: 15px 0 5px 0; font-size: 12px; color: #DCCCA3;">© 2025 Wild Adventure Coach. All rights reserved.</p>
-    <p style="margin: 5px 0; font-size: 11px; color: #DCCCA3; opacity: 0.7;">
-      Developed by <a href="https://www.cisconnects.com" style="color: #C65D2B;">Cisconnects</a>
-    </p>
-  </div>
+    <div class="footer">
+      <p style="margin: 5px 0;"><strong>Wild Adventure Coach</strong></p>
+      <p style="margin: 10px 0;">
+        <a href="https://wildadventurecoach.com">wildadventurecoach.com</a> | 
+        <a href="https://www.instagram.com/wildadventurecoach/">@wildadventurecoach</a>
+      </p>
+      <p style="margin: 15px 0 5px 0; font-size: 12px;">© 2025 Wild Adventure Coach. All rights reserved.</p>
+    </div>
   </div>
 </body>
 </html>
@@ -168,6 +176,9 @@ Dear ${booking.first_name},
 Thank you for booking ${booking.retreat_name}!
 
 Booking Details:
+- Retreat: ${booking.retreat_name}
+${retreatDates ? `- Dates: ${retreatDates}` : ''}
+${booking.accommodation_type ? `- Accommodation: ${booking.accommodation_type}` : ''}
 - Name: ${booking.first_name} ${booking.last_name}
 - Email: ${booking.email}
 ${booking.gender ? `- Gender: ${booking.gender}` : ''}
@@ -177,10 +188,10 @@ ${booking.hiking_experience ? `- Hiking Experience: ${booking.hiking_experience}
 - Total Paid: £${amountInPounds}
 
 What's Next?
-- Within 48 hours: Detailed itinerary
-- 2 weeks before: Packing list
-- 1 week before: Meeting point details
-- 3 days before: Final reminders
+- Within 48 hours: You will receive a detailed itinerary, general information and transportation options
+- 3 Months before: You will receive a comprehensive packing list, recommended training plan and consent form to sign.
+- 2 Months before: The final payment is due.
+- 1 Month before: You will be invited to an info session and an optional simulation hike.
 
 Questions?
 WhatsApp: +44 7549 214155
@@ -257,96 +268,119 @@ export async function sendAdminNotification(booking) {
   try {
     const amountInPounds = (booking.amount_paid / 100).toFixed(2);
     
+    // Get retreat dates based on retreat name
+    const retreatDatesMap = {
+      'Hiking and Yoga Retreat in Chamonix': 'June 4 - 9, 2026',
+      'Hiking & Yoga Retreat Chamonix': 'June 4 - 9, 2026',
+      'Hiking and Yoga Retreat - August': 'August 30 - September 4, 2026',
+      'Hiking & Yoga Retreat - Tour du Mont Blanc': 'August 30 - September 4, 2026'
+    };
+    
+    const retreatDates = retreatDatesMap[booking.retreat_name] || '';
+    
     const adminEmailHtml = `
 <!DOCTYPE html>
 <html>
 <head>
   <style>
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #F7F5EB; max-width: 600px; margin: 0 auto; background: #1a2d20; }
-    .email-wrapper { background: #1a2d20; padding: 20px; }
-    .header { background: linear-gradient(135deg, #C65D2B 0%, #6B8E23 100%); color: #F7F5EB; padding: 30px 20px; text-align: center; border-radius: 15px 15px 0 0; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-    .header h1 { margin: 0; font-size: 32px; color: #F7F5EB; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
-    .content { padding: 30px 20px; background: #2E4A34; }
-    .booking-info { background: #1a2d20; padding: 25px; border-radius: 12px; margin: 20px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border: 2px solid #6B8E23; }
-    .booking-info h2 { color: #F7F5EB; margin-top: 0; font-size: 24px; border-bottom: 2px solid #C65D2B; padding-bottom: 10px; }
-    .detail { margin: 12px 0; padding: 10px; background: #2E4A34; border-radius: 8px; color: #DCCCA3; }
-    .label { font-weight: bold; color: #6B8E23; margin-right: 10px; }
-    .value { color: #F7F5EB; }
-    .action-box { background: #6B8E23; padding: 20px; border-radius: 12px; margin: 20px 0; border: 2px solid #C65D2B; }
-    .action-box h3 { color: #F7F5EB; margin-top: 0; }
-    .action-box ul { color: #DCCCA3; padding-left: 20px; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; background: #f5f5f5; }
+    .email-wrapper { background: #ffffff; padding: 20px; border-radius: 8px; }
+    .header { background: #6B8E23; color: white; padding: 30px 20px; text-align: center; border-radius: 8px 8px 0 0; }
+    .header h1 { margin: 0; font-size: 28px; }
+    .content { padding: 30px 20px; color: #333; }
+    .booking-info { background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #6B8E23; }
+    .booking-info h2 { color: #6B8E23; margin-top: 0; font-size: 22px; }
+    .detail { margin: 10px 0; padding: 8px 0; border-bottom: 1px solid #e0e0e0; }
+    .label { font-weight: 600; color: #6B8E23; margin-right: 10px; }
+    .value { color: #333; }
+    .action-box { background: #C65D2B; color: white; padding: 20px; border-radius: 8px; margin: 20px 0; }
+    .action-box h3 { margin-top: 0; }
+    .action-box ul { padding-left: 20px; }
     .action-box li { margin: 8px 0; }
-    .footer { text-align: center; padding: 20px; color: #DCCCA3; font-size: 13px; background: #1a2d20; border-radius: 0 0 15px 15px; border-top: 2px solid #6B8E23; }
+    .footer { text-align: center; padding: 20px; color: #666; font-size: 13px; border-top: 2px solid #6B8E23; background: #f9f9f9; border-radius: 0 0 8px 8px; }
+    .highlight { color: #C65D2B; font-weight: bold; font-size: 24px; }
   </style>
 </head>
 <body>
   <div class="email-wrapper">
-  <div class="header">
-    <h1>🎉 New Booking Received!</h1>
-  </div>
-  
-  <div class="content">
-    <div class="booking-info">
-      <h2 style="margin-top: 0; color: #2E4A34;">Booking Details</h2>
-      
-      <div class="detail">
-        <span class="label">Retreat:</span> <span class="value">${booking.retreat_name}</span>
+    <div class="header">
+      <h1>🎉 New Booking Received!</h1>
+    </div>
+    
+    <div class="content">
+      <div class="booking-info">
+        <h2>Booking Details</h2>
+        
+        <div class="detail">
+          <span class="label">Retreat:</span> <span class="value">${booking.retreat_name}</span>
+        </div>
+        
+        ${retreatDates ? `
+        <div class="detail">
+          <span class="label">Date:</span> <span class="value">${retreatDates}</span>
+        </div>
+        ` : ''}
+        
+        ${booking.accommodation_type ? `
+        <div class="detail">
+          <span class="label">Accommodation:</span> <span class="value">${booking.accommodation_type}</span>
+        </div>
+        ` : ''}
+        
+        <div class="detail">
+          <span class="label">Guest:</span> <span class="value">${booking.first_name} ${booking.last_name}</span>
+        </div>
+        
+        <div class="detail">
+          <span class="label">Email:</span> <span class="value">${booking.email}</span>
+        </div>
+        
+        <div class="detail">
+          <span class="label">Gender:</span> <span class="value">${booking.gender || 'N/A'}</span>
+        </div>
+        
+        <div class="detail">
+          <span class="label">Age:</span> <span class="value">${booking.age || 'N/A'}</span>
+        </div>
+        
+        <div class="detail">
+          <span class="label">Been Hiking:</span> <span class="value">${booking.been_hiking || 'N/A'}</span>
+        </div>
+        
+        <div class="detail">
+          <span class="label">Experience:</span> <span class="value">${booking.hiking_experience || 'N/A'}</span>
+        </div>
+        
+        <div class="detail" style="border-top: 2px solid #C65D2B; margin-top: 15px; padding-top: 15px; border-bottom: none;">
+          <span class="label" style="font-size: 18px;">Amount Paid:</span> 
+          <span class="highlight">£${amountInPounds}</span>
+        </div>
+        
+        <div class="detail">
+          <span class="label">Booking Date:</span> <span class="value">${new Date(booking.booking_date).toLocaleString('en-GB')}</span>
+        </div>
+        
+        <div class="detail">
+          <span class="label">Stripe ID:</span> 
+          <span class="value" style="font-family: monospace; font-size: 12px;">${booking.stripe_session_id}</span>
+        </div>
       </div>
       
-      <div class="detail">
-        <span class="label">Guest:</span> <span class="value">${booking.first_name} ${booking.last_name}</span>
-      </div>
-      
-      <div class="detail">
-        <span class="label">Email:</span> <span class="value">${booking.email}</span>
-      </div>
-      
-      <div class="detail">
-        <span class="label">Gender:</span> <span class="value">${booking.gender || 'N/A'}</span>
-      </div>
-      
-      <div class="detail">
-        <span class="label">Age:</span> <span class="value">${booking.age || 'N/A'}</span>
-      </div>
-      
-      <div class="detail">
-        <span class="label">Been Hiking:</span> <span class="value">${booking.been_hiking || 'N/A'}</span>
-      </div>
-      
-      <div class="detail">
-        <span class="label">Experience:</span> <span class="value">${booking.hiking_experience || 'N/A'}</span>
-      </div>
-      
-      <div class="detail" style="margin-top: 15px; background: #6B8E23; border: 2px solid #C65D2B;">
-        <span class="label" style="font-size: 16px; color: #F7F5EB;">Amount Paid:</span> 
-        <span style="color: #F7F5EB; font-weight: bold; font-size: 24px;">£${amountInPounds}</span>
-      </div>
-      
-      <div class="detail">
-        <span class="label">Booking Date:</span> <span class="value">${new Date(booking.booking_date).toLocaleString('en-GB')}</span>
-      </div>
-      
-      <div class="detail" style="font-size: 12px;">
-        <span class="label">Stripe ID:</span> 
-        <span class="value" style="font-family: monospace; font-size: 11px;">${booking.stripe_session_id}</span>
+      <div class="action-box">
+        <h3>✅ Action Required:</h3>
+        <ul>
+          <li>Log into Supabase to view full booking details</li>
+          <li>Send welcome package to guest within 48 hours</li>
+          <li>Update retreat capacity if needed</li>
+          <li>Prepare personalized itinerary for guest</li>
+        </ul>
       </div>
     </div>
     
-    <div class="action-box">
-      <h3>✅ Action Required:</h3>
-      <ul>
-        <li>Log into Supabase to view full booking details</li>
-        <li>Send welcome package to guest within 48 hours</li>
-        <li>Update retreat capacity if needed</li>
-        <li>Prepare personalized itinerary for guest</li>
-      </ul>
+    <div class="footer">
+      <p style="margin: 5px 0;">Wild Adventure Coach - Admin Notification</p>
+      <p style="margin: 5px 0; font-size: 12px;">This is an automated notification from your booking system</p>
     </div>
-  </div>
-  
-  <div class="footer">
-    <p style="margin: 5px 0; color: #DCCCA3;">Wild Adventure Coach - Admin Notification</p>
-    <p style="margin: 5px 0; font-size: 11px; opacity: 0.7;">This is an automated notification from your booking system</p>
-  </div>
   </div>
 </body>
 </html>
@@ -409,56 +443,57 @@ export async function sendContactEmail(contactData) {
 <html>
 <head>
   <style>
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #F7F5EB; max-width: 600px; margin: 0 auto; background: #1a2d20; }
-    .email-wrapper { background: #1a2d20; padding: 20px; }
-    .header { background: linear-gradient(135deg, #2E4A34 0%, #6B8E23 100%); color: #F7F5EB; padding: 30px 20px; text-align: center; border-radius: 15px 15px 0 0; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-    .header h1 { margin: 0; font-size: 32px; color: #F7F5EB; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
-    .content { padding: 30px 20px; background: #2E4A34; }
-    .contact-info { background: #1a2d20; padding: 25px; border-radius: 12px; margin: 20px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border: 2px solid #6B8E23; }
-    .contact-info h2 { color: #F7F5EB; margin-top: 0; font-size: 24px; border-bottom: 2px solid #C65D2B; padding-bottom: 10px; }
-    .detail { margin: 15px 0; padding: 15px; background: #2E4A34; border-radius: 8px; color: #DCCCA3; }
-    .label { font-weight: bold; color: #6B8E23; margin-right: 10px; }
-    .value { color: #F7F5EB; }
-    .message-box { background: #1a2d20; padding: 20px; border-radius: 12px; margin: 20px 0; border-left: 4px solid #C65D2B; }
-    .message-box p { color: #DCCCA3; margin: 0; line-height: 1.8; }
-    .footer { text-align: center; padding: 20px; color: #DCCCA3; font-size: 13px; background: #1a2d20; border-radius: 0 0 15px 15px; border-top: 2px solid #6B8E23; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; background: #f5f5f5; }
+    .email-wrapper { background: #ffffff; padding: 20px; border-radius: 8px; }
+    .header { background: #6B8E23; color: white; padding: 30px 20px; text-align: center; border-radius: 8px 8px 0 0; }
+    .header h1 { margin: 0; font-size: 28px; }
+    .content { padding: 30px 20px; color: #333; }
+    .contact-info { background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #6B8E23; }
+    .contact-info h2 { color: #6B8E23; margin-top: 0; font-size: 22px; }
+    .detail { margin: 12px 0; padding: 8px 0; border-bottom: 1px solid #e0e0e0; }
+    .label { font-weight: 600; color: #6B8E23; margin-right: 10px; }
+    .value { color: #333; }
+    .message-box { background: #ffffff; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #C65D2B; }
+    .message-box h3 { color: #C65D2B; margin-top: 0; margin-bottom: 15px; }
+    .message-box p { color: #333; margin: 0; line-height: 1.8; }
+    .footer { text-align: center; padding: 20px; color: #666; font-size: 13px; border-top: 2px solid #6B8E23; background: #f9f9f9; border-radius: 0 0 8px 8px; }
   </style>
 </head>
 <body>
   <div class="email-wrapper">
-  <div class="header">
-    <h1>📧 New Contact Form Submission</h1>
-  </div>
-  
-  <div class="content">
-    <div class="contact-info">
-      <h2 style="margin-top: 0; color: #F7F5EB;">Contact Details</h2>
-      
-      <div class="detail">
-        <span class="label">Name:</span> <span class="value">${contactData.name}</span>
-      </div>
-      
-      <div class="detail">
-        <span class="label">Email:</span> <span class="value">${contactData.email}</span>
-      </div>
-      
-      <div class="message-box">
-        <h3 style="color: #F7F5EB; margin-top: 0; margin-bottom: 15px;">Message:</h3>
-        <p>${contactData.message.replace(/\n/g, '<br>')}</p>
-      </div>
-      
-      <div class="detail" style="margin-top: 20px; padding: 10px; background: #1a2d20; font-size: 13px; color: #DCCCA3;">
-        <strong style="color: #6B8E23;">Received:</strong> ${new Date().toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'long' })}
+    <div class="header">
+      <h1>📧 New Contact Form Submission</h1>
+    </div>
+    
+    <div class="content">
+      <div class="contact-info">
+        <h2>Contact Details</h2>
+        
+        <div class="detail">
+          <span class="label">Name:</span> <span class="value">${contactData.name}</span>
+        </div>
+        
+        <div class="detail">
+          <span class="label">Email:</span> <span class="value">${contactData.email}</span>
+        </div>
+        
+        <div class="message-box">
+          <h3>Message:</h3>
+          <p>${contactData.message.replace(/\n/g, '<br>')}</p>
+        </div>
+        
+        <div class="detail" style="margin-top: 20px; padding: 10px; background: #f5f5f5; font-size: 13px; border-radius: 6px; border-bottom: none;">
+          <strong style="color: #6B8E23;">Received:</strong> ${new Date().toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'long' })}
+        </div>
       </div>
     </div>
-  </div>
-  
-  <div class="footer">
-    <p>© 2025 Wild Adventure Coach. All rights reserved.</p>
-    <p style="margin-top: 10px;">
-      <a href="https://wildadventurecoach.onrender.com" style="color: #C65D2B; text-decoration: none;">wildadventurecoach.onrender.com</a>
-    </p>
-  </div>
+    
+    <div class="footer">
+      <p>© 2025 Wild Adventure Coach. All rights reserved.</p>
+      <p style="margin-top: 10px;">
+        <a href="https://wildadventurecoach.com" style="color: #C65D2B; text-decoration: none;">wildadventurecoach.com</a>
+      </p>
+    </div>
   </div>
 </body>
 </html>

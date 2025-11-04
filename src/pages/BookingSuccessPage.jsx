@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
-import { CheckCircle, Calendar, Mail, Loader2, Instagram } from 'lucide-react';
+import { CheckCircle, Calendar, Mail, Loader2 } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
@@ -184,44 +184,6 @@ const BookingSuccessPage = () => {
           </motion.div>
         </div>
       </div>
-
-      <footer className="bg-[#1a2d20] py-12 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col items-center space-y-6">
-            {/* Social Links */}
-            <div className="flex items-center space-x-6">
-              <a 
-                href="https://www.instagram.com/wildadventurecoach/?igsh=MW5kZ2ZpYzJwNm5nOQ%3D%3D"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center space-x-2 text-[#DCCCA3] hover:text-[#C65D2B] transition-colors group"
-              >
-                <Instagram className="w-6 h-6" />
-                <span className="text-lg">@wildadventurecoach</span>
-              </a>
-            </div>
-
-            {/* Email */}
-            <a 
-              href="mailto:wildadventurecoach@gmail.com"
-              className="flex items-center space-x-2 text-[#DCCCA3] hover:text-[#C65D2B] transition-colors"
-            >
-              <Mail className="w-5 h-5" />
-              <span className="text-lg">wildadventurecoach@gmail.com</span>
-            </a>
-
-            {/* Copyright */}
-            <div className="pt-6 border-t border-[#6B8E23]/30 w-full text-center">
-              <p className="text-[#DCCCA3] text-lg">
-                © 2025 Wild Adventure Coach. All rights reserved.
-              </p>
-              <p className="text-[#DCCCA3]/70 text-sm mt-3">
-                Developed by <a href="https://www.cisconnects.com" target="_blank" rel="noopener noreferrer" className="text-[#C65D2B] hover:text-[#C65D2B]/80 transition-colors underline">Cisconnects</a>
-              </p>
-            </div>
-          </div>
-        </div>
-      </footer>
     </>
   );
 };
