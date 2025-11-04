@@ -9,9 +9,23 @@ const FROM_EMAIL = process.env.FROM_EMAIL || 'wildadventurecoach@gmail.com';
  */
 export async function sendBookingConfirmationEmail(booking) {
   console.log('📧 Attempting to send email from:', FROM_EMAIL);
+  console.log('📦 Booking data received:', JSON.stringify(booking, null, 2));
+  
   if (!SENDGRID_API_KEY) {
     console.warn('⚠️  SendGrid API key not configured. Skipping email.');
     return { success: false, error: 'SendGrid not configured' };
+  }
+
+  // Validate required fields
+  if (!booking || !booking.email || !booking.first_name || !booking.last_name || !booking.retreat_name) {
+    console.error('❌ Missing required booking fields:', { 
+      hasBooking: !!booking,
+      hasEmail: !!booking?.email,
+      hasFirstName: !!booking?.first_name,
+      hasLastName: !!booking?.last_name,
+      hasRetreatName: !!booking?.retreat_name
+    });
+    return { success: false, error: 'Missing required booking fields' };
   }
 
   try {
@@ -217,7 +231,7 @@ The Wild Adventure Coach Team
               email: booking.email, 
               name: `${booking.first_name} ${booking.last_name}` 
             }],
-            subject: `✅ Booking Confirmed - ${booking.retreat_name}`,
+            subject: `Booking Confirmed - ${booking.retreat_name}`,
           },
         ],
         from: {
@@ -227,6 +241,20 @@ The Wild Adventure Coach Team
         reply_to: {
           email: FROM_EMAIL,
           name: 'Wild Adventure Coach',
+        },
+        // Mark as transactional email to improve deliverability
+        mail_settings: {
+          sandbox_mode: {
+            enable: false
+          }
+        },
+        // Add categories to help with deliverability
+        categories: ['booking-confirmation', 'transactional'],
+        // Custom headers to improve deliverability
+        headers: {
+          'X-Entity-Ref-ID': `booking-${booking.stripe_session_id}`,
+          'List-Unsubscribe': `<mailto:${FROM_EMAIL}?subject=unsubscribe>`,
+          'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click'
         },
         content: [
           {
@@ -357,7 +385,7 @@ export async function sendAdminNotification(booking) {
         </div>
         
         <div class="detail">
-          <span class="label">Booking Date:</span> <span class="value">${new Date(booking.booking_date).toLocaleString('en-GB')}</span>
+          <span class="label">Booking Date:</span> <span class="value">${booking.booking_date ? new Date(booking.booking_date).toLocaleString('en-GB') : new Date().toLocaleString('en-GB')}</span>
         </div>
         
         <div class="detail">

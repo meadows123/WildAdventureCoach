@@ -199,12 +199,33 @@ app.get('/checkout-session/:sessionId', async (req, res) => {
         const savedBooking = await addBooking(bookingData);
         console.log('✅ Booking saved via success page (backup method)');
         console.log(`📊 Spot booked for ${bookingData.retreat_name}: ${bookingData.first_name} ${bookingData.last_name}`);
+        console.log('📦 Saved booking data:', JSON.stringify(savedBooking, null, 2));
         
         // Send confirmation email to customer
-        await sendBookingConfirmationEmail(savedBooking);
+        try {
+          console.log('📧 Attempting to send confirmation email to:', savedBooking.email);
+          const emailResult = await sendBookingConfirmationEmail(savedBooking);
+          if (emailResult.success) {
+            console.log('✅ Confirmation email sent successfully');
+          } else {
+            console.error('❌ Failed to send confirmation email:', emailResult.error);
+          }
+        } catch (emailError) {
+          console.error('❌ Error sending confirmation email:', emailError);
+        }
         
         // Send notification email to admin
-        await sendAdminNotification(savedBooking);
+        try {
+          console.log('📧 Attempting to send admin notification');
+          const adminEmailResult = await sendAdminNotification(savedBooking);
+          if (adminEmailResult.success) {
+            console.log('✅ Admin notification sent successfully');
+          } else {
+            console.error('❌ Failed to send admin notification:', adminEmailResult.error);
+          }
+        } catch (adminEmailError) {
+          console.error('❌ Error sending admin notification:', adminEmailError);
+        }
       } catch (dbError) {
         // Might already exist from webhook - that's okay
         if (dbError.code !== '23505') { // Not a duplicate key error
@@ -339,12 +360,33 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res)
         const savedBooking = await addBooking(bookingData);
         console.log('✅ Booking saved to Supabase');
         console.log(`📊 Spot booked for ${bookingData.retreat_name}: ${bookingData.first_name} ${bookingData.last_name}`);
+        console.log('📦 Saved booking data:', JSON.stringify(savedBooking, null, 2));
         
         // Send confirmation email to customer
-        await sendBookingConfirmationEmail(savedBooking);
+        try {
+          console.log('📧 Attempting to send confirmation email to:', savedBooking.email);
+          const emailResult = await sendBookingConfirmationEmail(savedBooking);
+          if (emailResult.success) {
+            console.log('✅ Confirmation email sent successfully');
+          } else {
+            console.error('❌ Failed to send confirmation email:', emailResult.error);
+          }
+        } catch (emailError) {
+          console.error('❌ Error sending confirmation email:', emailError);
+        }
         
         // Send notification email to admin
-        await sendAdminNotification(savedBooking);
+        try {
+          console.log('📧 Attempting to send admin notification');
+          const adminEmailResult = await sendAdminNotification(savedBooking);
+          if (adminEmailResult.success) {
+            console.log('✅ Admin notification sent successfully');
+          } else {
+            console.error('❌ Failed to send admin notification:', adminEmailResult.error);
+          }
+        } catch (adminEmailError) {
+          console.error('❌ Error sending admin notification:', adminEmailError);
+        }
       } catch (dbError) {
         console.error('❌ Error saving to database:', dbError);
         // Payment still succeeded, just log the error
