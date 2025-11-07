@@ -469,7 +469,7 @@ const ChamonixRetreatPage = () => {
                 <h3 className="text-xl font-bold mb-2 text-[#F7F5EB]">Rugilė Bazytė</h3>
                 <p className="text-[#C65D2B] font-semibold mb-3">Adventure Guide</p>
                 <p className="text-[#DCCCA3] text-sm leading-relaxed">
-                  With years of experience navigating the world's most challenging trails, Rugilė brings expertise, passion, and unwavering safety consciousness to every retreat.
+                  Rugilė is the heart behind these adventures — an experienced hiker, mountain lover, and organizer who has spent years exploring some of the most spectacular trails across Europe. Her retreats bring together her passion for the outdoors, mindful living, and genuine human connection. Known for her calm presence and safety-first approach, she creates experiences that are both grounding and unforgettable — where challenge meets serenity, and every step leads you closer to nature and yourself.
                 </p>
               </motion.div>
 
@@ -484,15 +484,16 @@ const ChamonixRetreatPage = () => {
               >
                 <div className="mb-6">
                   <img 
-                    src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop" 
+                    src="/images/homepage/maray.png" 
                     alt="Maray - Yoga Instructor"
                     className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-[#C65D2B]/50"
                   />
                 </div>
-                <h3 className="text-xl font-bold mb-2 text-[#F7F5EB]">Maray</h3>
+                <h3 className="text-xl font-bold mb-1 text-[#F7F5EB]">Maray</h3>
+                <p className="text-sm text-[#DCCCA3] mb-2">@maunayogachamonix</p>
                 <p className="text-[#C65D2B] font-semibold mb-3">Yoga Instructor</p>
                 <p className="text-[#DCCCA3] text-sm leading-relaxed">
-                  Maray combines mindfulness and movement to help you find balance and inner strength during your adventure. Her calming presence enhances every retreat experience.
+                  Maray has been a dedicated student and practitioner of yoga since 2001. Her path began with Iyengar Yoga and quickly expanded to include Hatha, Ashtanga, and Zen meditation. From the very beginning, her heart was drawn to the deeper questions of yoga, Who am I? What is the truth? What is love? Today, she teaches online and in person in Chamonix Mont-Blanc, France, offering educational programs, teacher training, workshops, and collaborative projects with yoga schools around the world.
                 </p>
               </motion.div>
 
@@ -507,7 +508,7 @@ const ChamonixRetreatPage = () => {
               >
                 <div className="mb-6">
                   <img 
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop" 
+                    src="/images/homepage/dominykas.png" 
                     alt="Dominykas Svirskas - Chef"
                     className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-[#C65D2B]/50"
                   />
@@ -515,7 +516,7 @@ const ChamonixRetreatPage = () => {
                 <h3 className="text-xl font-bold mb-2 text-[#F7F5EB]">Dominykas Svirskas</h3>
                 <p className="text-[#C65D2B] font-semibold mb-3">Chef</p>
                 <p className="text-[#DCCCA3] text-sm leading-relaxed">
-                  Dominykas prepares nutritious, delicious meals that fuel your adventure. His culinary expertise ensures you're well-nourished throughout your retreat journey.
+                  Meet Dominykas - our retreat Chef whose passion for food goes far beyond flavor. With experience in several Michelin-starred kitchens and now leading one of London’s most renowned restaurants, he brings exceptional culinary artistry to our retreats. Dominykas crafts clean, wholesome, and deeply nourishing meals tailored to support your body’s needs throughout the journey - helping you feel energized, balanced, and truly cared for from the inside out.
                 </p>
               </motion.div>
             </div>

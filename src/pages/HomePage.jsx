@@ -229,20 +229,18 @@ const HomePage = () => {
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.3 }}
-                  className="text-base sm:text-lg text-[#DCCCA3] mb-4 sm:mb-6"
+                  className="text-base sm:text-lg text-[#DCCCA3] mb-4 sm:mb-6 text-justify"
                 >
-                  Our retreats are designed to push your boundaries, reconnect you with nature, 
-                  and help you discover strengths you never knew you had.
+                  Our retreats are designed to challenge your limits, reconnect you with nature, and help you uncover strengths you never knew you had.
                 </motion.p>
                 <motion.p 
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.5 }}
-                  className="text-base sm:text-lg text-[#DCCCA3] mb-6 sm:mb-8"
+                  className="text-base sm:text-lg text-[#DCCCA3] mb-6 sm:mb-8 text-justify"
                 >
-                  Whether you're seeking adventure, personal growth, or simply a break from 
-                  the everyday, we create transformative experiences in stunning natural settings.
+                  Whether you’re seeking adventure, personal growth, or simply a break from the everyday, we offer transformative experiences set in breathtaking natural landscapes.
                 </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -277,7 +275,7 @@ const HomePage = () => {
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.3 }}
-                  className="text-base sm:text-lg text-[#DCCCA3] mb-4 sm:mb-6"
+                  className="text-base sm:text-lg text-[#DCCCA3] mb-4 sm:mb-6 text-justify"
                 >
                   Join me on this transformative journey
                 </motion.p>
@@ -290,10 +288,10 @@ const HomePage = () => {
                 >
                   <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#F7F5EB]">Rugilė</h3>
                   <p className="text-[#C65D2B] font-semibold text-base sm:text-lg">Adventure Host & Guide</p>
-                  <p className="text-base sm:text-lg text-[#DCCCA3]">
+                  <p className="text-base sm:text-lg text-[#DCCCA3] text-justify">
                     I am an experienced hiker with a deep passion for nature and human connection. I bring years of expertise navigating some of the world's most breathtaking trails. My love for the mountains is matched only by my commitment to creating meaningful experiences that bring people together.
                   </p>
-                  <p className="text-base sm:text-lg text-[#DCCCA3]">
+                  <p className="text-base sm:text-lg text-[#DCCCA3] text-justify">
                     Through shared adventures in nature's most stunning landscapes, I believe in the transformative power of connection with the wilderness, with others, and with ourselves. My guided retreats are designed to challenge you physically while nurturing your spirit and fostering authentic human bonds that last long after you return home.
                   </p>
                 </motion.div>

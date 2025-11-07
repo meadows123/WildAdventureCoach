@@ -127,13 +127,6 @@ export async function sendBookingConfirmationEmail(booking) {
         </div>
         ` : ''}
         
-        ${booking.been_hiking ? `
-        <div class="detail-row">
-          <span class="detail-label">Been Hiking Before: </span>
-          <span class="detail-value">${booking.been_hiking}</span>
-        </div>
-        ` : ''}
-        
         ${booking.hiking_experience ? `
         <div class="detail-row">
           <span class="detail-label">Hiking Experience: </span>
@@ -150,15 +143,14 @@ export async function sendBookingConfirmationEmail(booking) {
       <div class="next-steps">
         <h3>✅ What Happens Next?</h3>
         <ul>
-          <li><strong>Within 48 hours:</strong> You will receive a detailed itinerary, general information and transportation options</li>
-          <li><strong>3 Months before:</strong> You will receive a comprehensive packing list, recommended training plan and consent form to sign.</li>
-          <li><strong>2 Months before:</strong> The final payment is due.</li>
-          <li><strong>1 Month before:</strong> You will be invited to an info session and an optional simulation hike.</li>
+          <li><strong>Within 48 hours:</strong> You will receive a detailed itinerary, general information and transportation options.</li>
+          <li><strong>90 - 60 days before:</strong> You will receive a comprehensive packing list, recommended training plan and a consent form to sign. The final payment is due.</li>
+          <li><strong>30 days before:</strong> You will be invited to an info session and an optional simulation hike.</li>
         </ul>
       </div>
       
       <div class="button-wrapper">
-        <a href="https://wa.me/447549214155" class="button">📞 Get in Touch</a>
+        <a href="https://wildadventurecoach.com/contact" class="button">📞 Get in Touch</a>
       </div>
       
       <p style="margin-top: 25px;">We can't wait to see you on the trails and help you create memories that will last a lifetime!</p>
@@ -197,18 +189,16 @@ ${booking.accommodation_type ? `- Accommodation: ${booking.accommodation_type}` 
 - Email: ${booking.email}
 ${booking.gender ? `- Gender: ${booking.gender}` : ''}
 ${booking.age ? `- Age: ${booking.age}` : ''}
-${booking.been_hiking ? `- Been Hiking Before: ${booking.been_hiking}` : ''}
 ${booking.hiking_experience ? `- Hiking Experience: ${booking.hiking_experience}` : ''}
 - Total Paid: £${amountInPounds}
 
 What's Next?
-- Within 48 hours: You will receive a detailed itinerary, general information and transportation options
-- 3 Months before: You will receive a comprehensive packing list, recommended training plan and consent form to sign.
-- 2 Months before: The final payment is due.
-- 1 Month before: You will be invited to an info session and an optional simulation hike.
+- Within 48 hours: You will receive a detailed itinerary, general information and transportation options.
+- 90 - 60 days before: You will receive a comprehensive packing list, recommended training plan and a consent form to sign. The final payment is due.
+- 30 days before: You will be invited to an info session and an optional simulation hike.
 
 Questions?
-WhatsApp: +44 7549 214155
+Visit: https://wildadventurecoach.com/contact
 Instagram: @wildadventurecoach
 Email: wildadventurecoach@gmail.com
 

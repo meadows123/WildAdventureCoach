@@ -107,8 +107,6 @@ const BookingPage = () => {
   const [formData, setFormData] = useState({
     retreat: retreat.name,
     accommodationType: '',
-    travelingAloneOrGroup: '',
-    numberOfPeople: '',
     firstName: '',
     lastName: '',
     email: '',
@@ -181,16 +179,12 @@ const BookingPage = () => {
       // Check if accommodation selection is required (July retreat)
       const needsAccommodation = retreat.hasAccommodationOptions && !formData.accommodationType;
       
-      // Check if number of people is required for groups
-      const needsGroupCount = formData.travelingAloneOrGroup === 'Group' && !formData.numberOfPeople;
-      
       if (!formData.firstName || !formData.lastName || !formData.email || 
           !formData.gender || !formData.age || !formData.hikingExperience || 
-          !formData.travelingAloneOrGroup || needsAccommodation || needsGroupCount) {
+          needsAccommodation) {
         toast({
           title: "Missing information",
-          description: needsAccommodation ? "Please select your accommodation preference" : 
-                       needsGroupCount ? "Please enter the number of people in your group" :
+          description: needsAccommodation ? "Please select your accommodation preference" :
                        "Please fill in all required fields",
           variant: "destructive"
         });
@@ -241,15 +235,13 @@ const BookingPage = () => {
     
     // Validate all required fields before submitting
     const needsAccommodation = retreat.hasAccommodationOptions && !formData.accommodationType;
-    const needsGroupCount = formData.travelingAloneOrGroup === 'Group' && !formData.numberOfPeople;
     
     if (!formData.firstName || !formData.lastName || !formData.email || 
         !formData.gender || !formData.age || !formData.hikingExperience || 
-        !formData.travelingAloneOrGroup || needsAccommodation || needsGroupCount) {
+        needsAccommodation) {
       toast({
         title: "Missing information",
-        description: needsAccommodation ? "Please select your accommodation preference" : 
-                     needsGroupCount ? "Please enter the number of people in your group" :
+        description: needsAccommodation ? "Please select your accommodation preference" :
                      "Please fill in all required fields before checkout",
         variant: "destructive",
         duration: 5000
@@ -270,9 +262,7 @@ const BookingPage = () => {
         gender: formData.gender || '',
         age: formData.age || '',
         beenHiking: formData.beenHiking || 'Yes',
-        hikingExperience: formData.hikingExperience || '',
-        travelingAloneOrGroup: formData.travelingAloneOrGroup || '',
-        numberOfPeople: formData.numberOfPeople || ''
+        hikingExperience: formData.hikingExperience || ''
       };
       
       // Log the data being sent for debugging
@@ -601,50 +591,7 @@ const BookingPage = () => {
                     />
                   </div>
                   
-                  {/* Traveling Alone or in Group */}
-                  <div>
-                    <Label htmlFor="travelingAloneOrGroup" className="text-[#DCCCA3] mb-2 block">Are you traveling alone or in a group? *</Label>
-                    <select
-                      id="travelingAloneOrGroup"
-                      name="travelingAloneOrGroup"
-                      value={formData.travelingAloneOrGroup}
-                      onChange={handleInputChange}
-                      className="flex h-10 w-full rounded-md border border-[#6B8E23] bg-[#2E4A34] px-3 py-2 text-sm text-[#F7F5EB] ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-[#DCCCA3]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C65D2B] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 appearance-none cursor-pointer"
-                      style={{ backgroundImage: "url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%207l5%205%205-5%22%20stroke%3D%22%23DCCCA3%22%20stroke-width%3D%221.5%22%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E')", backgroundPosition: 'right 0.5rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1.5em 1.5em', paddingRight: '2.5rem' }}
-                      required
-                    >
-                      <option value="">Select an option</option>
-                      <option value="Alone">Alone</option>
-                      <option value="Group">Group</option>
-                    </select>
-                  </div>
                   
-                  {/* Number of People - Only show if "Group" */}
-                  {formData.travelingAloneOrGroup === 'Group' ? (
-                    <div>
-                      <Label htmlFor="numberOfPeople" className="text-[#DCCCA3] mb-2 block">How many people? (including you) *</Label>
-                      <select
-                        id="numberOfPeople"
-                        name="numberOfPeople"
-                        value={formData.numberOfPeople}
-                        onChange={handleInputChange}
-                        className="flex h-10 w-full rounded-md border border-[#6B8E23] bg-[#2E4A34] px-3 py-2 text-sm text-[#F7F5EB] ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-[#DCCCA3]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C65D2B] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 appearance-none cursor-pointer"
-                        style={{ backgroundImage: "url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%207l5%205%205-5%22%20stroke%3D%22%23DCCCA3%22%20stroke-width%3D%221.5%22%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E')", backgroundPosition: 'right 0.5rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1.5em 1.5em', paddingRight: '2.5rem' }}
-                        required
-                      >
-                        <option value="">Select number</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                      </select>
-                    </div>
-                  ) : null}
                   
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
@@ -932,16 +879,6 @@ const BookingPage = () => {
                         <span className="text-[#DCCCA3] text-sm">Hiking Experience:</span>
                         <p className="text-[#F7F5EB] text-lg">{formData.hikingExperience}</p>
                       </div>
-                      <div>
-                        <span className="text-[#DCCCA3] text-sm">Traveling:</span>
-                        <p className="text-[#F7F5EB] text-lg">{formData.travelingAloneOrGroup}</p>
-                      </div>
-                      {formData.numberOfPeople && (
-                        <div>
-                          <span className="text-[#DCCCA3] text-sm">Number of People:</span>
-                          <p className="text-[#F7F5EB] text-lg">{formData.numberOfPeople}</p>
-                        </div>
-                      )}
                     </div>
                     
                     <div className="border-t border-[#6B8E23]/30 pt-4 mt-4">
