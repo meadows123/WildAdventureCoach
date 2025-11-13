@@ -454,13 +454,13 @@ const ChamonixRetreatPage = () => {
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
                 whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                className="bg-[#6B8E23]/20 backdrop-blur-sm p-6 rounded-2xl border border-[#6B8E23]/30 hover:border-[#C65D2B]/50 transition-all text-center"
+                className="bg-[#6B8E23]/20 backdrop-blur-sm p-6 rounded-2xl border border-[#6B8E23]/30 hover:border-[#C65D2B]/50 transition-all text-left"
               >
-                <div className="mb-6">
+                <div className="mb-6 flex justify-center">
                   <img 
                     src="/images/homepage/rugile.jpg" 
                     alt="Rugilė Bazytė - Adventure Guide"
-                    className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-[#C65D2B]/50"
+                    className="w-36 h-36 md:w-44 md:h-44 mx-auto rounded-full object-cover border-4 border-[#C65D2B]/50"
                     onError={(e) => {
                       e.target.src = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop";
                     }}
@@ -473,24 +473,23 @@ const ChamonixRetreatPage = () => {
                 </p>
               </motion.div>
 
-              {/* Maray - Yoga Instructor */}
+              {/* Maray Sutti - Yoga Instructor */}
               <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
                 whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                className="bg-[#6B8E23]/20 backdrop-blur-sm p-6 rounded-2xl border border-[#6B8E23]/30 hover:border-[#C65D2B]/50 transition-all text-center"
+                className="bg-[#6B8E23]/20 backdrop-blur-sm p-6 rounded-2xl border border-[#6B8E23]/30 hover:border-[#C65D2B]/50 transition-all text-left"
               >
-                <div className="mb-6">
+                <div className="mb-6 flex justify-center">
                   <img 
                     src="/images/homepage/maray.png" 
-                    alt="Maray - Yoga Instructor"
-                    className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-[#C65D2B]/50"
+                    alt="Maray Sutti - Yoga Instructor"
+                    className="w-36 h-36 md:w-44 md:h-44 mx-auto rounded-full object-cover border-4 border-[#C65D2B]/50"
                   />
                 </div>
-                <h3 className="text-xl font-bold mb-1 text-[#F7F5EB]">Maray</h3>
-                <p className="text-sm text-[#DCCCA3] mb-2">@maunayogachamonix</p>
+                <h3 className="text-xl font-bold mb-2 text-[#F7F5EB]">Maray Sutti</h3>
                 <p className="text-[#C65D2B] font-semibold mb-3">Yoga Instructor</p>
                 <p className="text-[#DCCCA3] text-sm leading-relaxed">
                   Maray has been a dedicated student and practitioner of yoga since 2001. Her path began with Iyengar Yoga and quickly expanded to include Hatha, Ashtanga, and Zen meditation. From the very beginning, her heart was drawn to the deeper questions of yoga, Who am I? What is the truth? What is love? Today, she teaches online and in person in Chamonix Mont-Blanc, France, offering educational programs, teacher training, workshops, and collaborative projects with yoga schools around the world.
@@ -504,13 +503,13 @@ const ChamonixRetreatPage = () => {
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
                 whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                className="bg-[#6B8E23]/20 backdrop-blur-sm p-6 rounded-2xl border border-[#6B8E23]/30 hover:border-[#C65D2B]/50 transition-all text-center"
+                className="bg-[#6B8E23]/20 backdrop-blur-sm p-6 rounded-2xl border border-[#6B8E23]/30 hover:border-[#C65D2B]/50 transition-all text-left"
               >
-                <div className="mb-6">
+                <div className="mb-6 flex justify-center">
                   <img 
                     src="/images/homepage/dominykas.png" 
                     alt="Dominykas Svirskas - Chef"
-                    className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-[#C65D2B]/50"
+                    className="w-36 h-36 md:w-44 md:h-44 mx-auto rounded-full object-cover border-4 border-[#C65D2B]/50"
                   />
                 </div>
                 <h3 className="text-xl font-bold mb-2 text-[#F7F5EB]">Dominykas Svirskas</h3>

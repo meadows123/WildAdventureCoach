@@ -268,17 +268,8 @@ const HomePage = () => {
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <motion.div {...fadeInLeft}>
                 <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 text-[#F7F5EB]">
-                  Meet Your Host
+                  Your Host
                 </h2>
-                <motion.p 
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.3 }}
-                  className="text-base sm:text-lg text-[#DCCCA3] mb-4 sm:mb-6 text-justify"
-                >
-                  Join me on this transformative journey
-                </motion.p>
                 <motion.div 
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
@@ -286,8 +277,8 @@ const HomePage = () => {
                   transition={{ duration: 0.6, delay: 0.5 }}
                   className="space-y-4"
                 >
-                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#F7F5EB]">Rugilė</h3>
-                  <p className="text-[#C65D2B] font-semibold text-base sm:text-lg">Adventure Host & Guide</p>
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#F7F5EB]">Rugilė Bazytė</h3>
+                  <p className="text-[#C65D2B] font-semibold text-base sm:text-lg">Adventure Host</p>
                   <p className="text-base sm:text-lg text-[#DCCCA3] text-justify">
                     I am an experienced hiker with a deep passion for nature and human connection. I bring years of expertise navigating some of the world's most breathtaking trails. My love for the mountains is matched only by my commitment to creating meaningful experiences that bring people together.
                   </p>

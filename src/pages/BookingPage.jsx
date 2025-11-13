@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
-import { CheckCircle, Loader2 } from 'lucide-react';
+import { CheckCircle, Loader2, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { useSearchParams } from 'react-router-dom';
+import TermsContent from '@/components/terms/TermsContent';
 
 const BookingPage = () => {
   const { toast } = useToast();
@@ -18,6 +19,7 @@ const BookingPage = () => {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [ageAccepted, setAgeAccepted] = useState(false);
   const [termsAndConditionsAccepted, setTermsAndConditionsAccepted] = useState(false);
+  const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   
   // API URL - since backend serves the frontend, use relative URLs in production
   const API_URL = import.meta.env.VITE_API_URL || '';
@@ -145,6 +147,31 @@ const BookingPage = () => {
     }));
   }, [retreat.name]);
 
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+
+    if (isTermsModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = previousOverflow;
+    }
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setIsTermsModalOpen(false);
+      }
+    };
+
+    if (isTermsModalOpen) {
+      document.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isTermsModalOpen]);
+
   // Fetch available spots on page load
   useEffect(() => {
     fetch(`${API_URL}/retreat-capacity/${retreat.name}`)
@@ -168,9 +195,27 @@ const BookingPage = () => {
   }, [retreat.name, toast]);
 
   const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    let nextValue = value;
+
+    if (name === 'age') {
+      const digitsOnly = value.replace(/\D/g, '');
+
+      if (!digitsOnly) {
+        nextValue = '';
+      } else {
+        const parsed = parseInt(digitsOnly, 10);
+        if (Number.isNaN(parsed)) {
+          nextValue = '';
+        } else {
+          nextValue = Math.min(parsed, 100).toString();
+        }
+      }
+    }
+
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: nextValue
     });
   };
 
@@ -619,7 +664,10 @@ const BookingPage = () => {
                         name="age"
                         type="number"
                         min="18"
-                        max="99"
+                        max="100"
+                        step="1"
+                        inputMode="numeric"
+                        onWheel={(event) => event.currentTarget.blur()}
                         value={formData.age}
                         onChange={handleInputChange}
                         className="bg-[#2E4A34] border-[#6B8E23] text-[#F7F5EB]"
@@ -676,7 +724,7 @@ const BookingPage = () => {
                             className="mt-1 w-5 h-5 rounded border-2 border-[#6B8E23] bg-[#2E4A34] text-[#C65D2B] focus:ring-2 focus:ring-[#C65D2B] focus:ring-offset-0 cursor-pointer"
                           />
                           <span className="ml-3 text-[#DCCCA3] text-sm leading-relaxed group-hover:text-[#F7F5EB] transition-colors">
-                            I understand that this is an adventure activity and will follow all safety instructions and guidelines provided by the guides.
+                            I understand that this is an adventure activity and will follow all safety instructions and guidelines provided by the guides
                           </span>
                         </label>
                       </div>
@@ -692,14 +740,13 @@ const BookingPage = () => {
                           />
                           <span className="ml-3 text-[#DCCCA3] text-sm leading-relaxed group-hover:text-[#F7F5EB] transition-colors">
                             I have read and agree to the{' '}
-                            <a 
-                              href="/terms" 
-                              target="_blank" 
-                              rel="noopener noreferrer"
+                            <button
+                              type="button"
+                              onClick={() => setIsTermsModalOpen(true)}
                               className="text-[#C65D2B] hover:text-[#C65D2B]/80 underline font-semibold"
                             >
                               Terms & Conditions
-                            </a>
+                            </button>
                           </span>
                         </label>
                       </div>
@@ -776,14 +823,13 @@ const BookingPage = () => {
                           />
                           <span className="ml-3 text-[#F7F5EB] text-lg leading-relaxed group-hover:text-[#DCCCA3] transition-colors">
                             I have read and agree to the{' '}
-                            <a 
-                              href="/terms" 
-                              target="_blank" 
-                              rel="noopener noreferrer"
+                            <button
+                              type="button"
+                              onClick={() => setIsTermsModalOpen(true)}
                               className="text-[#C65D2B] hover:text-[#C65D2B]/80 underline font-semibold"
                             >
                               Terms & Conditions
-                            </a>
+                            </button>
                           </span>
                         </label>
                       </div>
@@ -967,6 +1013,50 @@ const BookingPage = () => {
           </motion.div>
         </div>
       </div>
+
+      {isTermsModalOpen && (
+        <div
+          className="fixed inset-0 z-[1200] flex items-center justify-center px-4 py-6"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="terms-modal-title"
+        >
+          <div
+            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            onClick={() => setIsTermsModalOpen(false)}
+          />
+          <div
+            className="relative z-10 w-full max-w-3xl overflow-hidden rounded-2xl border border-[#6B8E23]/40 bg-[#111111]"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex items-center justify-between border-b border-[#6B8E23]/30 px-6 py-4">
+              <h3 id="terms-modal-title" className="text-lg sm:text-xl font-semibold text-[#F7F5EB]">
+                Terms & Conditions
+              </h3>
+              <button
+                type="button"
+                onClick={() => setIsTermsModalOpen(false)}
+                className="text-[#DCCCA3] hover:text-[#F7F5EB] rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-[#C65D2B]"
+                aria-label="Close terms and conditions"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="max-h-[70vh] overflow-y-auto px-6 py-4">
+              <TermsContent />
+            </div>
+            <div className="flex justify-end border-t border-[#6B8E23]/30 bg-[#1A1A1A]/80 px-6 py-4">
+              <Button
+                type="button"
+                onClick={() => setIsTermsModalOpen(false)}
+                className="bg-[#C65D2B] hover:bg-[#C65D2B]/90 text-[#F7F5EB]"
+              >
+                Close
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
