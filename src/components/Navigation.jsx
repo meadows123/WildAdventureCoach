@@ -19,6 +19,7 @@ const Navigation = () => {
   const navLinks = [
     { path: '/', label: 'Home' },
     { path: '/retreats', label: 'Retreats' },
+    { path: '/about', label: 'About' },
     { path: '/contact', label: 'Contact Us' }
   ];
 

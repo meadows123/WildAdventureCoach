@@ -280,10 +280,10 @@ const HomePage = () => {
                   <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#F7F5EB]">Rugilė Bazytė</h3>
                   <p className="text-[#C65D2B] font-semibold text-base sm:text-lg">Adventure Host</p>
                   <p className="text-base sm:text-lg text-[#DCCCA3] text-justify">
-                    I am an experienced hiker with a deep passion for nature and human connection. I bring years of expertise navigating some of the world's most breathtaking trails. My love for the mountains is matched only by my commitment to creating meaningful experiences that bring people together.
+                    For over twenty years, I've spent extensive time in the Alps, honing my skills in alpine terrain, high-altitude navigation, and mountain safety. I'm currently a Mountain Leader trainee and a certified Vinyasa Yoga instructor, combining technical expertise with mindful practice to guide journeys that are both safe and transformative.
                   </p>
                   <p className="text-base sm:text-lg text-[#DCCCA3] text-justify">
-                    Through shared adventures in nature's most stunning landscapes, I believe in the transformative power of connection with the wilderness, with others, and with ourselves. My guided retreats are designed to challenge you physically while nurturing your spirit and fostering authentic human bonds that last long after you return home.
+                    Raised in a family of experienced mountaineers, the mountains have been a central part of my life from an early age. This lifelong immersion inspired WildAdventureCoach, a space where careful guidance, presence, and the restorative power of the mountains come together. Leading a group through this environment is not just my work — it's a chance to share a meaningful experience, helping everyone feel confident, supported, and fully present in the journey.
                   </p>
                 </motion.div>
               </motion.div>

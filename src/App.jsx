@@ -9,6 +9,7 @@ import RetreatsPage from '@/pages/RetreatsPage';
 import BookingPage from '@/pages/BookingPage';
 import BookingSuccessPage from '@/pages/BookingSuccessPage';
 import ContactPage from '@/pages/ContactPage';
+import AboutPage from '@/pages/AboutPage';
 import ChamonixRetreatPage from '@/pages/ChamonixRetreatPage';
 import AugustRetreatPage from '@/pages/AugustRetreatPage';
 import TermsAndConditionsPage from '@/pages/TermsAndConditionsPage';
@@ -32,6 +33,7 @@ function App() {
           <Route path="/retreats" element={<RetreatsPage />} />
           <Route path="/retreat/chamonix" element={<ChamonixRetreatPage />} />
           <Route path="/retreat/august" element={<AugustRetreatPage />} />
+          <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/terms" element={<TermsAndConditionsPage />} />
           <Route path="/booking" element={<BookingPage />} />

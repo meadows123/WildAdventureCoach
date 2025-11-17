@@ -724,7 +724,7 @@ const BookingPage = () => {
                             className="mt-1 w-5 h-5 rounded border-2 border-[#6B8E23] bg-[#2E4A34] text-[#C65D2B] focus:ring-2 focus:ring-[#C65D2B] focus:ring-offset-0 cursor-pointer"
                           />
                           <span className="ml-3 text-[#DCCCA3] text-sm leading-relaxed group-hover:text-[#F7F5EB] transition-colors">
-                            I understand that this is an adventure activity and will follow all safety instructions and guidelines provided by the guides
+                            I understand that this is an adventure activity and agree to follow all safety instructions and guidelines provided by the guides.
                           </span>
                         </label>
                       </div>
