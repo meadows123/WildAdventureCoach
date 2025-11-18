@@ -290,7 +290,7 @@ const HomePage = () => {
               
               <motion.div {...fadeInRight}>
                 <img 
-                  src="/images/homepage/Host.jpeg" 
+                  src="/images/homepage/host_hq.jpg" 
                   alt="Rugilė - Adventure Host"
                   className="rounded-2xl shadow-2xl w-full h-[300px] sm:h-[400px] md:h-[500px] object-cover"
                   onError={(e) => {
