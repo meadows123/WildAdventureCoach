@@ -18,7 +18,12 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 // Configure CORS to allow requests from frontend
 // In development, allow common localhost ports
 const allowedOrigins = process.env.CLIENT_URL 
-  ? [process.env.CLIENT_URL]
+  ? [
+      process.env.CLIENT_URL,
+      'https://www.wildadventurecoach.com',
+      'https://wildadventurecoach.com',
+      'https://wildadventurecoach.onrender.com'
+    ]
   : ['http://localhost:3000', 'http://localhost:5173', 'http://127.0.0.1:3000', 'http://127.0.0.1:5173'];
 
 app.use(cors({
@@ -26,9 +31,18 @@ app.use(cors({
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
-    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
+    // In development, allow all origins
+    if (process.env.NODE_ENV !== 'production') {
+      return callback(null, true);
+    }
+    
+    // In production, check against allowed origins
+    if (allowedOrigins.some(allowed => origin === allowed || origin.startsWith(allowed))) {
       callback(null, true);
     } else {
+      // Log the blocked origin for debugging
+      console.log('🚫 CORS blocked origin:', origin);
+      console.log('✅ Allowed origins:', allowedOrigins);
       callback(new Error('Not allowed by CORS'));
     }
   },
