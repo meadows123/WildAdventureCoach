@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 const ChamonixRetreatPage = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [availableSpots, setAvailableSpots] = useState(null);
-  const [maxCapacity, setMaxCapacity] = useState(9);
+  const [maxCapacity, setMaxCapacity] = useState(null);
 
   // API URL - for localhost, default to http://localhost:4242 if not set
   const API_URL = import.meta.env.VITE_API_URL || 
@@ -19,13 +19,24 @@ const ChamonixRetreatPage = () => {
     // Function to fetch available spots
     const fetchAvailableSpots = () => {
       fetch(`${API_URL}/retreat-capacity/Hiking and Yoga Retreat in Chamonix`)
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+          }
+          return res.json();
+        })
         .then(data => {
-          setAvailableSpots(data.availableSpots);
-          setMaxCapacity(data.maxCapacity || 9);
+          console.log('📊 Capacity data received:', data);
+          // Only update if we have valid data
+          if (data && typeof data.availableSpots === 'number' && typeof data.maxCapacity === 'number') {
+            setAvailableSpots(data.availableSpots);
+            setMaxCapacity(data.maxCapacity);
+          } else {
+            console.warn('⚠️ Invalid capacity data received:', data);
+          }
         })
         .catch(error => {
-          console.error('Error fetching capacity:', error);
+          console.error('❌ Error fetching capacity:', error);
           // Don't set a default on error, keep showing null/loading state
         });
     };
@@ -207,7 +218,7 @@ const ChamonixRetreatPage = () => {
               </div>
               
               {/* Available Spots Indicator */}
-              {availableSpots !== null && (
+              {availableSpots !== null && maxCapacity !== null && (
                 <div className="mt-4 pt-4 border-t border-[#6B8E23]/30">
                   <div className="bg-[#6B8E23]/30 rounded-lg p-3">
                     <div className="flex items-center justify-between">
@@ -219,7 +230,7 @@ const ChamonixRetreatPage = () => {
                     <div className="w-full bg-[#2E4A34] rounded-full h-3 mt-2 overflow-hidden">
                       <div 
                         className="h-full bg-[#C65D2B] rounded-full transition-all duration-300"
-                        style={{ width: `${(availableSpots / maxCapacity) * 100}%` }}
+                        style={{ width: `${maxCapacity > 0 ? (availableSpots / maxCapacity) * 100 : 0}%` }}
                       ></div>
                     </div>
                   </div>
