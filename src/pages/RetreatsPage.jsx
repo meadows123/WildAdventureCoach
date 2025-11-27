@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -6,14 +6,22 @@ import { Calendar, MapPin, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const RetreatsPage = () => {
+  const [capacityData, setCapacityData] = useState({});
 
-  const fadeInUp = {
-    initial: { opacity: 0, y: 60 },
-    whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true },
-    transition: { duration: 0.6 }
+  // API URL - for localhost, default to http://localhost:4242 if not set
+  const API_URL = import.meta.env.VITE_API_URL || 
+    (import.meta.env.DEV ? 'http://localhost:4242' : '');
+
+  // Map retreat titles to their database names
+  const getRetreatDatabaseName = (retreatTitle) => {
+    const mapping = {
+      'Hiking and Yoga Retreat in Chamonix': 'Hiking and Yoga Retreat in Chamonix',
+      'Hiking & Yoga Retreat - Tour du Mont Blanc': 'Hiking and Yoga Retreat - August'
+    };
+    return mapping[retreatTitle] || retreatTitle;
   };
 
+  // Define retreats array (moved before useEffect)
   const retreats = [
     {
       id: 'july-retreat',
@@ -84,10 +92,10 @@ const RetreatsPage = () => {
     {
       id: 'august-retreat',
       title: 'Hiking & Yoga Retreat - Tour du Mont Blanc',
-      location: 'Mont Blanc (France and Italy)',
+      location: 'Chamonix - French, Italian & Swiss Alps',
       duration: '6 days / 5 nights',
-      dates: 'August 30 - September 4, 2026',
-      participants: '8-10 people',
+      dates: 'August 6–11, 2026',
+      participants: 'Up to 10 people',
       description: '4 iconic stages of the Tour du Mont Blanc covering 65 km across France and Italy. 15 km each day and 1000 D+ each day. Good fitness level is required.',
       status: 'upcoming',
       price: '£1,499',
@@ -114,8 +122,46 @@ const RetreatsPage = () => {
     }
   ];
 
-  // API URL - since backend serves the frontend, use relative URLs in production
-  const API_URL = import.meta.env.VITE_API_URL || '';
+  // Fetch capacity data for all retreats
+  useEffect(() => {
+    const fetchCapacity = async () => {
+      // Get all unique retreat database names from the retreats array
+      const retreatDatabaseNames = retreats
+        .map(retreat => getRetreatDatabaseName(retreat.title))
+        .filter((name, index, self) => self.indexOf(name) === index); // Remove duplicates
+
+      const capacityPromises = retreatDatabaseNames.map(async (retreatName) => {
+        try {
+          const response = await fetch(`${API_URL}/retreat-capacity/${retreatName}`);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.json();
+          return { [retreatName]: data };
+        } catch (error) {
+          console.error(`Error fetching capacity for ${retreatName}:`, error);
+          return { [retreatName]: null };
+        }
+      });
+
+      const results = await Promise.all(capacityPromises);
+      const combined = results.reduce((acc, curr) => ({ ...acc, ...curr }), {});
+      setCapacityData(combined);
+    };
+
+    fetchCapacity();
+
+    // Set up automatic refresh every 30 seconds
+    const interval = setInterval(fetchCapacity, 30000);
+    return () => clearInterval(interval);
+  }, [API_URL]);
+
+  const fadeInUp = {
+    initial: { opacity: 0, y: 60 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true },
+    transition: { duration: 0.6 }
+  };
 
   // Component for individual retreat card - Horizontal Banner Style
   const RetreatCard = ({ retreat }) => {
@@ -124,6 +170,12 @@ const RetreatsPage = () => {
     
     // Determine fitness level text
     const fitnessLevel = retreat.beginnerFriendly ? 'Beginner Friendly' : 'Moderate to Advanced';
+
+    // Get capacity data for this retreat - works for all retreats
+    const retreatDatabaseName = getRetreatDatabaseName(retreat.title);
+    const capacity = capacityData[retreatDatabaseName];
+    const availableSpots = capacity?.availableSpots;
+    const maxCapacity = capacity?.maxCapacity;
 
     return (
       <motion.div
@@ -161,7 +213,7 @@ const RetreatsPage = () => {
               {/* Date */}
               <div className="flex items-center gap-1.5">
                 <Calendar className="w-4 h-4 text-[#6B8E23] flex-shrink-0" />
-                <span className="text-[#F7F5EB] font-medium">{isAugust ? 'Coming Up' : retreat.dates}</span>
+                <span className="text-[#F7F5EB] font-medium">{retreat.dates}</span>
               </div>
               
               {/* Location */}
@@ -176,6 +228,18 @@ const RetreatsPage = () => {
                 <span className="text-[#F7F5EB]">{fitnessLevel}</span>
               </div>
             </div>
+
+            {/* Spots Remaining - Show if data is available */}
+            {availableSpots !== null && availableSpots !== undefined && maxCapacity && (
+              <div className="mt-3 pt-3 border-t border-[#6B8E23]/30">
+                <div className="flex items-center gap-2">
+                  <span className="text-[#F7F5EB] font-semibold text-sm">⚡</span>
+                  <span className="text-[#F7F5EB] font-semibold text-sm">
+                    {availableSpots} spot{availableSpots === 1 ? '' : 's'} remaining
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Right Column: Button */}
