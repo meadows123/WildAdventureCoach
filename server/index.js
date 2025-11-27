@@ -439,12 +439,41 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res)
 
 // Serve static files from the React app build directory
 const buildPath = path.join(__dirname, '..', 'build');
-app.use(express.static(buildPath));
+
+// Add error handling middleware for static files
+app.use(express.static(buildPath, {
+  maxAge: process.env.NODE_ENV === 'production' ? '1y' : 0, // Cache in production, no cache in dev
+  etag: true,
+  setHeaders: (res, filePath) => {
+    // Add cache control headers
+    if (filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    }
+  }
+}));
 
 // Catch-all handler: send back React's index.html for any request that doesn't match an API route
 // Note: Express 5.x requires regex pattern for catch-all routes
-app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(buildPath, 'index.html'));
+app.get(/.*/, (req, res, next) => {
+  // Skip API routes
+  if (req.path.startsWith('/api/') || 
+      req.path.startsWith('/create-checkout-session') ||
+      req.path.startsWith('/checkout-session') ||
+      req.path.startsWith('/retreat-capacity') ||
+      req.path.startsWith('/send-contact') ||
+      req.path.startsWith('/waitlist') ||
+      req.path.startsWith('/webhook')) {
+    return next();
+  }
+  
+  // For all other routes, serve index.html (SPA routing)
+  const indexPath = path.join(buildPath, 'index.html');
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      console.error('❌ Error serving index.html:', err);
+      res.status(500).send('Error loading page');
+    }
+  });
 });
 
 const PORT = process.env.PORT || 4242;
