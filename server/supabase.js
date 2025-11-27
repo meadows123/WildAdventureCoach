@@ -53,11 +53,30 @@ export async function addBooking(bookingData) {
 export async function getAvailableSpots(retreatName) {
   console.log('🔍 getAvailableSpots called for:', retreatName);
   
+  // Map display names to database names for retreat capacity lookup
+  const retreatNameMapping = {
+    'Hiking and Yoga Retreat in Chamonix': 'Hiking and Yoga Retreat in Chamonix',
+    'Hiking & Yoga Retreat Chamonix': 'Hiking and Yoga Retreat in Chamonix',
+    'Hiking and Yoga Retreat - August': 'Hiking and Yoga Retreat - August'
+  };
+  
+  // Get the database name for capacity lookup
+  const capacityRetreatName = retreatNameMapping[retreatName] || retreatName;
+  
+  // Get all possible booking names that could match this retreat
+  // Include both the mapped name and all variations that map to the same capacity name
+  const bookingRetreatNames = [
+    retreatName, // Original name requested
+    capacityRetreatName, // Mapped capacity name
+    'Hiking & Yoga Retreat Chamonix', // Actual booking name format
+    'Hiking and Yoga Retreat in Chamonix' // Capacity table name format
+  ].filter((name, index, self) => self.indexOf(name) === index); // Remove duplicates
+  
   // Get the retreat capacity
   const { data: retreat, error: retreatError } = await supabase
     .from('retreat_capacity')
     .select('max_capacity')
-    .eq('retreat_name', retreatName)
+    .eq('retreat_name', capacityRetreatName)
     .single();
 
   if (retreatError) {
@@ -68,11 +87,11 @@ export async function getAvailableSpots(retreatName) {
   
   console.log('✅ Retreat found with capacity:', retreat.max_capacity);
 
-  // Get total participants booked
+  // Get total participants booked (check all possible retreat name variations)
   const { data: bookings, error: bookingsError } = await supabase
     .from('bookings')
     .select('participants')
-    .eq('retreat_name', retreatName)
+    .in('retreat_name', bookingRetreatNames)
     .eq('payment_status', 'completed');
 
   if (bookingsError) {
@@ -82,7 +101,7 @@ export async function getAvailableSpots(retreatName) {
 
   const totalBooked = bookings.reduce((sum, booking) => sum + booking.participants, 0);
   const availableSpots = retreat.max_capacity - totalBooked;
-  console.log('📊 Total booked:', totalBooked, 'Available:', availableSpots);
+  console.log('📊 Total booked:', totalBooked, 'Available:', availableSpots, 'Booking names checked:', bookingRetreatNames);
   return availableSpots;
 }
 
@@ -108,20 +127,51 @@ export async function getRetreatBookings(retreatName) {
  * Get retreat statistics
  */
 export async function getRetreatStats(retreatName) {
+  // Map display names to database names for retreat capacity lookup
+  // This handles the mismatch between booking names and capacity table names
+  const retreatNameMapping = {
+    'Hiking and Yoga Retreat in Chamonix': 'Hiking and Yoga Retreat in Chamonix',
+    'Hiking & Yoga Retreat Chamonix': 'Hiking and Yoga Retreat in Chamonix',
+    'Hiking and Yoga Retreat - August': 'Hiking and Yoga Retreat - August'
+  };
+  
+  // Get the database name for capacity lookup
+  const capacityRetreatName = retreatNameMapping[retreatName] || retreatName;
+  
+  // Get all possible booking names that could match this retreat
+  // Include both the mapped name and all variations that map to the same capacity name
+  const bookingRetreatNames = [
+    retreatName, // Original name requested
+    capacityRetreatName, // Mapped capacity name
+    'Hiking & Yoga Retreat Chamonix', // Actual booking name format
+    'Hiking and Yoga Retreat in Chamonix' // Capacity table name format
+  ].filter((name, index, self) => self.indexOf(name) === index); // Remove duplicates
+
   const { data: retreat } = await supabase
     .from('retreat_capacity')
     .select('max_capacity')
-    .eq('retreat_name', retreatName)
+    .eq('retreat_name', capacityRetreatName)
     .single();
 
+  // Query bookings with all possible retreat name variations
   const { data: bookings } = await supabase
     .from('bookings')
-    .select('participants, amount_paid')
-    .eq('retreat_name', retreatName)
+    .select('participants, amount_paid, retreat_name')
+    .in('retreat_name', bookingRetreatNames)
     .eq('payment_status', 'completed');
 
   const totalParticipants = bookings?.reduce((sum, b) => sum + b.participants, 0) || 0;
   const totalRevenue = bookings?.reduce((sum, b) => sum + b.amount_paid, 0) || 0;
+
+  console.log('📊 Capacity lookup:', {
+    requestedName: retreatName,
+    capacityName: capacityRetreatName,
+    bookingNamesChecked: bookingRetreatNames,
+    bookingsFound: bookings?.length || 0,
+    bookingDetails: bookings?.map(b => ({ name: b.retreat_name, participants: b.participants })),
+    totalParticipants,
+    availableSpots: (retreat?.max_capacity || 9) - totalParticipants
+  });
 
   return {
     maxCapacity: retreat?.max_capacity || 9,
