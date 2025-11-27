@@ -90,7 +90,7 @@ const RetreatsPage = () => {
       participants: '8-10 people',
       description: '4 iconic stages of the Tour du Mont Blanc covering 65 km across France and Italy. 15 km each day and 1000 D+ each day. Good fitness level is required.',
       status: 'upcoming',
-      price: '£1,250',
+      price: '£1,499',
       priceNote: 'per person',
       beginnerFriendly: false,
       included: [
@@ -132,16 +132,8 @@ const RetreatsPage = () => {
       >
         {/* Single Image - Left Side */}
         <div className="w-full sm:w-40 md:w-48 h-full flex-shrink-0 rounded-l-xl relative">
-          {/* Coming Up Badge - Top of Image (August only) */}
-          {isAugust && (
-            <div className="absolute -top-2 left-2 sm:-top-2 sm:left-2 z-20">
-              <span className="px-3 py-1 text-xs sm:text-sm font-semibold text-[#F7F5EB] bg-gradient-to-r from-[#6B8E23] to-[#4A6F1F] rounded-full whitespace-nowrap shadow-lg border-2 border-[#C65D2B]/50">
-                ⚡ Coming Up
-              </span>
-            </div>
-          )}
-          {/* Deposit Badge - Top of Image (June only) */}
-          {isJune && (
+          {/* Deposit Badge - Top of Image (June and August) */}
+          {(isJune || isAugust) && (
             <div className="absolute -top-2 left-2 sm:-top-2 sm:left-2 z-20">
               <span className="px-3 py-1 text-xs sm:text-sm font-semibold text-[#F7F5EB] bg-gradient-to-r from-[#C65D2B] to-[#E07B4B] rounded-full whitespace-nowrap shadow-lg border-2 border-[#6B8E23]/50">
                 £250 Deposit
@@ -197,11 +189,11 @@ const RetreatsPage = () => {
                 </Button>
               </Link>
             ) : isAugust ? (
-              <Link to="/contact" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+              <Link to="/retreat/august" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                 <Button 
                   className="w-full sm:w-auto text-sm sm:text-base py-3 sm:py-4 px-6 sm:px-8 rounded-full shadow-lg transition-all touch-manipulation bg-[#C65D2B] hover:bg-[#C65D2B]/90 hover:shadow-xl active:scale-95 text-[#F7F5EB] whitespace-nowrap min-h-[48px]"
                 >
-                  Find Out More
+                  Join the Experience
                 </Button>
               </Link>
             ) : (

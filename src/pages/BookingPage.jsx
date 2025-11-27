@@ -21,8 +21,10 @@ const BookingPage = () => {
   const [termsAndConditionsAccepted, setTermsAndConditionsAccepted] = useState(false);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   
-  // API URL - since backend serves the frontend, use relative URLs in production
-  const API_URL = import.meta.env.VITE_API_URL || '';
+  // API URL - for localhost, default to http://localhost:4242 if not set
+  // In production, this should be empty string (relative URL) or the production API URL
+  const API_URL = import.meta.env.VITE_API_URL || 
+    (import.meta.env.DEV ? 'http://localhost:4242' : '');
   
   // Get retreat from URL parameter
   const retreatParam = searchParams.get('retreat');
@@ -83,8 +85,8 @@ const BookingPage = () => {
     'Hiking and Yoga Retreat - August': {
       name: 'Hiking & Yoga Retreat Chamonix',
       beginnerFriendly: false,
-      price: 1250,
-      deposit: 375,
+      price: 1499,
+      deposit: 250,
       dates: 'August 30 - September 4, 2026',
       duration: '6 Days',
       location: 'Mont Blanc (France and Italy)',
@@ -342,23 +344,37 @@ const BookingPage = () => {
     } catch (error) {
       setIsProcessing(false);
       
+      // Log the full error for debugging
+      console.error('❌ Payment error details:', {
+        error,
+        message: error.message,
+        name: error.name,
+        stack: error.stack,
+        API_URL: API_URL || '(empty - using relative URL)',
+        fullURL: `${API_URL}/create-checkout-session`
+      });
+      
       // Provide more helpful error messages
       let errorMessage = error.message;
       let errorTitle = "Payment Error";
       
       if (error.message.includes('Failed to fetch') || error.name === 'TypeError') {
         errorTitle = "Server Connection Error";
-        errorMessage = "Cannot connect to payment server. Make sure the backend server is running on port 4242. Run 'npm run server' in a separate terminal.";
+        const apiUrlHint = API_URL ? `API URL: ${API_URL}` : 'API URL not set (using relative path)';
+        errorMessage = `Cannot connect to payment server. ${apiUrlHint}\n\nMake sure the backend server is running on port 4242. Run 'npm run server' in a separate terminal.\n\nIf you're on localhost, you may need to set VITE_API_URL=http://localhost:4242 in a .env file.`;
       } else if (error.message.includes('NetworkError') || error.message.includes('Load failed')) {
         errorTitle = "Network Error";
         errorMessage = "Cannot reach the payment server. Please ensure the backend server is running with 'npm run server'.";
+      } else if (error.message.includes('CORS')) {
+        errorTitle = "CORS Error";
+        errorMessage = "Cross-origin request blocked. Make sure CLIENT_URL in your server .env matches your frontend URL (e.g., http://localhost:3000).";
       }
       
       toast({
         title: errorTitle,
         description: errorMessage,
         variant: "destructive",
-        duration: 8000
+        duration: 10000
       });
     }
   };
@@ -942,11 +958,22 @@ const BookingPage = () => {
                             }
                           }
                           
+                          const transactionFee = 4.95;
+                          const totalToPay = deposit + transactionFee;
+                          
                           return (
                             <>
                               <div className="flex justify-between items-center">
-                                <span className="text-[#DCCCA3] text-lg">Deposit to Pay Today:</span>
-                                <p className="text-[#C65D2B] text-2xl sm:text-3xl font-bold">£{deposit}</p>
+                                <span className="text-[#DCCCA3] text-sm">Deposit:</span>
+                                <span className="text-[#F7F5EB] text-sm">£{deposit}</span>
+                              </div>
+                              <div className="flex justify-between items-center">
+                                <span className="text-[#DCCCA3] text-sm">Transaction Fee:</span>
+                                <span className="text-[#F7F5EB] text-sm">£{transactionFee.toFixed(2)}</span>
+                              </div>
+                              <div className="flex justify-between items-center pt-2 border-t border-[#6B8E23]/20">
+                                <span className="text-[#DCCCA3] text-lg font-semibold">Total to Pay Today:</span>
+                                <p className="text-[#C65D2B] text-2xl sm:text-3xl font-bold">£{totalToPay.toFixed(2)}</p>
                               </div>
                               <div className="flex justify-between items-center pt-2 border-t border-[#6B8E23]/20">
                                 <span className="text-[#DCCCA3] text-sm">Full Price: £{fullPrice}</span>

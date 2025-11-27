@@ -16,15 +16,29 @@ const app = express();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // Configure CORS to allow requests from frontend
+// In development, allow common localhost ports
+const allowedOrigins = process.env.CLIENT_URL 
+  ? [process.env.CLIENT_URL]
+  : ['http://localhost:3000', 'http://localhost:5173', 'http://127.0.0.1:3000', 'http://127.0.0.1:5173'];
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 app.use(express.json());
 
 // Define retreat prices (in pence for GBP)
 const retreatPrices = {
-  'Hiking and Yoga Retreat - August': 125000, // £1,250.00 (125000 pence)
+  'Hiking and Yoga Retreat - August': 149900, // £1,499.00 (149900 pence)
   'Hiking and Yoga Retreat - July': 125000, // £1,250.00 (125000 pence)
   'Hiking and Yoga Retreat - July - Standard Accommodation': 125000, // £1,250.00
   'Hiking and Yoga Retreat - July - Premium Quarters': 143000, // £1,430.00 (143000 pence)
@@ -36,7 +50,7 @@ const retreatPrices = {
 
 // Define retreat deposit prices (in pence for GBP)
 const retreatDeposits = {
-  'Hiking and Yoga Retreat - August': 37500, // £375.00 (37500 pence)
+  'Hiking and Yoga Retreat - August': 25000, // £250.00 (25000 pence)
   'Hiking and Yoga Retreat - July': 37500, // £375.00 (37500 pence)
   'Hiking and Yoga Retreat - July - Standard Accommodation': 37500, // £375.00
   'Hiking and Yoga Retreat - July - Premium Quarters': 37500, // £375.00
@@ -57,6 +71,8 @@ const retreatCurrencies = {
 app.post('/create-checkout-session', async (req, res) => {
   console.log('💳 Creating checkout session for:', req.body.email);
   console.log('📦 Request body:', JSON.stringify(req.body, null, 2));
+  console.log('🌐 Request origin:', req.headers.origin);
+  console.log('🔑 Stripe key configured:', !!process.env.STRIPE_SECRET_KEY);
   const { retreat, accommodationType, email, firstName, lastName, gender, age, beenHiking, hikingExperience } = req.body;
   
   // Build the full retreat key with accommodation if provided (and not empty string)
@@ -99,7 +115,14 @@ app.post('/create-checkout-session', async (req, res) => {
   console.log('💰 Pricing lookup:', { retreat, retreatKey, depositAmount, fullPriceAmount });
   
   if (!depositAmount || !fullPriceAmount) {
+    console.log('❌ Invalid pricing:', { retreat, retreatKey, depositAmount, fullPriceAmount });
     return res.status(400).json({ error: 'Invalid retreat selection' });
+  }
+
+  // Check if Stripe is configured
+  if (!process.env.STRIPE_SECRET_KEY) {
+    console.error('❌ STRIPE_SECRET_KEY is not set in environment variables');
+    return res.status(500).json({ error: 'Payment system not configured. Please contact support.' });
   }
 
   // CHECK CAPACITY BEFORE ALLOWING BOOKING (single person booking)
@@ -121,6 +144,7 @@ app.post('/create-checkout-session', async (req, res) => {
 
   try {
     const currency = retreatCurrencies[retreat] || 'usd';
+    const transactionFee = 495; // £4.95 in pence
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
@@ -137,6 +161,17 @@ app.post('/create-checkout-session', async (req, res) => {
             images: ['https://images.unsplash.com/photo-1506905925346-21bda4d32df4'],
           },
           unit_amount: depositAmount,
+          },
+          quantity: 1,
+        },
+        {
+          price_data: {
+            currency: currency,
+            product_data: {
+              name: 'Transaction Fee',
+              description: 'Payment processing fee',
+            },
+            unit_amount: transactionFee,
           },
           quantity: 1,
         },

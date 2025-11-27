@@ -10,21 +10,36 @@ const ChamonixRetreatPage = () => {
   const [availableSpots, setAvailableSpots] = useState(null);
   const [maxCapacity, setMaxCapacity] = useState(9);
 
-  // API URL - since backend serves the frontend, use relative URLs in production
-  const API_URL = import.meta.env.VITE_API_URL || '';
+  // API URL - for localhost, default to http://localhost:4242 if not set
+  const API_URL = import.meta.env.VITE_API_URL || 
+    (import.meta.env.DEV ? 'http://localhost:4242' : '');
 
-  // Fetch available spots on page load
+  // Fetch available spots on page load and set up auto-refresh
   useEffect(() => {
-    fetch(`${API_URL}/retreat-capacity/Hiking and Yoga Retreat in Chamonix`)
-      .then(res => res.json())
-      .then(data => {
-        setAvailableSpots(data.availableSpots);
-        setMaxCapacity(data.maxCapacity || 9);
-      })
-      .catch(error => {
-        console.error('Error fetching capacity:', error);
-        setAvailableSpots(9);
-      });
+    // Function to fetch available spots
+    const fetchAvailableSpots = () => {
+      fetch(`${API_URL}/retreat-capacity/Hiking and Yoga Retreat in Chamonix`)
+        .then(res => res.json())
+        .then(data => {
+          setAvailableSpots(data.availableSpots);
+          setMaxCapacity(data.maxCapacity || 9);
+        })
+        .catch(error => {
+          console.error('Error fetching capacity:', error);
+          // Don't set a default on error, keep showing null/loading state
+        });
+    };
+
+    // Initial fetch
+    fetchAvailableSpots();
+
+    // Set up automatic refresh every 30 seconds to keep spots updated
+    const interval = setInterval(() => {
+      fetchAvailableSpots();
+    }, 30000); // Refresh every 30 seconds
+
+    // Cleanup interval on unmount
+    return () => clearInterval(interval);
   }, [API_URL]);
 
   const images = [
@@ -473,7 +488,7 @@ const ChamonixRetreatPage = () => {
                 </p>
               </motion.div>
 
-              {/* Maray Sutti - Yoga Instructor */}
+              {/* Pauline Jouffret - Yoga Instructor */}
               <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -484,15 +499,15 @@ const ChamonixRetreatPage = () => {
               >
                 <div className="mb-6 flex justify-center">
                   <img 
-                    src="/images/homepage/maray.png" 
-                    alt="Maray Sutti - Yoga Instructor"
+                    src="/images/retreat/Pauline.png" 
+                    alt="Pauline Jouffret - Yoga Instructor"
                     className="w-36 h-36 md:w-44 md:h-44 mx-auto rounded-full object-cover border-4 border-[#C65D2B]/50"
                   />
                 </div>
-                <h3 className="text-xl font-bold mb-2 text-[#F7F5EB]">Maray Sutti</h3>
+                <h3 className="text-xl font-bold mb-2 text-[#F7F5EB]">Pauline Jouffret</h3>
                 <p className="text-[#C65D2B] font-semibold mb-3">Yoga Instructor</p>
                 <p className="text-[#DCCCA3] text-sm leading-relaxed">
-                  Maray has been a dedicated student and practitioner of yoga since 2001. Her path began with Iyengar Yoga and quickly expanded to include Hatha, Ashtanga, and Zen meditation. From the very beginning, her heart was drawn to the deeper questions of yoga, Who am I? What is the truth? What is love? Today, she teaches online and in person in Chamonix Mont-Blanc, France, offering educational programs, teacher training, workshops, and collaborative projects with yoga schools around the world.
+                  Trained by Alina Bialek in London, Pauline first started yoga to balance her CrossFit and running routines. You can expect dynamic vinyasa flows, with hands-on adjustments. My classes are open to all levels and conditions, with variations offered for all bodies. My guidance fosters curiosity, challenge and kindness.
                 </p>
               </motion.div>
 
