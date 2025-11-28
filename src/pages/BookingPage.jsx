@@ -20,6 +20,9 @@ const BookingPage = () => {
   const [ageAccepted, setAgeAccepted] = useState(false);
   const [termsAndConditionsAccepted, setTermsAndConditionsAccepted] = useState(false);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
+  // Additional checkboxes for August retreat
+  const [ageAcceptedAugust, setAgeAcceptedAugust] = useState(false);
+  const [adventureActivityAccepted, setAdventureActivityAccepted] = useState(false);
   
   // API URL - for localhost, default to http://localhost:4242 if not set
   // In production, this should be empty string (relative URL) or the production API URL
@@ -83,13 +86,13 @@ const BookingPage = () => {
       ]
     },
     'Hiking and Yoga Retreat - August': {
-      name: 'Hiking & Yoga Retreat Chamonix',
+      name: 'Hiking & Yoga Retreat - Tour du Mont Blanc',
       beginnerFriendly: false,
       price: 1499,
       deposit: 250,
-      dates: 'August 30 - September 4, 2026',
-      duration: '6 Days',
-      location: 'Mont Blanc (France and Italy)',
+      dates: 'August 6–11, 2026',
+      duration: '6 days / 5 nights',
+      location: 'Chamonix - French, Italian & Swiss Alps. Stages 5-10 of Tour du Mont Blanc',
       description: '4 iconic stages of the Tour du Mont Blanc covering 65 km across France and Italy. 15 km each day and 1000 D+ each day. Good fitness level is required.',
       included: [
         '5 nights accommodation',
@@ -240,32 +243,63 @@ const BookingPage = () => {
     }
     
     if (step === 2) {
-      if (!termsAccepted) {
-        toast({
-          title: "Acknowledgment Required",
-          description: "You must read and accept the terms before proceeding",
-          variant: "destructive"
-        });
-        return;
-      }
-      
-      if (!termsAndConditionsAccepted) {
-        toast({
-          title: "Terms & Conditions Required",
-          description: "You must accept the Terms & Conditions before proceeding",
-          variant: "destructive"
-        });
-        return;
-      }
-      
-      // Check age acceptance for beginner-friendly retreats
-      if (retreat.beginnerFriendly && !ageAccepted) {
-        toast({
-          title: "Age Confirmation Required",
-          description: "You must confirm that you are over 18 and under 70 years of age",
-          variant: "destructive"
-        });
-        return;
+      // For August retreat (non-beginnerFriendly), check different checkboxes
+      if (!retreat.beginnerFriendly) {
+        if (!ageAcceptedAugust) {
+          toast({
+            title: "Age Confirmation Required",
+            description: "You must confirm that you are over 18 and under 70 years of age",
+            variant: "destructive"
+          });
+          return;
+        }
+        
+        if (!adventureActivityAccepted) {
+          toast({
+            title: "Safety Acknowledgment Required",
+            description: "You must acknowledge that you understand this is an adventure activity and agree to follow safety instructions",
+            variant: "destructive"
+          });
+          return;
+        }
+        
+        if (!termsAndConditionsAccepted) {
+          toast({
+            title: "Terms & Conditions Required",
+            description: "You must accept the Terms & Conditions before proceeding",
+            variant: "destructive"
+          });
+          return;
+        }
+      } else {
+        // For June retreat (beginnerFriendly), use existing logic
+        if (!termsAccepted) {
+          toast({
+            title: "Acknowledgment Required",
+            description: "You must read and accept the terms before proceeding",
+            variant: "destructive"
+          });
+          return;
+        }
+        
+        if (!termsAndConditionsAccepted) {
+          toast({
+            title: "Terms & Conditions Required",
+            description: "You must accept the Terms & Conditions before proceeding",
+            variant: "destructive"
+          });
+          return;
+        }
+        
+        // Check age acceptance for beginner-friendly retreats
+        if (retreat.beginnerFriendly && !ageAccepted) {
+          toast({
+            title: "Age Confirmation Required",
+            description: "You must confirm that you are over 18 and under 70 years of age",
+            variant: "destructive"
+          });
+          return;
+        }
       }
     }
     
@@ -813,23 +847,39 @@ const BookingPage = () => {
                         </div>
                       </div>
 
-                      {/* Acknowledgment Checkbox - only show for users with hiking experience */}
-                      <div className="bg-[#2E4A34]/50 rounded-xl p-6 border-2 border-[#6B8E23]/50">
+                      {/* Checkboxes for August retreat - styled to match image */}
+                      {/* Age Confirmation Checkbox */}
+                      <div className="bg-[#2E4A34] rounded-lg p-4 sm:p-6 border border-[#6B8E23]">
                         <label className="flex items-start cursor-pointer group">
                           <input
                             type="checkbox"
-                            checked={termsAccepted}
-                            onChange={(e) => setTermsAccepted(e.target.checked)}
+                            checked={ageAcceptedAugust}
+                            onChange={(e) => setAgeAcceptedAugust(e.target.checked)}
                             className="mt-1 w-5 h-5 rounded border-2 border-[#6B8E23] bg-[#2E4A34] text-[#C65D2B] focus:ring-2 focus:ring-[#C65D2B] focus:ring-offset-0 cursor-pointer"
                           />
-                          <span className="ml-3 text-[#F7F5EB] text-lg leading-relaxed group-hover:text-[#DCCCA3] transition-colors">
-                            I have read and understood the above notice. I confirm that I have the necessary experience and fitness level for this challenging hiking retreat, and I accept full responsibility for my participation.
+                          <span className="ml-3 text-[#F7F5EB] text-base leading-relaxed">
+                            I am over 18 and under 70 years of age
+                          </span>
+                        </label>
+                      </div>
+
+                      {/* Adventure Activity Acknowledgment Checkbox */}
+                      <div className="bg-[#2E4A34] rounded-lg p-4 sm:p-6 border border-[#6B8E23]">
+                        <label className="flex items-start cursor-pointer group">
+                          <input
+                            type="checkbox"
+                            checked={adventureActivityAccepted}
+                            onChange={(e) => setAdventureActivityAccepted(e.target.checked)}
+                            className="mt-1 w-5 h-5 rounded border-2 border-[#6B8E23] bg-[#2E4A34] text-[#C65D2B] focus:ring-2 focus:ring-[#C65D2B] focus:ring-offset-0 cursor-pointer"
+                          />
+                          <span className="ml-3 text-[#F7F5EB] text-base leading-relaxed">
+                            I understand that this is an adventure activity and agree to follow all safety instructions and guidelines provided by the guides.
                           </span>
                         </label>
                       </div>
 
                       {/* Terms & Conditions Checkbox */}
-                      <div className="bg-[#2E4A34]/50 rounded-xl p-6 border-2 border-[#6B8E23]/50">
+                      <div className="bg-[#2E4A34] rounded-lg p-4 sm:p-6 border border-[#6B8E23]">
                         <label className="flex items-start cursor-pointer group">
                           <input
                             type="checkbox"
@@ -837,7 +887,7 @@ const BookingPage = () => {
                             onChange={(e) => setTermsAndConditionsAccepted(e.target.checked)}
                             className="mt-1 w-5 h-5 rounded border-2 border-[#6B8E23] bg-[#2E4A34] text-[#C65D2B] focus:ring-2 focus:ring-[#C65D2B] focus:ring-offset-0 cursor-pointer"
                           />
-                          <span className="ml-3 text-[#F7F5EB] text-lg leading-relaxed group-hover:text-[#DCCCA3] transition-colors">
+                          <span className="ml-3 text-[#F7F5EB] text-base leading-relaxed">
                             I have read and agree to the{' '}
                             <button
                               type="button"
@@ -1009,7 +1059,11 @@ const BookingPage = () => {
                   <Button
                     type="button"
                     onClick={handleNextStep}
-                    disabled={step === 2 && (!termsAccepted || (retreatParam === 'Hiking and Yoga Retreat in Chamonix' && !ageAccepted))}
+                    disabled={step === 2 && (
+                      retreat.beginnerFriendly 
+                        ? (!termsAccepted || !ageAccepted || !termsAndConditionsAccepted)
+                        : (!ageAcceptedAugust || !adventureActivityAccepted || !termsAndConditionsAccepted)
+                    )}
                     className="bg-[#C65D2B] hover:bg-[#C65D2B]/90 disabled:opacity-50 disabled:cursor-not-allowed text-[#F7F5EB] w-full sm:w-auto sm:ml-auto px-6 py-3 text-base sm:text-lg touch-manipulation"
                   >
                     {step === 2 ? 'I Understand - Continue' : 'Next Step'}

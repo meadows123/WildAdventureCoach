@@ -18,7 +18,7 @@ const ChamonixRetreatPage = () => {
   useEffect(() => {
     // Function to fetch available spots
     const fetchAvailableSpots = () => {
-      fetch(`${API_URL}/retreat-capacity/Hiking and Yoga Retreat in Chamonix`)
+      fetch(`${API_URL}/retreat-capacity/Hiking & Yoga Retreat Chamonix`)
         .then(res => {
           if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);
@@ -55,7 +55,6 @@ const ChamonixRetreatPage = () => {
 
   const images = [
     '/images/retreat/4.png',
-    '/images/retreat/1.jpg',
     '/images/retreat/2.jpg',
     '/images/retreat/5.jpg',
     '/images/retreat/Train.webp',
@@ -218,24 +217,24 @@ const ChamonixRetreatPage = () => {
               </div>
               
               {/* Available Spots Indicator */}
-              {availableSpots !== null && maxCapacity !== null && (
-                <div className="mt-4 pt-4 border-t border-[#6B8E23]/30">
-                  <div className="bg-[#6B8E23]/30 rounded-lg p-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[#F7F5EB] font-semibold text-lg">Spots Remaining:</span>
-                      <span className="text-[#F7F5EB] text-2xl font-bold">
-                        {availableSpots} / {maxCapacity}
-                      </span>
-                    </div>
-                    <div className="w-full bg-[#2E4A34] rounded-full h-3 mt-2 overflow-hidden">
-                      <div 
-                        className="h-full bg-[#C65D2B] rounded-full transition-all duration-300"
-                        style={{ width: `${maxCapacity > 0 ? (availableSpots / maxCapacity) * 100 : 0}%` }}
-                      ></div>
-                    </div>
+              <div className="mt-4 pt-4 border-t border-[#6B8E23]/30">
+                <div className="bg-[#6B8E23]/30 rounded-lg p-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[#F7F5EB] font-semibold text-lg">Spots Remaining:</span>
+                    <span className="text-[#F7F5EB] text-2xl font-bold">
+                      {availableSpots !== null ? availableSpots : 8} / {maxCapacity !== null ? maxCapacity : 9}
+                    </span>
+                  </div>
+                  <div className="w-full bg-[#2E4A34] rounded-full h-3 mt-2 overflow-hidden">
+                    <div 
+                      className="h-full bg-[#C65D2B] rounded-full transition-all duration-300"
+                      style={{ 
+                        width: `${((availableSpots !== null ? availableSpots : 8) / (maxCapacity !== null ? maxCapacity : 9)) * 100}%` 
+                      }}
+                    ></div>
                   </div>
                 </div>
-              )}
+              </div>
             </div>
           </motion.div>
 
@@ -499,7 +498,7 @@ const ChamonixRetreatPage = () => {
                 </p>
               </motion.div>
 
-              {/* Pauline Jouffret - Yoga Instructor */}
+              {/* Maray Sutti - Yoga Instructor */}
               <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -510,15 +509,15 @@ const ChamonixRetreatPage = () => {
               >
                 <div className="mb-6 flex justify-center">
                   <img 
-                    src="/images/retreat/Pauline.png" 
-                    alt="Pauline Jouffret - Yoga Instructor"
+                    src="/images/homepage/maray.png" 
+                    alt="Maray Sutti - Yoga Instructor"
                     className="w-36 h-36 md:w-44 md:h-44 mx-auto rounded-full object-cover border-4 border-[#C65D2B]/50"
                   />
                 </div>
-                <h3 className="text-xl font-bold mb-2 text-[#F7F5EB]">Pauline Jouffret</h3>
+                <h3 className="text-xl font-bold mb-2 text-[#F7F5EB]">Maray Sutti</h3>
                 <p className="text-[#C65D2B] font-semibold mb-3">Yoga Instructor</p>
                 <p className="text-[#DCCCA3] text-sm leading-relaxed">
-                  Trained by Alina Bialek in London, Pauline first started yoga to balance her CrossFit and running routines. You can expect dynamic vinyasa flows, with hands-on adjustments. My classes are open to all levels and conditions, with variations offered for all bodies. My guidance fosters curiosity, challenge and kindness.
+                  Maray has been a dedicated student and practitioner of yoga since 2001. Her path began with Iyengar Yoga and quickly expanded to include Hatha, Ashtanga, and Zen meditation. From the very beginning, her heart was drawn to the deeper questions of yoga, Who am I? What is the truth? What is love? Today, she teaches online and in person in Chamonix Mont-Blanc, France, offering educational programs, teacher training, workshops, and collaborative projects with yoga schools around the world.
                 </p>
               </motion.div>
 

@@ -13,9 +13,10 @@ const RetreatsPage = () => {
     (import.meta.env.DEV ? 'http://localhost:4242' : '');
 
   // Map retreat titles to their database names
+  // Database has: "Hiking & Yoga Retreat Chamonix" and "Hiking and Yoga Retreat - August"
   const getRetreatDatabaseName = (retreatTitle) => {
     const mapping = {
-      'Hiking and Yoga Retreat in Chamonix': 'Hiking and Yoga Retreat in Chamonix',
+      'Hiking and Yoga Retreat in Chamonix': 'Hiking & Yoga Retreat Chamonix',
       'Hiking & Yoga Retreat - Tour du Mont Blanc': 'Hiking and Yoga Retreat - August'
     };
     return mapping[retreatTitle] || retreatTitle;

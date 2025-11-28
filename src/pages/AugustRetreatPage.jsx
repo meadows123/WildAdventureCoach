@@ -7,36 +7,64 @@ import { Button } from '@/components/ui/button';
 
 const AugustRetreatPage = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [availableSpots, setAvailableSpots] = useState(7);
-  const [maxCapacity, setMaxCapacity] = useState(10);
+  const [availableSpots, setAvailableSpots] = useState(null);
+  const [maxCapacity, setMaxCapacity] = useState(null);
 
   // API URL - for localhost, default to http://localhost:4242 if not set
   const API_URL = import.meta.env.VITE_API_URL || 
     (import.meta.env.DEV ? 'http://localhost:4242' : '');
 
-  // Fetch available spots on page load
+  // Fetch available spots on page load and set up auto-refresh
   useEffect(() => {
-    fetch(`${API_URL}/retreat-capacity/Hiking and Yoga Retreat - August`)
-      .then(res => res.json())
-      .then(data => {
-        // Use API data if available, otherwise default to 7 spots
-        setAvailableSpots(data.availableSpots !== undefined ? data.availableSpots : 7);
-        setMaxCapacity(data.maxCapacity || 10);
-      })
-      .catch(error => {
-        console.error('Error fetching capacity:', error);
-        // Default to 7 spots if API fails
-        setAvailableSpots(7);
-        setMaxCapacity(10);
-      });
+    // Function to fetch available spots
+    const fetchAvailableSpots = () => {
+      fetch(`${API_URL}/retreat-capacity/Hiking and Yoga Retreat - August`)
+        .then(res => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+          }
+          return res.json();
+        })
+        .then(data => {
+          console.log('📊 August capacity data received:', data);
+          // Only update if we have valid data
+          if (data && typeof data.availableSpots === 'number' && typeof data.maxCapacity === 'number') {
+            setAvailableSpots(data.availableSpots);
+            setMaxCapacity(data.maxCapacity);
+          } else {
+            console.warn('⚠️ Invalid capacity data received:', data);
+          }
+        })
+        .catch(error => {
+          console.error('❌ Error fetching capacity:', error);
+          // Don't set a default on error, keep showing null/loading state
+        });
+    };
+
+    // Initial fetch
+    fetchAvailableSpots();
+
+    // Set up automatic refresh every 30 seconds to keep spots updated
+    const interval = setInterval(() => {
+      fetchAvailableSpots();
+    }, 30000); // Refresh every 30 seconds
+
+    // Cleanup interval on unmount
+    return () => clearInterval(interval);
   }, [API_URL]);
 
   const images = [
-    '/images/retreat/1.jpg',
-    '/images/retreat/2.jpg',
-    '/images/retreat/4.png',
-    '/images/retreat/5.jpg',
-    '/images/retreat/6.jpg'
+    '/images/august retreat/1.HEIC',
+    '/images/august retreat/2.HEIC',
+    '/images/august retreat/3.HEIC',
+    '/images/august retreat/4.HEIC',
+    '/images/august retreat/5.HEIC',
+    '/images/august retreat/6.HEIC',
+    '/images/august retreat/7.HEIC',
+    '/images/august retreat/8.HEIC',
+    '/images/august retreat/9.jpg',
+    '/images/august retreat/10.HEIC',
+    '/images/august retreat/11.HEIC'
   ];
 
   const nextImage = () => {
@@ -85,7 +113,7 @@ const AugustRetreatPage = () => {
               transition={{ duration: 0.5 }}
               src={images[currentImageIndex]}
               alt={`August Retreat - Image ${currentImageIndex + 1}`}
-              className="w-full h-full object-cover"
+              className={`w-full h-full object-cover ${currentImageIndex === 4 ? 'object-bottom' : ''}`}
             />
 
             {/* Navigation Arrows */}
@@ -190,24 +218,24 @@ const AugustRetreatPage = () => {
               </div>
               
               {/* Available Spots Indicator */}
-              {availableSpots !== null && (
-                <div className="mt-4 pt-4 border-t border-[#6B8E23]/30">
-                  <div className="bg-[#6B8E23]/30 rounded-lg p-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[#F7F5EB] font-semibold text-lg">Spots Remaining:</span>
-                      <span className="text-[#F7F5EB] text-2xl font-bold">
-                        {availableSpots} / {maxCapacity}
-                      </span>
-                    </div>
-                    <div className="w-full bg-[#2E4A34] rounded-full h-3 mt-2 overflow-hidden">
-                      <div 
-                        className="h-full bg-[#C65D2B] rounded-full transition-all duration-300"
-                        style={{ width: `${(availableSpots / maxCapacity) * 100}%` }}
-                      ></div>
-                    </div>
+              <div className="mt-4 pt-4 border-t border-[#6B8E23]/30">
+                <div className="bg-[#6B8E23]/30 rounded-lg p-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[#F7F5EB] font-semibold text-lg">Spots Remaining:</span>
+                    <span className="text-[#F7F5EB] text-2xl font-bold">
+                      {availableSpots !== null ? availableSpots : 7} / {maxCapacity !== null ? maxCapacity : 10}
+                    </span>
+                  </div>
+                  <div className="w-full bg-[#2E4A34] rounded-full h-3 mt-2 overflow-hidden">
+                    <div 
+                      className="h-full bg-[#C65D2B] rounded-full transition-all duration-300"
+                      style={{ 
+                        width: `${((availableSpots !== null ? availableSpots : 7) / (maxCapacity !== null ? maxCapacity : 10)) * 100}%` 
+                      }}
+                    ></div>
                   </div>
                 </div>
-              )}
+              </div>
             </div>
           </motion.div>
 

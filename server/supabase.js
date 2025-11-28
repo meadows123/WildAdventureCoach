@@ -54,9 +54,10 @@ export async function getAvailableSpots(retreatName) {
   console.log('🔍 getAvailableSpots called for:', retreatName);
   
   // Map display names to database names for retreat capacity lookup
+  // Database has: "Hiking & Yoga Retreat Chamonix" and "Hiking and Yoga Retreat - August"
   const retreatNameMapping = {
-    'Hiking and Yoga Retreat in Chamonix': 'Hiking and Yoga Retreat in Chamonix',
-    'Hiking & Yoga Retreat Chamonix': 'Hiking and Yoga Retreat in Chamonix',
+    'Hiking and Yoga Retreat in Chamonix': 'Hiking & Yoga Retreat Chamonix',
+    'Hiking & Yoga Retreat Chamonix': 'Hiking & Yoga Retreat Chamonix',
     'Hiking and Yoga Retreat - August': 'Hiking and Yoga Retreat - August'
   };
   
@@ -67,9 +68,9 @@ export async function getAvailableSpots(retreatName) {
   // Include both the mapped name and all variations that map to the same capacity name
   const bookingRetreatNames = [
     retreatName, // Original name requested
-    capacityRetreatName, // Mapped capacity name
-    'Hiking & Yoga Retreat Chamonix', // Actual booking name format
-    'Hiking and Yoga Retreat in Chamonix' // Capacity table name format
+    capacityRetreatName, // Mapped capacity name (database format)
+    'Hiking & Yoga Retreat Chamonix', // Database name for June retreat
+    'Hiking and Yoga Retreat in Chamonix' // Display name variation
   ].filter((name, index, self) => self.indexOf(name) === index); // Remove duplicates
   
   // Get the retreat capacity
@@ -128,10 +129,10 @@ export async function getRetreatBookings(retreatName) {
  */
 export async function getRetreatStats(retreatName) {
   // Map display names to database names for retreat capacity lookup
-  // This handles the mismatch between booking names and capacity table names
+  // Database has: "Hiking & Yoga Retreat Chamonix" and "Hiking and Yoga Retreat - August"
   const retreatNameMapping = {
-    'Hiking and Yoga Retreat in Chamonix': 'Hiking and Yoga Retreat in Chamonix',
-    'Hiking & Yoga Retreat Chamonix': 'Hiking and Yoga Retreat in Chamonix',
+    'Hiking and Yoga Retreat in Chamonix': 'Hiking & Yoga Retreat Chamonix',
+    'Hiking & Yoga Retreat Chamonix': 'Hiking & Yoga Retreat Chamonix',
     'Hiking and Yoga Retreat - August': 'Hiking and Yoga Retreat - August'
   };
   
@@ -142,9 +143,9 @@ export async function getRetreatStats(retreatName) {
   // Include both the mapped name and all variations that map to the same capacity name
   const bookingRetreatNames = [
     retreatName, // Original name requested
-    capacityRetreatName, // Mapped capacity name
-    'Hiking & Yoga Retreat Chamonix', // Actual booking name format
-    'Hiking and Yoga Retreat in Chamonix' // Capacity table name format
+    capacityRetreatName, // Mapped capacity name (database format)
+    'Hiking & Yoga Retreat Chamonix', // Database name for June retreat
+    'Hiking and Yoga Retreat in Chamonix' // Display name variation
   ].filter((name, index, self) => self.indexOf(name) === index); // Remove duplicates
 
   const { data: retreat } = await supabase
