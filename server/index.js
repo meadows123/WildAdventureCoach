@@ -123,13 +123,33 @@ app.post('/create-checkout-session', async (req, res) => {
     return res.status(400).json({ error: 'Please select an accommodation option' });
   }
 
-  const depositAmount = retreatDeposits[retreatKey] || retreatDeposits[retreat];
-  const fullPriceAmount = retreatPrices[retreatKey] || retreatPrices[retreat];
+  // Map display names to database pricing keys
+  const retreatPricingMapping = {
+    'Hiking & Yoga Retreat - Tour du Mont Blanc': 'Hiking and Yoga Retreat - August',
+    'Hiking and Yoga Retreat - August': 'Hiking and Yoga Retreat - August',
+    'Hiking and Yoga Retreat in Chamonix': 'Hiking & Yoga Retreat Chamonix',
+    'Hiking & Yoga Retreat Chamonix': 'Hiking & Yoga Retreat Chamonix'
+  };
   
-  console.log('💰 Pricing lookup:', { retreat, retreatKey, depositAmount, fullPriceAmount });
+  // Get the pricing key (database name for pricing lookup)
+  const pricingRetreatName = retreatPricingMapping[retreat] || retreat;
+  const pricingRetreatKey = (accommodationType && accommodationType.trim() !== '') 
+    ? `${pricingRetreatName} - ${accommodationType}` 
+    : pricingRetreatName;
+  
+  const depositAmount = retreatDeposits[pricingRetreatKey] || retreatDeposits[pricingRetreatName];
+  const fullPriceAmount = retreatPrices[pricingRetreatKey] || retreatPrices[pricingRetreatName];
+  
+  console.log('💰 Pricing lookup:', { 
+    retreat, 
+    pricingRetreatName, 
+    pricingRetreatKey, 
+    depositAmount, 
+    fullPriceAmount 
+  });
   
   if (!depositAmount || !fullPriceAmount) {
-    console.log('❌ Invalid pricing:', { retreat, retreatKey, depositAmount, fullPriceAmount });
+    console.log('❌ Invalid pricing:', { retreat, pricingRetreatName, pricingRetreatKey, depositAmount, fullPriceAmount });
     return res.status(400).json({ error: 'Invalid retreat selection' });
   }
 
@@ -157,7 +177,7 @@ app.post('/create-checkout-session', async (req, res) => {
   }
 
   try {
-    const currency = retreatCurrencies[retreat] || 'usd';
+    const currency = retreatCurrencies[pricingRetreatName] || retreatCurrencies[retreat] || 'usd';
     const transactionFee = 495; // £4.95 in pence
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -191,7 +211,8 @@ app.post('/create-checkout-session', async (req, res) => {
         },
       ],
       metadata: {
-        retreat,
+        retreat: pricingRetreatName, // Use database name for consistency (saves as "Hiking and Yoga Retreat - August" not "Tour du Mont Blanc")
+        originalRetreatName: retreat, // Keep original for display purposes
         accommodationType: accommodationType || '',
         firstName,
         lastName,
