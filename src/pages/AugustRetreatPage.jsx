@@ -54,17 +54,17 @@ const AugustRetreatPage = () => {
   }, [API_URL]);
 
   const images = [
-    '/images/august retreat/1.HEIC',
-    '/images/august retreat/2.HEIC',
-    '/images/august retreat/3.HEIC',
-    '/images/august retreat/4.HEIC',
-    '/images/august retreat/5.HEIC',
-    '/images/august retreat/6.HEIC',
-    '/images/august retreat/7.HEIC',
-    '/images/august retreat/8.HEIC',
+    '/images/august retreat/1.jpg',
+    '/images/august retreat/2.jpg',
+    '/images/august retreat/3.jpg',
+    '/images/august retreat/4.jpg',
+    '/images/august retreat/5.jpg',
+    '/images/august retreat/6.jpg',
+    '/images/august retreat/7.jpg',
+    '/images/august retreat/8.jpg',
     '/images/august retreat/9.jpg',
-    '/images/august retreat/10.HEIC',
-    '/images/august retreat/11.HEIC'
+    '/images/august retreat/10.jpg',
+    '/images/august retreat/11.jpg'
   ];
 
   const nextImage = () => {

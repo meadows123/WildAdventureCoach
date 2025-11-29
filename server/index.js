@@ -295,7 +295,9 @@ app.get('/checkout-session/:sessionId', async (req, res) => {
 app.get('/retreat-capacity/:retreatName', async (req, res) => {
   try {
     console.log('📊 Fetching capacity for:', req.params.retreatName);
-    const stats = await getRetreatStats(req.params.retreatName);
+    // Import fresh to avoid module caching
+    const supabaseModule = await import('./supabase.js?' + Date.now());
+    const stats = await supabaseModule.getRetreatStats(req.params.retreatName);
     console.log('📊 Stats returned:', stats);
     res.json(stats);
   } catch (error) {
