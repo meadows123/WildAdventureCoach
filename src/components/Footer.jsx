@@ -82,6 +82,21 @@ const Footer = () => {
             </ul>
           </div>
         </div>
+
+        {/* Developed By Section */}
+        <div className="mt-8 pt-8 border-t border-[#2a3d30] text-center">
+          <p className="text-[#DCCCA3] text-sm">
+            Developed by{' '}
+            <a 
+              href="https://www.conxiea.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-[#C65D2B] hover:text-[#F7F5EB] transition-colors"
+            >
+              Conxiea
+            </a>
+          </p>
+        </div>
       </div>
     </footer>
   );
