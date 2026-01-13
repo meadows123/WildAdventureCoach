@@ -434,7 +434,7 @@ const AugustRetreatPage = () => {
               >
                 <div className="mb-6 flex justify-center">
                   <img 
-                    src="/images/homepage/rugile.jpg" 
+                    src="/images/retreat/Rue007.jpeg" 
                     alt="Rugilė Bazytė - Adventure Guide"
                     className="w-36 h-36 md:w-44 md:h-44 mx-auto rounded-full object-cover border-4 border-[#C65D2B]/50"
                     onError={(e) => {
@@ -468,7 +468,7 @@ const AugustRetreatPage = () => {
                 <h3 className="text-xl font-bold mb-2 text-[#F7F5EB]">Pauline Jouffret</h3>
                 <p className="text-[#C65D2B] font-semibold mb-3">Yoga Instructor</p>
                 <p className="text-[#DCCCA3] text-sm leading-relaxed">
-                  Trained by Alina Bialek in London, Pauline first started yoga to balance her CrossFit and running routines. You can expect dynamic vinyasa flows, with hands-on adjustments. My classes are open to all levels and conditions, with variations offered for all bodies. My guidance fosters curiosity, challenge and kindness.
+                  Pauline is a yoga teacher and nature lover who enjoys exploring mountains just as much as exploring the body. She met Rugilė in London, where they connected over their shared love of movement and the outdoors. Her vinyasa-inspired sessions are open to all levels, offering space to relax after a day on the trails. She encourages curiosity, kindness, and a sense of personal challenge through creative flows and hands-on adjustments.
                 </p>
               </motion.div>
             </div>

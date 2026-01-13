@@ -196,7 +196,8 @@ const RetreatsPage = () => {
           <img
             src={retreat.images[0]}
             alt={retreat.title}
-            className="w-full h-full object-cover rounded-l-xl"
+            className={`w-full h-full object-cover rounded-l-xl ${isJune ? 'object-center' : ''}`}
+            style={isJune ? { objectPosition: 'center center' } : {}}
           />
         </div>
 

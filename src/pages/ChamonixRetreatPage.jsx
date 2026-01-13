@@ -53,6 +53,30 @@ const ChamonixRetreatPage = () => {
     return () => clearInterval(interval);
   }, [API_URL]);
 
+  // Preload all images on mount for instant carousel navigation
+  useEffect(() => {
+    images.forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
+  // Preload adjacent images when current image changes
+  useEffect(() => {
+    const preloadAdjacent = () => {
+      const prevIndex = currentImageIndex === 0 ? images.length - 1 : currentImageIndex - 1;
+      const nextIndex = currentImageIndex === images.length - 1 ? 0 : currentImageIndex + 1;
+      
+      // Preload previous and next images
+      [prevIndex, nextIndex].forEach(index => {
+        const img = new Image();
+        img.src = images[index];
+      });
+    };
+
+    preloadAdjacent();
+  }, [currentImageIndex]);
+
   const images = [
     '/images/retreat/4.png',
     '/images/retreat/2.jpg',
@@ -94,7 +118,7 @@ const ChamonixRetreatPage = () => {
     <>
       <Helmet>
         <title>Hiking & Yoga Retreat in Chamonix - Wild Adventure Coach</title>
-        <meta name="description" content="A transformative 6-day alpine adventure combining mindful movement, breathtaking hikes, an introduction to climbing and daily restorative yoga in Chamonix, French Alps." />
+        <meta name="description" content="A transformative 6-day alpine adventure combining mindful movement, breathtaking hikes and daily restorative yoga in Chamonix, French Alps." />
       </Helmet>
 
       <div className="min-h-screen pt-20 pb-16 px-4">
@@ -110,10 +134,12 @@ const ChamonixRetreatPage = () => {
               key={currentImageIndex}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.2 }}
               src={images[currentImageIndex]}
               alt={`Chamonix Retreat - Image ${currentImageIndex + 1}`}
               className="w-full h-full object-cover"
+              loading="eager"
+              decoding="async"
             />
 
             {/* Navigation Arrows */}
@@ -167,7 +193,7 @@ const ChamonixRetreatPage = () => {
             </p>
             <div className="w-24 h-1 bg-[#C65D2B] mx-auto rounded-full mb-3 sm:mb-4"></div>
             <p className="text-base sm:text-lg text-[#DCCCA3] max-w-3xl mx-auto leading-relaxed px-4">
-              A transformative 6-day alpine adventure combining mindful movement, breathtaking hikes, an introduction to climbing and daily restorative yoga
+              A transformative 6-day alpine adventure combining mindful movement, breathtaking hikes and daily restorative yoga
             </p>
             <div className="mt-6 sm:mt-8">
               <Link to="/booking?retreat=Hiking and Yoga Retreat in Chamonix" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
@@ -222,14 +248,14 @@ const ChamonixRetreatPage = () => {
                   <div className="flex items-center justify-between">
                     <span className="text-[#F7F5EB] font-semibold text-lg">Spots Remaining:</span>
                     <span className="text-[#F7F5EB] text-2xl font-bold">
-                      {availableSpots !== null ? availableSpots : 8} / {maxCapacity !== null ? maxCapacity : 9}
+                      {availableSpots !== null ? availableSpots : 7} / {maxCapacity !== null ? maxCapacity : 9}
                     </span>
                   </div>
                   <div className="w-full bg-[#2E4A34] rounded-full h-3 mt-2 overflow-hidden">
                     <div 
                       className="h-full bg-[#C65D2B] rounded-full transition-all duration-300"
                       style={{ 
-                        width: `${((availableSpots !== null ? availableSpots : 8) / (maxCapacity !== null ? maxCapacity : 9)) * 100}%` 
+                        width: `${((availableSpots !== null ? availableSpots : 7) / (maxCapacity !== null ? maxCapacity : 9)) * 100}%` 
                       }}
                     ></div>
                   </div>
@@ -258,20 +284,13 @@ const ChamonixRetreatPage = () => {
                   </div>
                 </div>
                 <div className="flex items-start text-[#DCCCA3]">
-                  <span className="text-3xl mr-4">🧗</span>
-                  <div>
-                    <p className="font-semibold text-[#F7F5EB] mb-1">Introduction to Climbing</p>
-                    <p className="text-sm">Experience the thrill of climbing in a safe, supportive environment</p>
-                  </div>
-                </div>
-                <div className="flex items-start text-[#DCCCA3]">
                   <span className="text-3xl mr-4">🌿</span>
                   <div>
                     <p className="font-semibold text-[#F7F5EB] mb-1">Mindful Moments & Digital Detox</p>
                     <p className="text-sm">Meditation, journaling, and quiet reflection away from digital distractions</p>
                   </div>
                 </div>
-                <div className="flex items-start text-[#DCCCA3] md:col-span-2 justify-start">
+                <div className="flex items-start text-[#DCCCA3]">
                   <span className="text-3xl mr-4">🤝</span>
                   <div>
                     <p className="font-semibold text-[#F7F5EB] mb-1">Community Connection</p>
@@ -327,25 +346,41 @@ const ChamonixRetreatPage = () => {
                 Stay in a cozy <span className="text-[#F7F5EB] font-semibold">alpine chalet</span> with panoramic Mont Blanc views. Meals are crafted by our <span className="text-[#F7F5EB] font-semibold">private chef</span>, using wholesome, locally sourced ingredients to energize and delight. Healthy snacks and natural energy bars are available anytime at the chalet's <span className="text-[#F7F5EB] font-semibold">honesty bar</span>. Shared spaces encourage authentic conversations and a sense of community.
               </p>
               
+              {/* Early Bird Banner */}
+              <div className="bg-gradient-to-r from-[#C65D2B] to-[#E07B4B] border-2 border-[#C65D2B]/50 rounded-lg px-4 py-3 mb-6 text-center">
+                <p className="text-[#F7F5EB] font-bold text-lg sm:text-xl">
+                  🎉 Early Bird prices! - Valid until the 28th of February 2026
+                </p>
+              </div>
+              
               {/* Accommodation Options */}
               <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <div className="bg-[#2E4A34]/50 rounded-lg p-4 border-2 border-[#6B8E23]/30">
                   <p className="font-semibold text-[#F7F5EB] mb-2">Basic Single</p>
                   <p className="text-sm text-[#DCCCA3]">Shared room (up to 3 total)</p>
                   <p className="text-sm text-[#DCCCA3]">Ensuite bathroom</p>
-                  <p className="text-2xl font-bold text-[#C65D2B] mt-3">£1,250</p>
+                  <div className="mt-3">
+                    <p className="text-2xl font-bold text-[#C65D2B]">£1,100</p>
+                    <p className="text-lg text-[#DCCCA3] line-through">£1,250</p>
+                  </div>
                 </div>
                 <div className="bg-[#2E4A34]/50 rounded-lg p-4 border-2 border-[#6B8E23]/30">
                   <p className="font-semibold text-[#F7F5EB] mb-2">Economy Single</p>
                   <p className="text-sm text-[#DCCCA3]">One bed in shared twin</p>
                   <p className="text-sm text-[#DCCCA3]">Same-gender accommodation</p>
-                  <p className="text-2xl font-bold text-[#C65D2B] mt-3">£1,450</p>
+                  <div className="mt-3">
+                    <p className="text-2xl font-bold text-[#C65D2B]">£1,320</p>
+                    <p className="text-lg text-[#DCCCA3] line-through">£1,450</p>
+                  </div>
                 </div>
                 <div className="bg-[#2E4A34]/50 rounded-lg p-4 border-2 border-[#6B8E23]/30">
                   <p className="font-semibold text-[#F7F5EB] mb-2">Double</p>
                   <p className="text-sm text-[#DCCCA3]">Single occupancy</p>
                   <p className="text-sm text-[#DCCCA3]">Double room</p>
-                  <p className="text-2xl font-bold text-[#C65D2B] mt-3">£1,750</p>
+                  <div className="mt-3">
+                    <p className="text-2xl font-bold text-[#C65D2B]">£1,550</p>
+                    <p className="text-lg text-[#DCCCA3] line-through">£1,750</p>
+                  </div>
                 </div>
               </div>
               <div className="bg-[#6B8E23]/20 border border-[#6B8E23]/40 rounded-lg px-4 py-3 mt-4">
@@ -364,6 +399,10 @@ const ChamonixRetreatPage = () => {
               <ul className="space-y-3 text-[#DCCCA3]">
                 <li className="flex items-start">
                   <span className="text-[#C65D2B] mr-3 text-xl">•</span>
+                  <span className="text-base sm:text-lg">Hikers of all levels — suitable for beginner, intermediate, and advanced hikers alike</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[#C65D2B] mr-3 text-xl">•</span>
                   <span className="text-base sm:text-lg">Busy professionals craving space to think, breathe, and reset</span>
                 </li>
                 <li className="flex items-start">
@@ -376,7 +415,7 @@ const ChamonixRetreatPage = () => {
                 </li>
               </ul>
               <p className="text-base sm:text-lg text-[#F7F5EB] font-semibold mt-4 sm:mt-6">
-                No prior yoga or climbing experience required — bring an open mind and readiness for growth
+                No prior yoga experience required — bring an open mind and readiness for growth
               </p>
             </div>
           </motion.div>
@@ -397,10 +436,6 @@ const ChamonixRetreatPage = () => {
                 <li className="flex items-start text-[#DCCCA3]">
                   <span className="text-[#C65D2B] mr-3 text-xl">✓</span>
                   <span className="text-lg"><span className="text-[#F7F5EB] font-semibold">Meditation & Self-Reflection Sessions</span> – Guided moments to help you unwind, recharge, and reconnect with what truly matters</span>
-                </li>
-                <li className="flex items-start text-[#DCCCA3]">
-                  <span className="text-[#C65D2B] mr-3 text-xl">✓</span>
-                  <span className="text-lg"><span className="text-[#F7F5EB] font-semibold">Introduction to Climbing</span> – Learn the basics and feel the thrill of scaling alpine rock in a supportive setting</span>
                 </li>
                 <li className="flex items-start text-[#DCCCA3]">
                   <span className="text-[#C65D2B] mr-3 text-xl">✓</span>
@@ -483,7 +518,7 @@ const ChamonixRetreatPage = () => {
               >
                 <div className="mb-6 flex justify-center">
                   <img 
-                    src="/images/homepage/rugile.jpg" 
+                    src="/images/retreat/Rue007.jpeg" 
                     alt="Rugilė Bazytė - Adventure Guide"
                     className="w-36 h-36 md:w-44 md:h-44 mx-auto rounded-full object-cover border-4 border-[#C65D2B]/50"
                     onError={(e) => {
