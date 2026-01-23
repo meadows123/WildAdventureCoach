@@ -16,20 +16,69 @@ const EMAILJS_TEMPLATE_ID_BOOKING = process.env.EMAILJS_TEMPLATE_ID_BOOKING || '
 const EMAILJS_TEMPLATE_ID_ADMIN = process.env.EMAILJS_TEMPLATE_ID_ADMIN || 'template_ml0v13r';
 const useEmailJS = !!(EMAILJS_USER_ID && EMAILJS_ACCESS_TOKEN && EMAILJS_TEMPLATE_ID_BOOKING && EMAILJS_TEMPLATE_ID_ADMIN);
 
+/**
+ * Sanitize a value for EmailJS template parameters.
+ * EmailJS requires all values to be clean strings - no null, undefined, or special formatting issues.
+ */
+function sanitizeForEmailJS(value) {
+  // Handle null/undefined
+  if (value === null || value === undefined) {
+    return '';
+  }
+  
+  // Handle boolean values
+  if (typeof value === 'boolean') {
+    return value ? 'Yes' : 'No';
+  }
+  
+  // Handle numbers
+  if (typeof value === 'number') {
+    return String(value);
+  }
+  
+  // Convert to string
+  let str = String(value);
+  
+  // Remove any control characters that might cause issues (but keep newlines, tabs, etc. for formatting)
+  str = str.replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, '');
+  
+  // Replace problematic characters that EmailJS might not handle well
+  // Keep common symbols like £, €, etc. but ensure proper encoding
+  str = str.replace(/\u200B/g, ''); // Remove zero-width spaces
+  
+  // Trim whitespace
+  str = str.trim();
+  
+  return str;
+}
+
 async function sendViaEmailJS(templateId, templateParams) {
   if (!EMAILJS_ACCESS_TOKEN) {
     throw new Error('EMAILJS_ACCESS_TOKEN is required for server-side API calls');
+  }
+  
+  // Sanitize all template parameters to ensure they're clean strings
+  const sanitizedParams = {};
+  for (const [key, value] of Object.entries(templateParams)) {
+    sanitizedParams[key] = sanitizeForEmailJS(value);
   }
   
   const requestBody = {
     service_id: EMAILJS_SERVICE_ID,
     template_id: templateId,
     user_id: EMAILJS_USER_ID,
-    template_params: templateParams,
+    template_params: sanitizedParams,
     accessToken: EMAILJS_ACCESS_TOKEN, // Required for server-side calls
   };
   
   console.log(`📧 [EmailJS] Sending to template ${templateId} with access token: ${EMAILJS_ACCESS_TOKEN ? '✅ Set' : '❌ Missing'}`);
+  console.log(`📦 [EmailJS] Template params keys:`, Object.keys(sanitizedParams).join(', '));
+  // Log param values for debugging (truncated to avoid sensitive data)
+  const paramPreview = Object.entries(sanitizedParams).reduce((acc, [key, value]) => {
+    acc[key] = typeof value === 'string' && value.length > 50 ? value.substring(0, 50) + '...' : value;
+    return acc;
+  }, {});
+  console.log(`📦 [EmailJS] Template params preview:`, JSON.stringify(paramPreview, null, 2));
   
   const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
     method: 'POST',
@@ -78,21 +127,20 @@ export async function sendBookingConfirmationEmail(booking) {
 
   if (useEmailJS) {
     try {
-      // Ensure all values are strings (EmailJS requires strings, not null/undefined)
+      // Only send variables that are actually used in the template
+      // All values will be sanitized by sendViaEmailJS
       const params = {
-        to_email: String(booking.email || ''),
-        first_name: String(booking.first_name || ''),
-        last_name: String(booking.last_name || ''),
-        guest_name: String(`${booking.first_name || ''} ${booking.last_name || ''}`).trim(),
-        email: String(booking.email || ''),
-        retreat_name: String(booking.retreat_name || ''),
-        retreat_dates: String(retreatDates || ''),
-        accommodation_type: String(booking.accommodation_type || ''),
-        gender: String(booking.gender || ''),
-        age: String(booking.age || ''),
-        hiking_experience: String(booking.hiking_experience || ''),
-        amount_paid: String(`£${amountInPounds}`),
-        subject: String(`Booking Confirmed - ${booking.retreat_name || ''}`),
+        first_name: booking.first_name || '',
+        last_name: booking.last_name || '',
+        guest_name: `${booking.first_name || ''} ${booking.last_name || ''}`.trim() || 'Guest',
+        email: booking.email || '',
+        retreat_name: booking.retreat_name || '',
+        retreat_dates: retreatDates || '',
+        accommodation_type: booking.accommodation_type || '',
+        gender: booking.gender || '',
+        age: booking.age || '',
+        hiking_experience: booking.hiking_experience || '',
+        amount_paid: `£${amountInPounds}`,
       };
       await sendViaEmailJS(EMAILJS_TEMPLATE_ID_BOOKING, params);
       console.log(`📧 [EmailJS] Confirmation email sent to ${booking.email}`);
@@ -356,24 +404,21 @@ export async function sendAdminNotification(booking) {
 
   if (useEmailJS) {
     try {
-      // Ensure all values are strings (EmailJS requires strings, not null/undefined)
+      // Only send variables that are actually used in the template
+      // All values will be sanitized by sendViaEmailJS
       const params = {
-        to_email: String(RETREAT_OWNER_EMAIL || ''),
-        first_name: String(booking.first_name || ''),
-        last_name: String(booking.last_name || ''),
-        guest_name: String(`${booking.first_name || ''} ${booking.last_name || ''}`).trim(),
-        email: String(booking.email || ''),
-        retreat_name: String(booking.retreat_name || ''),
-        retreat_dates: String(retreatDates || ''),
-        accommodation_type: String(booking.accommodation_type || ''),
-        gender: String(booking.gender || 'N/A'),
-        age: String(booking.age || 'N/A'),
-        been_hiking: String(booking.been_hiking || 'N/A'),
-        hiking_experience: String(booking.hiking_experience || 'N/A'),
-        amount_paid: String(`£${amountInPounds}`),
-        booking_date: String(bookingDateStr || ''),
-        stripe_session_id: String(booking.stripe_session_id || ''),
-        subject: String(`New Booking: ${booking.first_name || ''} ${booking.last_name || ''} - ${booking.retreat_name || ''}`),
+        guest_name: `${booking.first_name || ''} ${booking.last_name || ''}`.trim() || 'Guest',
+        email: booking.email || '',
+        retreat_name: booking.retreat_name || '',
+        retreat_dates: retreatDates || '',
+        accommodation_type: booking.accommodation_type || '',
+        gender: booking.gender || 'N/A',
+        age: booking.age || 'N/A',
+        been_hiking: booking.been_hiking || 'N/A',
+        hiking_experience: booking.hiking_experience || 'N/A',
+        amount_paid: `£${amountInPounds}`,
+        booking_date: bookingDateStr || '',
+        stripe_session_id: booking.stripe_session_id || '',
       };
       await sendViaEmailJS(EMAILJS_TEMPLATE_ID_ADMIN, params);
       console.log(`📧 [EmailJS] Retreat-owner notification sent to ${RETREAT_OWNER_EMAIL}`);
