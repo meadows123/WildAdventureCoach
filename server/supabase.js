@@ -57,15 +57,44 @@ export async function addBooking(bookingData) {
     // Don't log duplicate key errors as errors - they're expected when webhook + success page both fire
     if (error.code === '23505') {
       console.log('ℹ️  Booking already exists (duplicate key) - likely saved by webhook or previous request');
+      console.log('🔍 Duplicate error details:', error.details || 'No details');
       // Try to fetch the existing booking
       if (bookingData.stripe_session_id) {
-        const { data: existing } = await supabase
+        console.log('🔍 Searching for booking with session_id:', bookingData.stripe_session_id);
+        const { data: existing, error: fetchError } = await supabase
           .from('bookings')
           .select('*')
           .eq('stripe_session_id', bookingData.stripe_session_id)
-          .single();
-        if (existing) return existing;
+          .maybeSingle();
+        
+        if (existing) {
+          console.log('✅ Found existing booking in addBooking()');
+          return existing;
+        } else {
+          console.log('⚠️  Could not find booking by stripe_session_id in addBooking()');
+          if (fetchError) console.log('Fetch error:', fetchError);
+          // Try fallback search by email + retreat + amount
+          if (bookingData.email && bookingData.retreat_name && bookingData.amount_paid) {
+            console.log('🔍 Trying fallback search by email + retreat + amount...');
+            const { data: fallbackBooking } = await supabase
+              .from('bookings')
+              .select('*')
+              .eq('email', bookingData.email)
+              .eq('retreat_name', bookingData.retreat_name)
+              .eq('amount_paid', bookingData.amount_paid)
+              .order('created_at', { ascending: false })
+              .limit(1)
+              .maybeSingle();
+            
+            if (fallbackBooking) {
+              console.log('✅ Found existing booking via fallback search');
+              return fallbackBooking;
+            }
+          }
+        }
       }
+      // If we can't find the booking, still throw the error so the caller can handle it
+      console.log('⚠️  Could not locate existing booking, re-throwing error for caller to handle');
     } else {
       console.error('❌ Error adding booking:', error);
     }

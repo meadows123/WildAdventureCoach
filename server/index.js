@@ -312,16 +312,47 @@ app.get('/checkout-session/:sessionId', async (req, res) => {
         // Might already exist from webhook - that's okay, just fetch it
         if (dbError.code === '23505') {
           console.log('ℹ️  Booking already exists (likely saved by webhook) - fetching existing booking');
+          console.log('🔍 Duplicate error details:', dbError.details || 'No details');
+          console.log('🔍 Searching for booking with session_id:', session.id);
+          
           try {
-            // Fetch the existing booking to send emails
-            const { data: existingBooking } = await supabase
+            // Try fetching by stripe_session_id first
+            let existingBooking = null;
+            const { data: bookingBySession, error: sessionError } = await supabase
               .from('bookings')
               .select('*')
               .eq('stripe_session_id', session.id)
-              .single();
+              .maybeSingle();
+            
+            if (bookingBySession) {
+              existingBooking = bookingBySession;
+              console.log('✅ Found existing booking by stripe_session_id');
+            } else {
+              // Fallback: try fetching by email + retreat_name + amount (in case session_id differs)
+              console.log('🔍 Not found by session_id, trying email + retreat + amount...');
+              const { data: bookingByDetails, error: detailsError } = await supabase
+                .from('bookings')
+                .select('*')
+                .eq('email', session.customer_email)
+                .eq('retreat_name', session.metadata?.retreat || bookingData.retreat_name)
+                .eq('amount_paid', session.amount_total)
+                .order('created_at', { ascending: false })
+                .limit(1)
+                .maybeSingle();
+              
+              if (bookingByDetails) {
+                existingBooking = bookingByDetails;
+                console.log('✅ Found existing booking by email + retreat + amount');
+              } else {
+                console.log('⚠️  Could not find existing booking by any method');
+                if (sessionError) console.log('Session query error:', sessionError);
+                if (detailsError) console.log('Details query error:', detailsError);
+              }
+            }
             
             if (existingBooking) {
               console.log('✅ Found existing booking, checking if emails need to be sent...');
+              console.log('📦 Existing booking ID:', existingBooking.id, 'Session ID:', existingBooking.stripe_session_id);
               // Send emails for the existing booking (webhook might have failed to send them)
               try {
                 console.log('📧 Attempting to send confirmation email to:', existingBooking.email);
@@ -347,7 +378,7 @@ app.get('/checkout-session/:sessionId', async (req, res) => {
                 console.error('❌ Error sending retreat-owner notification for existing booking:', ownerErr);
               }
             } else {
-              console.log('⚠️  Could not find existing booking to send emails');
+              console.log('⚠️  Could not find existing booking to send emails - booking may have been created with different details');
             }
           } catch (fetchErr) {
             console.error('❌ Error fetching existing booking:', fetchErr);
