@@ -39,6 +39,8 @@ services:
         sync: false
       - key: EMAILJS_USER_ID
         sync: false
+      - key: EMAILJS_ACCESS_TOKEN
+        sync: false
       - key: EMAILJS_TEMPLATE_ID_BOOKING
         sync: false
       - key: EMAILJS_TEMPLATE_ID_ADMIN

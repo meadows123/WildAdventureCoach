@@ -11,23 +11,34 @@ const RETREAT_OWNER_EMAIL = process.env.RETREAT_OWNER_EMAIL || ADMIN_EMAIL;
 /** EmailJS (https://emailjs.com) – booking confirmation & admin notification */
 const EMAILJS_SERVICE_ID = process.env.EMAILJS_SERVICE_ID || 'service_1c8sjrs';
 const EMAILJS_USER_ID = process.env.EMAILJS_USER_ID;
+const EMAILJS_ACCESS_TOKEN = process.env.EMAILJS_ACCESS_TOKEN; // Private key for server-side API calls
 const EMAILJS_TEMPLATE_ID_BOOKING = process.env.EMAILJS_TEMPLATE_ID_BOOKING || 'template_hdnnpuh';
 const EMAILJS_TEMPLATE_ID_ADMIN = process.env.EMAILJS_TEMPLATE_ID_ADMIN || 'template_ml0v13r';
-const useEmailJS = !!(EMAILJS_USER_ID && EMAILJS_TEMPLATE_ID_BOOKING && EMAILJS_TEMPLATE_ID_ADMIN);
+const useEmailJS = !!(EMAILJS_USER_ID && EMAILJS_ACCESS_TOKEN && EMAILJS_TEMPLATE_ID_BOOKING && EMAILJS_TEMPLATE_ID_ADMIN);
 
 async function sendViaEmailJS(templateId, templateParams) {
+  if (!EMAILJS_ACCESS_TOKEN) {
+    throw new Error('EMAILJS_ACCESS_TOKEN is required for server-side API calls');
+  }
+  
+  const requestBody = {
+    service_id: EMAILJS_SERVICE_ID,
+    template_id: templateId,
+    user_id: EMAILJS_USER_ID,
+    template_params: templateParams,
+    accessToken: EMAILJS_ACCESS_TOKEN, // Required for server-side calls
+  };
+  
+  console.log(`📧 [EmailJS] Sending to template ${templateId} with access token: ${EMAILJS_ACCESS_TOKEN ? '✅ Set' : '❌ Missing'}`);
+  
   const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      service_id: EMAILJS_SERVICE_ID,
-      template_id: templateId,
-      user_id: EMAILJS_USER_ID,
-      template_params: templateParams,
-    }),
+    body: JSON.stringify(requestBody),
   });
   if (!res.ok) {
     const text = await res.text();
+    console.error(`❌ EmailJS API error ${res.status}:`, text);
     throw new Error(`EmailJS API ${res.status}: ${text}`);
   }
   return { success: true };
@@ -644,9 +655,12 @@ export async function sendContactEmail(contactData) {
 
 if (useEmailJS) {
   console.log(`📧 Email: Using EmailJS (${EMAILJS_SERVICE_ID}) for booking confirmation & retreat-owner notification`);
+} else if (EMAILJS_USER_ID && !EMAILJS_ACCESS_TOKEN) {
+  console.log('⚠️  EmailJS: USER_ID set but ACCESS_TOKEN missing - EmailJS requires access token for server-side calls');
+  console.log('📧 Email: Falling back to SendGrid (if configured)');
 } else if (SENDGRID_API_KEY) {
   console.log('📧 Email: Using SendGrid for booking confirmation & retreat-owner notification');
 } else {
-  console.log('📧 Email: No provider configured for booking/retreat-owner emails (set EmailJS or SendGrid)');
+  console.log('📧 Email: No provider configured for booking/retreat-owner emails (set EmailJS with ACCESS_TOKEN or SendGrid)');
 }
 
