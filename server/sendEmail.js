@@ -130,6 +130,11 @@ async function sendViaEmailJS(templateId, templateParams) {
   }, {});
   console.log(`📦 [EmailJS] Template params preview:`, JSON.stringify(paramPreview, null, 2));
   
+  // Log full request body for debugging (without access token)
+  const debugBody = { ...requestBody };
+  debugBody.accessToken = '***HIDDEN***';
+  console.log(`📦 [EmailJS] Full request body (token hidden):`, JSON.stringify(debugBody, null, 2));
+  
   // Validate all values are strings (EmailJS requirement)
   for (const [key, value] of Object.entries(sanitizedParams)) {
     if (typeof value !== 'string') {
@@ -166,17 +171,18 @@ async function sendViaEmailJS(templateId, templateParams) {
     body: requestBodyString,
   });
   
+  const responseText = await res.text();
+  
   if (!res.ok) {
-    const text = await res.text();
-    console.error(`❌ EmailJS API error ${res.status}:`, text);
+    console.error(`❌ EmailJS API error ${res.status}:`, responseText);
     
     // Try to parse error for more details
     try {
-      const errorData = JSON.parse(text);
+      const errorData = JSON.parse(responseText);
       console.error(`❌ EmailJS error details:`, JSON.stringify(errorData, null, 2));
       
       // If it's a corrupted variables error, log which variables might be problematic
-      if (text.includes('corrupted') || text.includes('corrupt')) {
+      if (responseText.includes('corrupted') || responseText.includes('corrupt')) {
         console.error(`❌ [EmailJS] Corrupted variables detected. Checking all variables...`);
         for (const [key, value] of Object.entries(sanitizedParams)) {
           // Check for potentially problematic characters
@@ -196,7 +202,22 @@ async function sendViaEmailJS(templateId, templateParams) {
       // Error response is not JSON, that's okay
     }
     
-    throw new Error(`EmailJS API ${res.status}: ${text}`);
+    throw new Error(`EmailJS API ${res.status}: ${responseText}`);
+  }
+  
+  // Log successful response for debugging
+  try {
+    const responseData = JSON.parse(responseText);
+    console.log(`✅ [EmailJS] Response:`, JSON.stringify(responseData, null, 2));
+    
+    // Check if response contains any warnings about variables
+    if (responseText.includes('corrupted') || responseText.includes('corrupt') || responseText.includes('warning')) {
+      console.warn(`⚠️  [EmailJS] Response contains warnings about variables`);
+      console.warn(`⚠️  [EmailJS] Full response:`, responseText);
+    }
+  } catch (e) {
+    // Response is not JSON, log as text
+    console.log(`✅ [EmailJS] Response (text):`, responseText.substring(0, 200));
   }
   
   return { success: true };
@@ -236,9 +257,7 @@ export async function sendBookingConfirmationEmail(booking) {
 
   if (useEmailJS) {
     try {
-      // Only send variables that are actually used in the booking confirmation template
-      // Required variables: to_email, first_name, guest_name, email, retreat_name, amount_paid
-      // Optional variables (only send if they have values): retreat_dates, accommodation_type, gender, age, hiking_experience
+      // Template no longer uses conditionals, so send all fields (empty strings are fine)
       const guestName = `${booking.first_name || ''} ${booking.last_name || ''}`.trim() || 'Guest';
       // Replace & with "and" in retreat_name to avoid EmailJS template parsing issues
       const retreatName = (booking.retreat_name || '').replace(/&/g, 'and');
@@ -249,15 +268,13 @@ export async function sendBookingConfirmationEmail(booking) {
         guest_name: guestName,
         email: booking.email || '',
         retreat_name: retreatName,
+        retreat_dates: retreatDates || '', // Always send, even if empty
+        accommodation_type: booking.accommodation_type || '', // Always send, even if empty
+        gender: booking.gender || '', // Always send, even if empty
+        age: booking.age ? String(booking.age) : '', // Always send, even if empty
+        hiking_experience: booking.hiking_experience || '', // Always send, even if empty
         amount_paid: `GBP ${amountInPounds}`,
       };
-      
-      // Only add optional variables if they have values (template uses {{#if}} conditionals)
-      if (retreatDates) params.retreat_dates = retreatDates;
-      if (booking.accommodation_type) params.accommodation_type = booking.accommodation_type;
-      if (booking.gender) params.gender = booking.gender;
-      if (booking.age) params.age = String(booking.age);
-      if (booking.hiking_experience) params.hiking_experience = booking.hiking_experience;
       
       await sendViaEmailJS(EMAILJS_TEMPLATE_ID_BOOKING, params);
       console.log(`📧 [EmailJS] Confirmation email sent to ${booking.email}`);
@@ -537,24 +554,23 @@ export async function sendAdminNotification(booking) {
       const retreatName = (booking.retreat_name || '').replace(/&/g, 'and');
       const subjectRetreatName = retreatName; // Use same cleaned name for subject
       
+      // Template no longer uses conditionals, so send all fields (empty strings are fine)
       const params = {
         to_email: recipientEmail, // Required by EmailJS API - recipient address
         subject: `New Booking: ${booking.first_name || ''} ${booking.last_name || ''} - ${subjectRetreatName}`,
         guest_name: `${booking.first_name || ''} ${booking.last_name || ''}`.trim() || 'Guest',
         email: booking.email || '', // Used for Reply-To field
         retreat_name: retreatName,
+        retreat_dates: retreatDates || '', // Always send, even if empty
+        accommodation_type: booking.accommodation_type || '', // Always send, even if empty
         gender: booking.gender || 'N/A',
         age: String(booking.age || 'N/A'),
         been_hiking: booking.been_hiking || 'N/A',
         hiking_experience: booking.hiking_experience || 'N/A',
         amount_paid: `GBP ${amountInPounds}`,
         booking_date: bookingDateStr || '',
+        stripe_session_id: booking.stripe_session_id || '', // Always send, even if empty
       };
-      
-      // Only add optional variables if they have values (template uses {{#if}} conditionals)
-      if (retreatDates) params.retreat_dates = retreatDates;
-      if (booking.accommodation_type) params.accommodation_type = booking.accommodation_type;
-      if (booking.stripe_session_id) params.stripe_session_id = booking.stripe_session_id;
       
       console.log(`📧 [EmailJS] Sending retreat-owner notification to: ${params.to_email}`);
       await sendViaEmailJS(EMAILJS_TEMPLATE_ID_ADMIN, params);

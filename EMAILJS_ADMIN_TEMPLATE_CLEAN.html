@@ -1,0 +1,81 @@
+<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 14px; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; background-color: #f5f5f5; padding: 14px 8px;">
+    <div style="max-width: 600px; margin: auto; background-color: #fff; border-radius: 8px; overflow: hidden;">
+    <div style="background-color: #6b8e23; color: white; padding: 40px 20px; text-align: center; border-radius: 8px 8px 0 0;">
+    <h1 style="margin: 0; font-size: 28px;">New Booking Received!</h1>
+    <p style="margin: 10px 0 0 0; font-size: 16px;">{{guest_name}} signed up for {{retreat_name}}</p>
+    </div>
+    <div style="padding: 30px 20px; color: #333;">
+    <p style="margin-top: 0;">A new guest has completed a booking. Here are the details:</p>
+    <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #6B8E23;">
+    <h2 style="color: #6b8e23; margin-top: 0; font-size: 22px;">Booking Details</h2>
+    <table style="width: 100%; border-collapse: collapse;">
+    <tbody>
+    <tr>
+    <td style="padding: 12px 8px 8px 0; font-weight: 600; color: #6b8e23; width: 40%; border-bottom: 1px solid #e0e0e0;">Retreat</td>
+    <td style="padding: 12px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{retreat_name}}</td>
+    </tr>
+    <tr>
+    <td style="padding: 12px 8px 8px 0; font-weight: 600; color: #6b8e23; border-bottom: 1px solid #e0e0e0;">Date</td>
+    <td style="padding: 12px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{retreat_dates}}</td>
+    </tr>
+    <tr>
+    <td style="padding: 12px 8px 8px 0; font-weight: 600; color: #6b8e23; border-bottom: 1px solid #e0e0e0;">Accommodation</td>
+    <td style="padding: 12px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{accommodation_type}}</td>
+    </tr>
+    <tr>
+    <td style="padding: 12px 8px 8px 0; font-weight: 600; color: #6b8e23; border-bottom: 1px solid #e0e0e0;">Guest</td>
+    <td style="padding: 12px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{guest_name}}</td>
+    </tr>
+    <tr>
+    <td style="padding: 12px 8px 8px 0; font-weight: 600; color: #6b8e23; border-bottom: 1px solid #e0e0e0;">Email</td>
+    <td style="padding: 12px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{email}}</td>
+    </tr>
+    <tr>
+    <td style="padding: 12px 8px 8px 0; font-weight: 600; color: #6b8e23; border-bottom: 1px solid #e0e0e0;">Gender</td>
+    <td style="padding: 12px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{gender}}</td>
+    </tr>
+    <tr>
+    <td style="padding: 12px 8px 8px 0; font-weight: 600; color: #6b8e23; border-bottom: 1px solid #e0e0e0;">Age</td>
+    <td style="padding: 12px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{age}}</td>
+    </tr>
+    <tr>
+    <td style="padding: 12px 8px 8px 0; font-weight: 600; color: #6b8e23; border-bottom: 1px solid #e0e0e0;">Been Hiking</td>
+    <td style="padding: 12px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{been_hiking}}</td>
+    </tr>
+    <tr>
+    <td style="padding: 12px 8px 8px 0; font-weight: 600; color: #6b8e23; border-bottom: 1px solid #e0e0e0;">Experience</td>
+    <td style="padding: 12px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{hiking_experience}}</td>
+    </tr>
+    <tr>
+    <td style="padding: 15px 8px 8px 0; font-weight: 600; color: #6b8e23; font-size: 18px; border-top: 2px solid #C65D2B; border-bottom: none;">Amount Paid</td>
+    <td style="padding: 15px 0 8px 8px; color: #c65d2b; font-weight: bold; font-size: 24px; text-align: right; border-top: 2px solid #C65D2B; border-bottom: none;">{{amount_paid}}</td>
+    </tr>
+    <tr>
+    <td style="padding: 12px 8px 8px 0; font-weight: 600; color: #6b8e23; border-bottom: 1px solid #e0e0e0;">Booking Date</td>
+    <td style="padding: 12px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{booking_date}}</td>
+    </tr>
+    <tr>
+    <td style="padding: 12px 8px 8px 0; font-weight: 600; color: #6b8e23; border-bottom: none;">Stripe ID</td>
+    <td style="padding: 12px 0 8px 8px; color: #333; text-align: right; font-family: monospace; font-size: 12px; border-bottom: none;">{{stripe_session_id}}</td>
+    </tr>
+    </tbody>
+    </table>
+    </div>
+    <div style="background: #C65D2B; color: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+    <h3 style="margin-top: 0; font-size: 20px;">Action Required</h3>
+    <ul style="padding-left: 20px; margin: 10px 0;">
+    <li style="margin: 8px 0;">Log into Supabase to view full booking details</li>
+    <li style="margin: 8px 0;">Send welcome package to guest within 48 hours</li>
+    <li style="margin: 8px 0;">Update retreat capacity if needed</li>
+    <li style="margin: 8px 0;">Prepare personalized itinerary for guest</li>
+    </ul>
+    </div>
+    </div>
+    <div style="text-align: center; padding: 20px; color: #666; font-size: 13px; border-top: 2px solid #6B8E23; background: #f9f9f9; border-radius: 0 0 8px 8px;">
+    <p style="margin: 5px 0;"><strong>Wild Adventure Coach</strong> &ndash; Retreat Owner Notification</p>
+    <p style="margin: 5px 0; font-size: 12px; color: #999;">Automated notification from your booking system</p>
+    <p style="margin: 10px 0 0 0;"><a style="color: #c65d2b; text-decoration: none;" href="https://wildadventurecoach.com">wildadventurecoach.com</a> | <a style="color: #c65d2b; text-decoration: none;" href="https://www.instagram.com/wildadventurecoach/">@wildadventurecoach</a></p>
+    </div>
+    </div>
+    </div>
+    
