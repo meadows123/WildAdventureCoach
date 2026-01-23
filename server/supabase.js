@@ -18,6 +18,20 @@ export const supabase = createClient(supabaseUrl, supabaseKey);
  * Add a new booking to the database
  */
 export async function addBooking(bookingData) {
+  // Check if booking already exists (prevents duplicate from webhook + success page)
+  if (bookingData.stripe_session_id) {
+    const { data: existing } = await supabase
+      .from('bookings')
+      .select('*')
+      .eq('stripe_session_id', bookingData.stripe_session_id)
+      .single();
+    
+    if (existing) {
+      console.log('ℹ️  Booking already exists for session:', bookingData.stripe_session_id);
+      return existing;
+    }
+  }
+  
   const { data, error } = await supabase
     .from('bookings')
     .insert([
@@ -40,7 +54,21 @@ export async function addBooking(bookingData) {
     .select();
 
   if (error) {
-    console.error('Error adding booking:', error);
+    // Don't log duplicate key errors as errors - they're expected when webhook + success page both fire
+    if (error.code === '23505') {
+      console.log('ℹ️  Booking already exists (duplicate key) - likely saved by webhook or previous request');
+      // Try to fetch the existing booking
+      if (bookingData.stripe_session_id) {
+        const { data: existing } = await supabase
+          .from('bookings')
+          .select('*')
+          .eq('stripe_session_id', bookingData.stripe_session_id)
+          .single();
+        if (existing) return existing;
+      }
+    } else {
+      console.error('❌ Error adding booking:', error);
+    }
     throw error;
   }
 

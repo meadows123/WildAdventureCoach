@@ -4,7 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { addBooking, getAvailableSpots, getRetreatStats } from './supabase.js';
+import { addBooking, getAvailableSpots, getRetreatStats, supabase } from './supabase.js';
 import { sendBookingConfirmationEmail, sendAdminNotification, sendContactEmail } from './sendEmail.js';
 
 dotenv.config();
@@ -297,8 +297,30 @@ app.get('/checkout-session/:sessionId', async (req, res) => {
           console.error('❌ Error sending retreat-owner notification:', ownerEmailError);
         }
       } catch (dbError) {
-        // Might already exist from webhook - that's okay
-        if (dbError.code !== '23505') { // Not a duplicate key error
+        // Might already exist from webhook - that's okay, just fetch it
+        if (dbError.code === '23505') {
+          console.log('ℹ️  Booking already exists (likely saved by webhook) - fetching existing booking');
+          try {
+            // Fetch the existing booking to send emails
+            const { data: existingBooking } = await supabase
+              .from('bookings')
+              .select('*')
+              .eq('stripe_session_id', session.id)
+              .single();
+            
+            if (existingBooking) {
+              // Send emails for the existing booking
+              try {
+                await sendBookingConfirmationEmail(existingBooking);
+                await sendAdminNotification(existingBooking);
+              } catch (emailErr) {
+                console.error('❌ Error sending emails for existing booking:', emailErr);
+              }
+            }
+          } catch (fetchErr) {
+            console.error('❌ Error fetching existing booking:', fetchErr);
+          }
+        } else {
           console.error('❌ Error saving booking via success page:', dbError);
         }
       }
