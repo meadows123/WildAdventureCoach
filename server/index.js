@@ -266,35 +266,47 @@ app.get('/checkout-session/:sessionId', async (req, res) => {
           payment_status: 'completed'
         };
         
+        // Check if booking already exists before trying to add
+        const { data: existingCheck } = await supabase
+          .from('bookings')
+          .select('*')
+          .eq('stripe_session_id', session.id)
+          .single();
+        
+        const isNewBooking = !existingCheck;
         const savedBooking = await addBooking(bookingData);
-        console.log('✅ Booking saved via success page (backup method)');
-        console.log(`📊 Spot booked for ${bookingData.retreat_name}: ${bookingData.first_name} ${bookingData.last_name}`);
-        console.log('📦 Saved booking data:', JSON.stringify(savedBooking, null, 2));
         
-        // Send confirmation email to customer
-        try {
-          console.log('📧 Attempting to send confirmation email to:', savedBooking.email);
-          const emailResult = await sendBookingConfirmationEmail(savedBooking);
-          if (emailResult.success) {
-            console.log('✅ Confirmation email sent successfully');
-          } else {
-            console.error('❌ Failed to send confirmation email:', emailResult.error);
+        if (isNewBooking) {
+          console.log('✅ Booking saved via success page (backup method)');
+          console.log(`📊 Spot booked for ${bookingData.retreat_name}: ${bookingData.first_name} ${bookingData.last_name}`);
+          console.log('📦 Saved booking data:', JSON.stringify(savedBooking, null, 2));
+          
+          // Send emails only if this is a new booking (webhook didn't fire yet)
+          try {
+            console.log('📧 Attempting to send confirmation email to:', savedBooking.email);
+            const emailResult = await sendBookingConfirmationEmail(savedBooking);
+            if (emailResult.success) {
+              console.log('✅ Confirmation email sent successfully');
+            } else {
+              console.error('❌ Failed to send confirmation email:', emailResult.error);
+            }
+          } catch (emailError) {
+            console.error('❌ Error sending confirmation email:', emailError);
           }
-        } catch (emailError) {
-          console.error('❌ Error sending confirmation email:', emailError);
-        }
-        
-        // Send retreat-owner notification (who signed up, guest details)
-        try {
-          console.log('📧 Attempting to send retreat-owner notification');
-          const ownerEmailResult = await sendAdminNotification(savedBooking);
-          if (ownerEmailResult.success) {
-            console.log('✅ Retreat-owner notification sent successfully');
-          } else {
-            console.error('❌ Failed to send retreat-owner notification:', ownerEmailResult.error);
+          
+          try {
+            console.log('📧 Attempting to send retreat-owner notification');
+            const ownerEmailResult = await sendAdminNotification(savedBooking);
+            if (ownerEmailResult.success) {
+              console.log('✅ Retreat-owner notification sent successfully');
+            } else {
+              console.error('❌ Failed to send retreat-owner notification:', ownerEmailResult.error);
+            }
+          } catch (ownerEmailError) {
+            console.error('❌ Error sending retreat-owner notification:', ownerEmailError);
           }
-        } catch (ownerEmailError) {
-          console.error('❌ Error sending retreat-owner notification:', ownerEmailError);
+        } else {
+          console.log('ℹ️  Booking already exists (saved by webhook) - emails were already sent');
         }
       } catch (dbError) {
         // Might already exist from webhook - that's okay, just fetch it
@@ -309,13 +321,33 @@ app.get('/checkout-session/:sessionId', async (req, res) => {
               .single();
             
             if (existingBooking) {
-              // Send emails for the existing booking
+              console.log('✅ Found existing booking, checking if emails need to be sent...');
+              // Send emails for the existing booking (webhook might have failed to send them)
               try {
-                await sendBookingConfirmationEmail(existingBooking);
-                await sendAdminNotification(existingBooking);
+                console.log('📧 Attempting to send confirmation email to:', existingBooking.email);
+                const emailResult = await sendBookingConfirmationEmail(existingBooking);
+                if (emailResult.success) {
+                  console.log('✅ Confirmation email sent successfully (existing booking)');
+                } else {
+                  console.log('ℹ️  Confirmation email result:', emailResult.error);
+                }
               } catch (emailErr) {
-                console.error('❌ Error sending emails for existing booking:', emailErr);
+                console.error('❌ Error sending confirmation email for existing booking:', emailErr);
               }
+              
+              try {
+                console.log('📧 Attempting to send retreat-owner notification (existing booking)');
+                const ownerResult = await sendAdminNotification(existingBooking);
+                if (ownerResult.success) {
+                  console.log('✅ Retreat-owner notification sent successfully (existing booking)');
+                } else {
+                  console.log('ℹ️  Retreat-owner notification result:', ownerResult.error);
+                }
+              } catch (ownerErr) {
+                console.error('❌ Error sending retreat-owner notification for existing booking:', ownerErr);
+              }
+            } else {
+              console.log('⚠️  Could not find existing booking to send emails');
             }
           } catch (fetchErr) {
             console.error('❌ Error fetching existing booking:', fetchErr);
