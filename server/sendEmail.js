@@ -17,10 +17,24 @@ const EMAILJS_TEMPLATE_ID_ADMIN = process.env.EMAILJS_TEMPLATE_ID_ADMIN || 'temp
 const useEmailJS = !!(EMAILJS_USER_ID && EMAILJS_ACCESS_TOKEN && EMAILJS_TEMPLATE_ID_BOOKING && EMAILJS_TEMPLATE_ID_ADMIN);
 
 /**
+ * HTML encode special characters that might cause issues in EmailJS templates.
+ * EmailJS templates are HTML-based, so special characters like &, <, > need to be encoded.
+ */
+function htmlEncode(str) {
+  if (typeof str !== 'string') return str;
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/**
  * Sanitize a value for EmailJS template parameters.
  * EmailJS requires all values to be clean strings - no null, undefined, or special formatting issues.
  * EmailJS can be very strict about character encoding and special characters.
- * This function ensures all values are safe ASCII strings.
+ * This function ensures all values are safe for HTML templates.
  */
 function sanitizeForEmailJS(value) {
   // Handle null/undefined
@@ -47,17 +61,18 @@ function sanitizeForEmailJS(value) {
   // Remove zero-width and other problematic Unicode characters
   str = str.replace(/[\u200B-\u200D\uFEFF\uFFFE\uFFFF]/g, '');
   
-  // Replace common problematic characters with ASCII equivalents
-  // This helps avoid encoding issues that EmailJS might have
-  str = str.replace(/[^\x20-\x7E\u00A0-\uFFFF]/g, ''); // Keep printable ASCII and common Unicode
-  
   // Normalize Unicode to avoid encoding issues
   try {
-    str = str.normalize('NFKC'); // Normalize to Compatibility Composition (more aggressive)
+    str = str.normalize('NFKC'); // Normalize to Compatibility Composition
   } catch (e) {
     // If normalization fails, continue with original string
     console.warn('⚠️  Unicode normalization failed for value:', str.substring(0, 50));
   }
+  
+  // HTML encode the & character - this is critical for EmailJS templates
+  // The & symbol can break EmailJS template parsing if not properly encoded
+  // EmailJS will decode &amp; back to & when rendering the email
+  str = str.replace(/&(?!amp;|lt;|gt;|quot;|#39;)/g, '&amp;');
   
   // Trim whitespace
   str = str.trim();
