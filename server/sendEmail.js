@@ -46,6 +46,9 @@ function sanitizeForEmailJS(value) {
   // Keep common symbols like £, €, etc. but ensure proper encoding
   str = str.replace(/\u200B/g, ''); // Remove zero-width spaces
   
+  // Remove any non-printable Unicode characters that might cause corruption
+  str = str.replace(/[\uFFFE\uFFFF]/g, '');
+  
   // Trim whitespace
   str = str.trim();
   
@@ -57,10 +60,28 @@ async function sendViaEmailJS(templateId, templateParams) {
     throw new Error('EMAILJS_ACCESS_TOKEN is required for server-side API calls');
   }
   
-  // Sanitize all template parameters to ensure they're clean strings
+  // Sanitize all template parameters and only include non-empty values
+  // EmailJS can be strict about empty strings in Handlebars conditionals
   const sanitizedParams = {};
   for (const [key, value] of Object.entries(templateParams)) {
-    sanitizedParams[key] = sanitizeForEmailJS(value);
+    const sanitized = sanitizeForEmailJS(value);
+    // Only include the parameter if it has a non-empty value
+    // Exception: to_email, subject, and email are always included (required fields)
+    // But ensure they're not empty strings
+    if (key === 'to_email' || key === 'subject' || key === 'email') {
+      if (sanitized === '') {
+        console.warn(`⚠️  Warning: Required field ${key} is empty, but including it anyway`);
+      }
+      sanitizedParams[key] = sanitized;
+    } else if (sanitized !== '') {
+      // For optional fields, only include if they have a value
+      sanitizedParams[key] = sanitized;
+    }
+  }
+  
+  // Validate required fields are present
+  if (!sanitizedParams.to_email) {
+    throw new Error('to_email is required but was empty or missing');
   }
   
   const requestBody = {
@@ -80,10 +101,15 @@ async function sendViaEmailJS(templateId, templateParams) {
   }, {});
   console.log(`📦 [EmailJS] Template params preview:`, JSON.stringify(paramPreview, null, 2));
   
+  // Ensure proper UTF-8 encoding for the request
+  const requestBodyString = JSON.stringify(requestBody);
+  
   const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(requestBody),
+    headers: { 
+      'Content-Type': 'application/json; charset=utf-8'
+    },
+    body: requestBodyString,
   });
   if (!res.ok) {
     const text = await res.text();
@@ -128,12 +154,13 @@ export async function sendBookingConfirmationEmail(booking) {
   if (useEmailJS) {
     try {
       // EmailJS requires to_email in template_params to know where to send the email
+      // Only include variables that are actually used in the template
       // All values will be sanitized by sendViaEmailJS
+      const guestName = `${booking.first_name || ''} ${booking.last_name || ''}`.trim() || 'Guest';
       const params = {
         to_email: booking.email, // Required by EmailJS API - recipient address
         first_name: booking.first_name || '',
-        last_name: booking.last_name || '',
-        guest_name: `${booking.first_name || ''} ${booking.last_name || ''}`.trim() || 'Guest',
+        guest_name: guestName,
         email: booking.email || '',
         retreat_name: booking.retreat_name || '',
         retreat_dates: retreatDates || '',
