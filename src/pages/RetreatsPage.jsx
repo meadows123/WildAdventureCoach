@@ -74,7 +74,7 @@ const RetreatsPage = () => {
           name: 'Basic Single',
           price: 1250,
           deposit: 250,
-          description: 'Single bed in a shared room (up to 3 total), ensuite bathroom'
+          description: 'Single bed in a shared room (up to 3 total), ensuite bathroom, no windows'
         },
         {
           name: 'Economy Single',
@@ -86,7 +86,8 @@ const RetreatsPage = () => {
           name: 'Double',
           price: 1750,
           deposit: 250,
-          description: 'Single occupancy in a double room'
+          description: 'Single occupancy in a double room',
+          soldOut: true
         }
       ]
     },

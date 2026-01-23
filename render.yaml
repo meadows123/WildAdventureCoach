@@ -35,6 +35,16 @@ services:
         sync: false
       - key: FROM_EMAIL
         value: wildadventurecoach@gmail.com
+      - key: EMAILJS_SERVICE_ID
+        sync: false
+      - key: EMAILJS_USER_ID
+        sync: false
+      - key: EMAILJS_TEMPLATE_ID_BOOKING
+        sync: false
+      - key: EMAILJS_TEMPLATE_ID_ADMIN
+        sync: false
+      - key: RETREAT_OWNER_EMAIL
+        sync: false
       - key: CLIENT_URL
         value: https://wildadventurecoach.onrender.com
       - key: PORT

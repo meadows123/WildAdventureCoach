@@ -3,6 +3,45 @@ dotenv.config();
 
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
 const FROM_EMAIL = process.env.FROM_EMAIL || 'wildadventurecoach@gmail.com';
+/** Where admin notifications are sent. Uses FROM_EMAIL if not set. */
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || FROM_EMAIL;
+/** Where retreat-owner notifications (new booking alerts) are sent. Uses ADMIN_EMAIL if not set. */
+const RETREAT_OWNER_EMAIL = process.env.RETREAT_OWNER_EMAIL || ADMIN_EMAIL;
+
+/** EmailJS (https://emailjs.com) – booking confirmation & admin notification */
+const EMAILJS_SERVICE_ID = process.env.EMAILJS_SERVICE_ID || 'service_1c8sjrs';
+const EMAILJS_USER_ID = process.env.EMAILJS_USER_ID;
+const EMAILJS_TEMPLATE_ID_BOOKING = process.env.EMAILJS_TEMPLATE_ID_BOOKING || 'template_hdnnpuh';
+const EMAILJS_TEMPLATE_ID_ADMIN = process.env.EMAILJS_TEMPLATE_ID_ADMIN || 'template_ml0v13r';
+const useEmailJS = !!(EMAILJS_USER_ID && EMAILJS_TEMPLATE_ID_BOOKING && EMAILJS_TEMPLATE_ID_ADMIN);
+
+async function sendViaEmailJS(templateId, templateParams) {
+  const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      service_id: EMAILJS_SERVICE_ID,
+      template_id: templateId,
+      user_id: EMAILJS_USER_ID,
+      template_params: templateParams,
+    }),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`EmailJS API ${res.status}: ${text}`);
+  }
+  return { success: true };
+}
+
+function retreatDatesForName(retreatName) {
+  const map = {
+    'Hiking and Yoga Retreat in Chamonix': 'June 4 - 9, 2026',
+    'Hiking & Yoga Retreat Chamonix': 'June 4 - 9, 2026',
+    'Hiking and Yoga Retreat - August': 'August 30 - September 4, 2026',
+    'Hiking & Yoga Retreat - Tour du Mont Blanc': 'August 30 - September 4, 2026',
+  };
+  return map[retreatName] || '';
+}
 
 /**
  * Send booking confirmation email via SendGrid
@@ -10,11 +49,6 @@ const FROM_EMAIL = process.env.FROM_EMAIL || 'wildadventurecoach@gmail.com';
 export async function sendBookingConfirmationEmail(booking) {
   console.log('📧 Attempting to send email from:', FROM_EMAIL);
   console.log('📦 Booking data received:', JSON.stringify(booking, null, 2));
-  
-  if (!SENDGRID_API_KEY) {
-    console.warn('⚠️  SendGrid API key not configured. Skipping email.');
-    return { success: false, error: 'SendGrid not configured' };
-  }
 
   // Validate required fields
   if (!booking || !booking.email || !booking.first_name || !booking.last_name || !booking.retreat_name) {
@@ -28,18 +62,41 @@ export async function sendBookingConfirmationEmail(booking) {
     return { success: false, error: 'Missing required booking fields' };
   }
 
+  const amountInPounds = (booking.amount_paid / 100).toFixed(2);
+  const retreatDates = retreatDatesForName(booking.retreat_name);
+
+  if (useEmailJS) {
+    try {
+      const params = {
+        to_email: booking.email,
+        first_name: booking.first_name,
+        last_name: booking.last_name,
+        guest_name: `${booking.first_name} ${booking.last_name}`,
+        email: booking.email,
+        retreat_name: booking.retreat_name,
+        retreat_dates: retreatDates,
+        accommodation_type: booking.accommodation_type || '',
+        gender: booking.gender || '',
+        age: booking.age || '',
+        hiking_experience: booking.hiking_experience || '',
+        amount_paid: `£${amountInPounds}`,
+        subject: `Booking Confirmed - ${booking.retreat_name}`,
+      };
+      await sendViaEmailJS(EMAILJS_TEMPLATE_ID_BOOKING, params);
+      console.log(`📧 [EmailJS] Confirmation email sent to ${booking.email}`);
+      return { success: true, message: 'Email sent via EmailJS' };
+    } catch (e) {
+      console.error('❌ EmailJS booking confirmation failed:', e.message);
+      return { success: false, error: e.message };
+    }
+  }
+
+  if (!SENDGRID_API_KEY) {
+    console.warn('⚠️  SendGrid API key not configured. Skipping email.');
+    return { success: false, error: 'SendGrid not configured' };
+  }
+
   try {
-    const amountInPounds = (booking.amount_paid / 100).toFixed(2);
-    
-    // Get retreat dates based on retreat name
-    const retreatDatesMap = {
-      'Hiking and Yoga Retreat in Chamonix': 'June 4 - 9, 2026',
-      'Hiking & Yoga Retreat Chamonix': 'June 4 - 9, 2026',
-      'Hiking and Yoga Retreat - August': 'August 30 - September 4, 2026',
-      'Hiking & Yoga Retreat - Tour du Mont Blanc': 'August 30 - September 4, 2026'
-    };
-    
-    const retreatDates = retreatDatesMap[booking.retreat_name] || '';
     
     const emailHtml = `
 <!DOCTYPE html>
@@ -275,27 +332,51 @@ The Wild Adventure Coach Team
 }
 
 /**
- * Send notification email to admin about new booking
+ * Send notification email to retreat owner about new booking (guest details, who signed up).
+ * Recipient: RETREAT_OWNER_EMAIL || ADMIN_EMAIL || FROM_EMAIL.
  */
 export async function sendAdminNotification(booking) {
-  console.log('📧 Attempting to send admin email from:', FROM_EMAIL);
+  console.log('📧 Attempting to send retreat-owner notification from:', FROM_EMAIL, 'to:', RETREAT_OWNER_EMAIL);
+
+  const amountInPounds = (booking.amount_paid / 100).toFixed(2);
+  const retreatDates = retreatDatesForName(booking.retreat_name);
+  const bookingDateStr = booking.booking_date ? new Date(booking.booking_date).toLocaleString('en-GB') : new Date().toLocaleString('en-GB');
+
+  if (useEmailJS) {
+    try {
+      const params = {
+        to_email: RETREAT_OWNER_EMAIL,
+        first_name: booking.first_name,
+        last_name: booking.last_name,
+        guest_name: `${booking.first_name} ${booking.last_name}`,
+        email: booking.email,
+        retreat_name: booking.retreat_name,
+        retreat_dates: retreatDates,
+        accommodation_type: booking.accommodation_type || '',
+        gender: booking.gender || 'N/A',
+        age: booking.age || 'N/A',
+        been_hiking: booking.been_hiking || 'N/A',
+        hiking_experience: booking.hiking_experience || 'N/A',
+        amount_paid: `£${amountInPounds}`,
+        booking_date: bookingDateStr,
+        stripe_session_id: booking.stripe_session_id || '',
+        subject: `🎉 New Booking: ${booking.first_name} ${booking.last_name} - ${booking.retreat_name}`,
+      };
+      await sendViaEmailJS(EMAILJS_TEMPLATE_ID_ADMIN, params);
+      console.log(`📧 [EmailJS] Retreat-owner notification sent to ${RETREAT_OWNER_EMAIL}`);
+      return { success: true, message: 'Admin email sent via EmailJS' };
+    } catch (e) {
+      console.error('❌ EmailJS retreat-owner notification failed:', e.message);
+      return { success: false, error: e.message };
+    }
+  }
+
   if (!SENDGRID_API_KEY) {
+    console.warn('⚠️ Retreat-owner notification NOT sent: no email provider (EmailJS or SendGrid) configured.');
     return { success: false, error: 'SendGrid not configured' };
   }
 
   try {
-    const amountInPounds = (booking.amount_paid / 100).toFixed(2);
-    
-    // Get retreat dates based on retreat name
-    const retreatDatesMap = {
-      'Hiking and Yoga Retreat in Chamonix': 'June 4 - 9, 2026',
-      'Hiking & Yoga Retreat Chamonix': 'June 4 - 9, 2026',
-      'Hiking and Yoga Retreat - August': 'August 30 - September 4, 2026',
-      'Hiking & Yoga Retreat - Tour du Mont Blanc': 'August 30 - September 4, 2026'
-    };
-    
-    const retreatDates = retreatDatesMap[booking.retreat_name] || '';
-    
     const adminEmailHtml = `
 <!DOCTYPE html>
 <html>
@@ -375,7 +456,7 @@ export async function sendAdminNotification(booking) {
         </div>
         
         <div class="detail">
-          <span class="label">Booking Date:</span> <span class="value">${booking.booking_date ? new Date(booking.booking_date).toLocaleString('en-GB') : new Date().toLocaleString('en-GB')}</span>
+          <span class="label">Booking Date:</span> <span class="value">${bookingDateStr}</span>
         </div>
         
         <div class="detail">
@@ -413,7 +494,7 @@ export async function sendAdminNotification(booking) {
       body: JSON.stringify({
         personalizations: [
           {
-            to: [{ email: FROM_EMAIL, name: 'Wild Adventure Coach Admin' }],
+            to: [{ email: RETREAT_OWNER_EMAIL, name: 'Wild Adventure Coach (Retreat Owner)' }],
             subject: `🎉 New Booking: ${booking.first_name} ${booking.last_name} - ${booking.retreat_name}`,
           },
         ],
@@ -436,11 +517,11 @@ export async function sendAdminNotification(booking) {
       throw new Error(`SendGrid API error: ${response.status}`);
     }
 
-    console.log(`📧 Admin notification sent to ${FROM_EMAIL}`);
-    return { success: true, message: 'Admin email sent' };
+    console.log(`📧 Retreat-owner notification sent to ${RETREAT_OWNER_EMAIL}`);
+    return { success: true, message: 'Retreat-owner email sent' };
     
   } catch (error) {
-    console.error('❌ Error sending admin notification:', error.message);
+    console.error('❌ Error sending retreat-owner notification:', error.message);
     return { success: false, error: error.message };
   }
 }
@@ -559,5 +640,13 @@ export async function sendContactEmail(contactData) {
     console.error('❌ Error sending contact email:', error.message);
     return { success: false, error: error.message };
   }
+}
+
+if (useEmailJS) {
+  console.log(`📧 Email: Using EmailJS (${EMAILJS_SERVICE_ID}) for booking confirmation & retreat-owner notification`);
+} else if (SENDGRID_API_KEY) {
+  console.log('📧 Email: Using SendGrid for booking confirmation & retreat-owner notification');
+} else {
+  console.log('📧 Email: No provider configured for booking/retreat-owner emails (set EmailJS or SendGrid)');
 }
 

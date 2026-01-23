@@ -1,0 +1,100 @@
+<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 14px; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; background-color: #f5f5f5; padding: 14px 8px;">
+  <div style="max-width: 600px; margin: auto; background-color: #fff; border-radius: 8px; overflow: hidden;">
+    <!-- Header -->
+    <div style="background-color: #6B8E23; color: white; padding: 40px 20px; text-align: center; border-radius: 8px 8px 0 0;">
+      <h1 style="margin: 0; font-size: 32px;">🏔️ Booking Confirmed!</h1>
+      <p style="margin: 10px 0 0 0; font-size: 18px;">Your adventure awaits, {{first_name}}!</p>
+    </div>
+
+    <div style="padding: 30px 20px; color: #333;">
+      <p>Dear {{first_name}},</p>
+      <p>Thank you for booking with <strong>Wild Adventure Coach</strong>! We're thrilled to have you join us for an unforgettable adventure in the stunning landscapes of Mont Blanc.</p>
+
+      <!-- Booking details card -->
+      <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #6B8E23;">
+        <h2 style="color: #6B8E23; margin-top: 0; font-size: 22px;">📋 Your Booking Details</h2>
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr>
+            <td style="padding: 12px 8px 8px 0; font-weight: 600; color: #6B8E23; width: 40%; border-bottom: 1px solid #e0e0e0;">Retreat</td>
+            <td style="padding: 12px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{retreat_name}}</td>
+          </tr>
+          {{#if retreat_dates}}
+          <tr>
+            <td style="padding: 12px 8px 8px 0; font-weight: 600; color: #6B8E23; border-bottom: 1px solid #e0e0e0;">Dates</td>
+            <td style="padding: 12px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{retreat_dates}}</td>
+          </tr>
+          {{/if}}
+          {{#if accommodation_type}}
+          <tr>
+            <td style="padding: 12px 8px 8px 0; font-weight: 600; color: #6B8E23; border-bottom: 1px solid #e0e0e0;">Accommodation</td>
+            <td style="padding: 12px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{accommodation_type}}</td>
+          </tr>
+          {{/if}}
+          <tr>
+            <td style="padding: 12px 8px 8px 0; font-weight: 600; color: #6B8E23; border-bottom: 1px solid #e0e0e0;">Name</td>
+            <td style="padding: 12px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{guest_name}}</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px 8px 8px 0; font-weight: 600; color: #6B8E23; border-bottom: 1px solid #e0e0e0;">Email</td>
+            <td style="padding: 12px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{email}}</td>
+          </tr>
+          {{#if gender}}
+          <tr>
+            <td style="padding: 12px 8px 8px 0; font-weight: 600; color: #6B8E23; border-bottom: 1px solid #e0e0e0;">Gender</td>
+            <td style="padding: 12px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{gender}}</td>
+          </tr>
+          {{/if}}
+          {{#if age}}
+          <tr>
+            <td style="padding: 12px 8px 8px 0; font-weight: 600; color: #6B8E23; border-bottom: 1px solid #e0e0e0;">Age</td>
+            <td style="padding: 12px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{age}}</td>
+          </tr>
+          {{/if}}
+          {{#if hiking_experience}}
+          <tr>
+            <td style="padding: 12px 8px 8px 0; font-weight: 600; color: #6B8E23; border-bottom: 1px solid #e0e0e0;">Hiking Experience</td>
+            <td style="padding: 12px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{hiking_experience}}</td>
+          </tr>
+          {{/if}}
+          <tr>
+            <td style="padding: 15px 8px 8px 0; font-weight: 600; color: #6B8E23; font-size: 18px; border-top: 2px solid #C65D2B; border-bottom: none;">Total Paid</td>
+            <td style="padding: 15px 0 8px 8px; color: #C65D2B; font-weight: bold; font-size: 24px; text-align: right; border-top: 2px solid #C65D2B; border-bottom: none;">{{amount_paid}}</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- What happens next -->
+      <div style="background: #6B8E23; color: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+        <h3 style="margin-top: 0; font-size: 20px;">✅ What Happens Next?</h3>
+        <ul style="padding-left: 20px; margin: 10px 0;">
+          <li style="margin: 8px 0;"><strong>Within 48 hours:</strong> You will receive a detailed itinerary, general information and transportation options.</li>
+          <li style="margin: 8px 0;"><strong>90 – 60 days before:</strong> You will receive a comprehensive packing list, recommended training plan and a consent form to sign. The final payment is due.</li>
+          <li style="margin: 8px 0;"><strong>30 days before:</strong> You will be invited to an info session and an optional simulation hike.</li>
+        </ul>
+      </div>
+
+      <p style="text-align: center; margin: 25px 0;">
+        <a href="https://wildadventurecoach.com/contact" style="display: inline-block; background: #C65D2B; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: 600;">📞 Get in Touch</a>
+      </p>
+
+      <p style="margin-top: 25px;">We can't wait to see you on the trails and help you create memories that will last a lifetime!</p>
+      <p style="margin-top: 25px;">
+        Best regards,<br />
+        <strong>The Wild Adventure Coach Team</strong> 🥾⛰️
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <div style="text-align: center; padding: 20px; color: #666; font-size: 14px; border-top: 2px solid #6B8E23; background: #f9f9f9; border-radius: 0 0 8px 8px;">
+      <p style="margin: 5px 0;"><strong>Wild Adventure Coach</strong></p>
+      <p style="margin: 10px 0;">
+        <a href="https://wildadventurecoach.com" style="color: #C65D2B; text-decoration: none;">wildadventurecoach.com</a> |
+        <a href="https://www.instagram.com/wildadventurecoach/" style="color: #C65D2B; text-decoration: none;">@wildadventurecoach</a>
+      </p>
+      <p style="margin: 15px 0 5px 0; font-size: 12px;">© 2025 Wild Adventure Coach. All rights reserved.</p>
+      <p style="margin: 10px 0 0 0; font-size: 12px; color: #999;">
+        This confirmation was sent to {{email}} because you completed a booking.
+      </p>
+    </div>
+  </div>
+</div>

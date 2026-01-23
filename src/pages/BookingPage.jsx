@@ -44,7 +44,7 @@ const BookingPage = () => {
           price: 1100,
           originalPrice: 1250,
           deposit: 250,
-          description: 'Single bed in a shared room (up to 3 total), ensuite bathroom'
+          description: 'Single bed in a shared room (up to 3 total), ensuite bathroom, no windows'
         },
         {
           name: 'Economy Single',
@@ -58,7 +58,8 @@ const BookingPage = () => {
           price: 1550,
           originalPrice: 1750,
           deposit: 250,
-          description: 'Single occupancy in a double room'
+          description: 'Single occupancy in a double room',
+          soldOut: true
         }
       ],
       // Default values for backward compatibility
@@ -626,35 +627,55 @@ const BookingPage = () => {
                         {retreat.accommodationOptions.map((option, index) => (
                           <label
                             key={index}
-                            className={`relative cursor-pointer border-2 rounded-lg p-4 transition-all ${index === 2 ? 'md:col-start-1 md:col-span-2 md:max-w-md md:mx-auto' : ''} ${
-                              formData.accommodationType === option.name
-                                ? 'border-[#C65D2B] bg-[#C65D2B]/30 ring-2 ring-[#C65D2B] shadow-lg'
-                                : 'border-[#6B8E23] bg-[#6B8E23]/10 hover:border-[#C65D2B] hover:bg-[#C65D2B]/10'
+                            className={`relative border-2 rounded-lg p-4 transition-all ${index === 2 ? 'md:col-start-1 md:col-span-2 md:max-w-md md:mx-auto' : ''} ${
+                              option.soldOut
+                                ? 'border-gray-600 bg-gray-800/50 opacity-60 cursor-not-allowed'
+                                : formData.accommodationType === option.name
+                                ? 'border-[#C65D2B] bg-[#C65D2B]/30 ring-2 ring-[#C65D2B] shadow-lg cursor-pointer'
+                                : 'border-[#6B8E23] bg-[#6B8E23]/10 hover:border-[#C65D2B] hover:bg-[#C65D2B]/10 cursor-pointer'
                             }`}
+                            onClick={(e) => {
+                              if (option.soldOut) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                              }
+                            }}
                           >
                             <input
                               type="radio"
                               name="accommodationType"
                               value={option.name}
                               checked={formData.accommodationType === option.name}
-                              onChange={(e) => setFormData({...formData, accommodationType: e.target.value})}
+                              onChange={(e) => {
+                                if (!option.soldOut) {
+                                  setFormData({...formData, accommodationType: e.target.value});
+                                }
+                              }}
+                              disabled={option.soldOut}
                               className="hidden"
                             />
-                            {formData.accommodationType === option.name && (
+                            {option.soldOut && (
+                              <span className="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+                                SOLD OUT
+                              </span>
+                            )}
+                            {formData.accommodationType === option.name && !option.soldOut && (
                               <span className="absolute bottom-2 right-2 bg-[#C65D2B] text-[#F7F5EB] text-xs font-bold px-2 py-1 rounded-full">Selected</span>
                             )}
                             <div className="space-y-2">
                               <div className="flex items-center justify-between">
-                                <h3 className="font-bold text-[#F7F5EB] text-lg">{option.name}</h3>
+                                <h3 className={`font-bold text-lg ${option.soldOut ? 'text-gray-400' : 'text-[#F7F5EB]'}`}>
+                                  {option.name}
+                                </h3>
                                 <div className="flex flex-col items-end gap-1">
-                                  <span className="text-2xl font-bold text-[#C65D2B]">£{option.price}</span>
+                                  <span className={`text-2xl font-bold ${option.soldOut ? 'text-gray-500' : 'text-[#C65D2B]'}`}>£{option.price}</span>
                                   {option.originalPrice && (
-                                    <span className="text-base text-[#DCCCA3] line-through">£{option.originalPrice}</span>
+                                    <span className={`text-base line-through ${option.soldOut ? 'text-gray-600' : 'text-[#DCCCA3]'}`}>£{option.originalPrice}</span>
                                   )}
                                 </div>
                               </div>
-                              <p className="text-[#DCCCA3] text-sm">{option.description}</p>
-                              <p className="text-[#6B8E23] text-xs font-semibold mt-2">Deposit: £{option.deposit}</p>
+                              <p className={`text-sm ${option.soldOut ? 'text-gray-500' : 'text-[#DCCCA3]'}`}>{option.description}</p>
+                              <p className={`text-xs font-semibold mt-2 ${option.soldOut ? 'text-gray-600' : 'text-[#6B8E23]'}`}>Deposit: £{option.deposit}</p>
                             </div>
                           </label>
                         ))}

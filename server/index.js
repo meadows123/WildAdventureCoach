@@ -284,17 +284,17 @@ app.get('/checkout-session/:sessionId', async (req, res) => {
           console.error('❌ Error sending confirmation email:', emailError);
         }
         
-        // Send notification email to admin
+        // Send retreat-owner notification (who signed up, guest details)
         try {
-          console.log('📧 Attempting to send admin notification');
-          const adminEmailResult = await sendAdminNotification(savedBooking);
-          if (adminEmailResult.success) {
-            console.log('✅ Admin notification sent successfully');
+          console.log('📧 Attempting to send retreat-owner notification');
+          const ownerEmailResult = await sendAdminNotification(savedBooking);
+          if (ownerEmailResult.success) {
+            console.log('✅ Retreat-owner notification sent successfully');
           } else {
-            console.error('❌ Failed to send admin notification:', adminEmailResult.error);
+            console.error('❌ Failed to send retreat-owner notification:', ownerEmailResult.error);
           }
-        } catch (adminEmailError) {
-          console.error('❌ Error sending admin notification:', adminEmailError);
+        } catch (ownerEmailError) {
+          console.error('❌ Error sending retreat-owner notification:', ownerEmailError);
         }
       } catch (dbError) {
         // Might already exist from webhook - that's okay
@@ -447,17 +447,17 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res)
           console.error('❌ Error sending confirmation email:', emailError);
         }
         
-        // Send notification email to admin
+        // Send retreat-owner notification (who signed up, guest details)
         try {
-          console.log('📧 Attempting to send admin notification');
-          const adminEmailResult = await sendAdminNotification(savedBooking);
-          if (adminEmailResult.success) {
-            console.log('✅ Admin notification sent successfully');
+          console.log('📧 Attempting to send retreat-owner notification');
+          const ownerEmailResult = await sendAdminNotification(savedBooking);
+          if (ownerEmailResult.success) {
+            console.log('✅ Retreat-owner notification sent successfully');
           } else {
-            console.error('❌ Failed to send admin notification:', adminEmailResult.error);
+            console.error('❌ Failed to send retreat-owner notification:', ownerEmailResult.error);
           }
-        } catch (adminEmailError) {
-          console.error('❌ Error sending admin notification:', adminEmailError);
+        } catch (ownerEmailError) {
+          console.error('❌ Error sending retreat-owner notification:', ownerEmailError);
         }
       } catch (dbError) {
         console.error('❌ Error saving to database:', dbError);
