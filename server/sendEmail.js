@@ -19,6 +19,7 @@ const useEmailJS = !!(EMAILJS_USER_ID && EMAILJS_ACCESS_TOKEN && EMAILJS_TEMPLAT
 /**
  * Sanitize a value for EmailJS template parameters.
  * EmailJS requires all values to be clean strings - no null, undefined, or special formatting issues.
+ * EmailJS can be very strict about character encoding and special characters.
  */
 function sanitizeForEmailJS(value) {
   // Handle null/undefined
@@ -39,15 +40,20 @@ function sanitizeForEmailJS(value) {
   // Convert to string
   let str = String(value);
   
-  // Remove any control characters that might cause issues (but keep newlines, tabs, etc. for formatting)
+  // Remove any control characters that might cause issues
   str = str.replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, '');
   
-  // Replace problematic characters that EmailJS might not handle well
-  // Keep common symbols like £, €, etc. but ensure proper encoding
-  str = str.replace(/\u200B/g, ''); // Remove zero-width spaces
+  // Remove zero-width and other problematic Unicode characters
+  str = str.replace(/[\u200B-\u200D\uFEFF\uFFFE\uFFFF]/g, '');
   
-  // Remove any non-printable Unicode characters that might cause corruption
-  str = str.replace(/[\uFFFE\uFFFF]/g, '');
+  // Ensure proper encoding - normalize Unicode characters
+  // This helps with special characters like £, €, etc.
+  try {
+    str = str.normalize('NFC'); // Normalize to Canonical Composition
+  } catch (e) {
+    // If normalization fails, continue with original string
+    console.warn('⚠️  Unicode normalization failed for value:', str.substring(0, 50));
+  }
   
   // Trim whitespace
   str = str.trim();
@@ -101,8 +107,28 @@ async function sendViaEmailJS(templateId, templateParams) {
   }, {});
   console.log(`📦 [EmailJS] Template params preview:`, JSON.stringify(paramPreview, null, 2));
   
+  // Validate all values are strings (EmailJS requirement)
+  for (const [key, value] of Object.entries(sanitizedParams)) {
+    if (typeof value !== 'string') {
+      console.error(`❌ [EmailJS] Parameter ${key} is not a string:`, typeof value, value);
+      throw new Error(`Parameter ${key} must be a string, got ${typeof value}`);
+    }
+  }
+  
   // Ensure proper UTF-8 encoding for the request
-  const requestBodyString = JSON.stringify(requestBody);
+  // Use JSON.stringify with proper encoding
+  let requestBodyString;
+  try {
+    requestBodyString = JSON.stringify(requestBody);
+    // Verify the string is valid UTF-8
+    if (!/^[\x00-\x7F]*$/.test(requestBodyString.replace(/\\u[0-9a-fA-F]{4}/g, ''))) {
+      // Contains non-ASCII, ensure proper encoding
+      requestBodyString = Buffer.from(requestBodyString, 'utf8').toString('utf8');
+    }
+  } catch (e) {
+    console.error('❌ Error stringifying request body:', e);
+    throw new Error('Failed to encode request body for EmailJS');
+  }
   
   const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
     method: 'POST',
@@ -153,9 +179,9 @@ export async function sendBookingConfirmationEmail(booking) {
 
   if (useEmailJS) {
     try {
-      // EmailJS requires to_email in template_params to know where to send the email
-      // Only include variables that are actually used in the template
-      // All values will be sanitized by sendViaEmailJS
+      // Only send variables that are actually used in the booking confirmation template
+      // Required variables: to_email, first_name, guest_name, email, retreat_name, amount_paid
+      // Optional variables (only send if they have values): retreat_dates, accommodation_type, gender, age, hiking_experience
       const guestName = `${booking.first_name || ''} ${booking.last_name || ''}`.trim() || 'Guest';
       const params = {
         to_email: booking.email, // Required by EmailJS API - recipient address
@@ -163,13 +189,16 @@ export async function sendBookingConfirmationEmail(booking) {
         guest_name: guestName,
         email: booking.email || '',
         retreat_name: booking.retreat_name || '',
-        retreat_dates: retreatDates || '',
-        accommodation_type: booking.accommodation_type || '',
-        gender: booking.gender || '',
-        age: booking.age || '',
-        hiking_experience: booking.hiking_experience || '',
-        amount_paid: `£${amountInPounds}`,
+        amount_paid: `GBP ${amountInPounds}`,
       };
+      
+      // Only add optional variables if they have values (template uses {{#if}} conditionals)
+      if (retreatDates) params.retreat_dates = retreatDates;
+      if (booking.accommodation_type) params.accommodation_type = booking.accommodation_type;
+      if (booking.gender) params.gender = booking.gender;
+      if (booking.age) params.age = String(booking.age);
+      if (booking.hiking_experience) params.hiking_experience = booking.hiking_experience;
+      
       await sendViaEmailJS(EMAILJS_TEMPLATE_ID_BOOKING, params);
       console.log(`📧 [EmailJS] Confirmation email sent to ${booking.email}`);
       return { success: true, message: 'Email sent via EmailJS' };
@@ -435,28 +464,34 @@ export async function sendAdminNotification(booking) {
 
   const amountInPounds = (booking.amount_paid / 100).toFixed(2);
   const retreatDates = retreatDatesForName(booking.retreat_name);
-  const bookingDateStr = booking.booking_date ? new Date(booking.booking_date).toLocaleString('en-GB') : new Date().toLocaleString('en-GB');
+  // Use a simpler date format to avoid encoding issues with commas and special characters
+  const bookingDate = booking.booking_date ? new Date(booking.booking_date) : new Date();
+  const bookingDateStr = `${bookingDate.getDate()}/${bookingDate.getMonth() + 1}/${bookingDate.getFullYear()} ${String(bookingDate.getHours()).padStart(2, '0')}:${String(bookingDate.getMinutes()).padStart(2, '0')}`;
 
   if (useEmailJS) {
     try {
-      // EmailJS requires to_email in template_params to know where to send the email
-      // All values will be sanitized by sendViaEmailJS
+      // Only send variables that are actually used in the admin notification template
+      // Required variables: to_email, subject, guest_name, email, retreat_name, gender, age, been_hiking, hiking_experience, amount_paid, booking_date
+      // Optional variables (only send if they have values): retreat_dates, accommodation_type, stripe_session_id
       const params = {
         to_email: recipientEmail, // Required by EmailJS API - recipient address
-        subject: `New Booking: ${booking.first_name || ''} ${booking.last_name || ''} - ${booking.retreat_name || ''}`, // Subject line for the email
+        subject: `New Booking: ${booking.first_name || ''} ${booking.last_name || ''} - ${booking.retreat_name || ''}`,
         guest_name: `${booking.first_name || ''} ${booking.last_name || ''}`.trim() || 'Guest',
         email: booking.email || '', // Used for Reply-To field
         retreat_name: booking.retreat_name || '',
-        retreat_dates: retreatDates || '',
-        accommodation_type: booking.accommodation_type || '',
         gender: booking.gender || 'N/A',
-        age: booking.age || 'N/A',
+        age: String(booking.age || 'N/A'),
         been_hiking: booking.been_hiking || 'N/A',
         hiking_experience: booking.hiking_experience || 'N/A',
-        amount_paid: `£${amountInPounds}`,
+        amount_paid: `GBP ${amountInPounds}`,
         booking_date: bookingDateStr || '',
-        stripe_session_id: booking.stripe_session_id || '',
       };
+      
+      // Only add optional variables if they have values (template uses {{#if}} conditionals)
+      if (retreatDates) params.retreat_dates = retreatDates;
+      if (booking.accommodation_type) params.accommodation_type = booking.accommodation_type;
+      if (booking.stripe_session_id) params.stripe_session_id = booking.stripe_session_id;
+      
       console.log(`📧 [EmailJS] Sending retreat-owner notification to: ${params.to_email}`);
       await sendViaEmailJS(EMAILJS_TEMPLATE_ID_ADMIN, params);
       console.log(`📧 [EmailJS] Retreat-owner notification sent to ${recipientEmail}`);
