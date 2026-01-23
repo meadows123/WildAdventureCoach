@@ -69,10 +69,9 @@ function sanitizeForEmailJS(value) {
     console.warn('⚠️  Unicode normalization failed for value:', str.substring(0, 50));
   }
   
-  // HTML encode the & character - this is critical for EmailJS templates
-  // The & symbol can break EmailJS template parsing if not properly encoded
-  // EmailJS will decode &amp; back to & when rendering the email
-  str = str.replace(/&(?!amp;|lt;|gt;|quot;|#39;)/g, '&amp;');
+  // Don't HTML encode - EmailJS handles encoding automatically
+  // HTML encoding might actually cause double-encoding issues
+  // Instead, ensure the string is clean and safe
   
   // Trim whitespace
   str = str.trim();
@@ -241,12 +240,15 @@ export async function sendBookingConfirmationEmail(booking) {
       // Required variables: to_email, first_name, guest_name, email, retreat_name, amount_paid
       // Optional variables (only send if they have values): retreat_dates, accommodation_type, gender, age, hiking_experience
       const guestName = `${booking.first_name || ''} ${booking.last_name || ''}`.trim() || 'Guest';
+      // Replace & with "and" in retreat_name to avoid EmailJS template parsing issues
+      const retreatName = (booking.retreat_name || '').replace(/&/g, 'and');
+      
       const params = {
         to_email: booking.email, // Required by EmailJS API - recipient address
         first_name: booking.first_name || '',
         guest_name: guestName,
         email: booking.email || '',
-        retreat_name: booking.retreat_name || '',
+        retreat_name: retreatName,
         amount_paid: `GBP ${amountInPounds}`,
       };
       
@@ -531,12 +533,16 @@ export async function sendAdminNotification(booking) {
       // Only send variables that are actually used in the admin notification template
       // Required variables: to_email, subject, guest_name, email, retreat_name, gender, age, been_hiking, hiking_experience, amount_paid, booking_date
       // Optional variables (only send if they have values): retreat_dates, accommodation_type, stripe_session_id
+      // Replace & with "and" in retreat_name to avoid EmailJS template parsing issues
+      const retreatName = (booking.retreat_name || '').replace(/&/g, 'and');
+      const subjectRetreatName = retreatName; // Use same cleaned name for subject
+      
       const params = {
         to_email: recipientEmail, // Required by EmailJS API - recipient address
-        subject: `New Booking: ${booking.first_name || ''} ${booking.last_name || ''} - ${booking.retreat_name || ''}`,
+        subject: `New Booking: ${booking.first_name || ''} ${booking.last_name || ''} - ${subjectRetreatName}`,
         guest_name: `${booking.first_name || ''} ${booking.last_name || ''}`.trim() || 'Guest',
         email: booking.email || '', // Used for Reply-To field
-        retreat_name: booking.retreat_name || '',
+        retreat_name: retreatName,
         gender: booking.gender || 'N/A',
         age: String(booking.age || 'N/A'),
         been_hiking: booking.been_hiking || 'N/A',
