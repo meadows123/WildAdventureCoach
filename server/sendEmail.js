@@ -127,9 +127,10 @@ export async function sendBookingConfirmationEmail(booking) {
 
   if (useEmailJS) {
     try {
-      // Only send variables that are actually used in the template
+      // EmailJS requires to_email in template_params to know where to send the email
       // All values will be sanitized by sendViaEmailJS
       const params = {
+        to_email: booking.email, // Required by EmailJS API - recipient address
         first_name: booking.first_name || '',
         last_name: booking.last_name || '',
         guest_name: `${booking.first_name || ''} ${booking.last_name || ''}`.trim() || 'Guest',
@@ -396,7 +397,14 @@ The Wild Adventure Coach Team
  * Recipient: RETREAT_OWNER_EMAIL || ADMIN_EMAIL || FROM_EMAIL.
  */
 export async function sendAdminNotification(booking) {
-  console.log('📧 Attempting to send retreat-owner notification from:', FROM_EMAIL, 'to:', RETREAT_OWNER_EMAIL);
+  const recipientEmail = RETREAT_OWNER_EMAIL || ADMIN_EMAIL || FROM_EMAIL;
+  console.log('📧 Attempting to send retreat-owner notification from:', FROM_EMAIL, 'to:', recipientEmail);
+
+  // Validate recipient email is set
+  if (!recipientEmail || recipientEmail.trim() === '') {
+    console.error('❌ RETREAT_OWNER_EMAIL, ADMIN_EMAIL, and FROM_EMAIL are all empty or not set');
+    return { success: false, error: 'Recipient email address is not configured' };
+  }
 
   const amountInPounds = (booking.amount_paid / 100).toFixed(2);
   const retreatDates = retreatDatesForName(booking.retreat_name);
@@ -404,11 +412,13 @@ export async function sendAdminNotification(booking) {
 
   if (useEmailJS) {
     try {
-      // Only send variables that are actually used in the template
+      // EmailJS requires to_email in template_params to know where to send the email
       // All values will be sanitized by sendViaEmailJS
       const params = {
+        to_email: recipientEmail, // Required by EmailJS API - recipient address
+        subject: `New Booking: ${booking.first_name || ''} ${booking.last_name || ''} - ${booking.retreat_name || ''}`, // Subject line for the email
         guest_name: `${booking.first_name || ''} ${booking.last_name || ''}`.trim() || 'Guest',
-        email: booking.email || '',
+        email: booking.email || '', // Used for Reply-To field
         retreat_name: booking.retreat_name || '',
         retreat_dates: retreatDates || '',
         accommodation_type: booking.accommodation_type || '',
@@ -420,8 +430,9 @@ export async function sendAdminNotification(booking) {
         booking_date: bookingDateStr || '',
         stripe_session_id: booking.stripe_session_id || '',
       };
+      console.log(`📧 [EmailJS] Sending retreat-owner notification to: ${params.to_email}`);
       await sendViaEmailJS(EMAILJS_TEMPLATE_ID_ADMIN, params);
-      console.log(`📧 [EmailJS] Retreat-owner notification sent to ${RETREAT_OWNER_EMAIL}`);
+      console.log(`📧 [EmailJS] Retreat-owner notification sent to ${recipientEmail}`);
       return { success: true, message: 'Admin email sent via EmailJS' };
     } catch (e) {
       console.error('❌ EmailJS retreat-owner notification failed:', e.message);
