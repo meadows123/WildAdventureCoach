@@ -78,20 +78,21 @@ export async function sendBookingConfirmationEmail(booking) {
 
   if (useEmailJS) {
     try {
+      // Ensure all values are strings (EmailJS requires strings, not null/undefined)
       const params = {
-        to_email: booking.email,
-        first_name: booking.first_name,
-        last_name: booking.last_name,
-        guest_name: `${booking.first_name} ${booking.last_name}`,
-        email: booking.email,
-        retreat_name: booking.retreat_name,
-        retreat_dates: retreatDates,
-        accommodation_type: booking.accommodation_type || '',
-        gender: booking.gender || '',
-        age: booking.age || '',
-        hiking_experience: booking.hiking_experience || '',
-        amount_paid: `£${amountInPounds}`,
-        subject: `Booking Confirmed - ${booking.retreat_name}`,
+        to_email: String(booking.email || ''),
+        first_name: String(booking.first_name || ''),
+        last_name: String(booking.last_name || ''),
+        guest_name: String(`${booking.first_name || ''} ${booking.last_name || ''}`).trim(),
+        email: String(booking.email || ''),
+        retreat_name: String(booking.retreat_name || ''),
+        retreat_dates: String(retreatDates || ''),
+        accommodation_type: String(booking.accommodation_type || ''),
+        gender: String(booking.gender || ''),
+        age: String(booking.age || ''),
+        hiking_experience: String(booking.hiking_experience || ''),
+        amount_paid: String(`£${amountInPounds}`),
+        subject: String(`Booking Confirmed - ${booking.retreat_name || ''}`),
       };
       await sendViaEmailJS(EMAILJS_TEMPLATE_ID_BOOKING, params);
       console.log(`📧 [EmailJS] Confirmation email sent to ${booking.email}`);
@@ -355,23 +356,24 @@ export async function sendAdminNotification(booking) {
 
   if (useEmailJS) {
     try {
+      // Ensure all values are strings (EmailJS requires strings, not null/undefined)
       const params = {
-        to_email: RETREAT_OWNER_EMAIL,
-        first_name: booking.first_name,
-        last_name: booking.last_name,
-        guest_name: `${booking.first_name} ${booking.last_name}`,
-        email: booking.email,
-        retreat_name: booking.retreat_name,
-        retreat_dates: retreatDates,
-        accommodation_type: booking.accommodation_type || '',
-        gender: booking.gender || 'N/A',
-        age: booking.age || 'N/A',
-        been_hiking: booking.been_hiking || 'N/A',
-        hiking_experience: booking.hiking_experience || 'N/A',
-        amount_paid: `£${amountInPounds}`,
-        booking_date: bookingDateStr,
-        stripe_session_id: booking.stripe_session_id || '',
-        subject: `🎉 New Booking: ${booking.first_name} ${booking.last_name} - ${booking.retreat_name}`,
+        to_email: String(RETREAT_OWNER_EMAIL || ''),
+        first_name: String(booking.first_name || ''),
+        last_name: String(booking.last_name || ''),
+        guest_name: String(`${booking.first_name || ''} ${booking.last_name || ''}`).trim(),
+        email: String(booking.email || ''),
+        retreat_name: String(booking.retreat_name || ''),
+        retreat_dates: String(retreatDates || ''),
+        accommodation_type: String(booking.accommodation_type || ''),
+        gender: String(booking.gender || 'N/A'),
+        age: String(booking.age || 'N/A'),
+        been_hiking: String(booking.been_hiking || 'N/A'),
+        hiking_experience: String(booking.hiking_experience || 'N/A'),
+        amount_paid: String(`£${amountInPounds}`),
+        booking_date: String(bookingDateStr || ''),
+        stripe_session_id: String(booking.stripe_session_id || ''),
+        subject: String(`New Booking: ${booking.first_name || ''} ${booking.last_name || ''} - ${booking.retreat_name || ''}`),
       };
       await sendViaEmailJS(EMAILJS_TEMPLATE_ID_ADMIN, params);
       console.log(`📧 [EmailJS] Retreat-owner notification sent to ${RETREAT_OWNER_EMAIL}`);
