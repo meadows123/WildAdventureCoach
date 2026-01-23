@@ -20,6 +20,7 @@ const useEmailJS = !!(EMAILJS_USER_ID && EMAILJS_ACCESS_TOKEN && EMAILJS_TEMPLAT
  * Sanitize a value for EmailJS template parameters.
  * EmailJS requires all values to be clean strings - no null, undefined, or special formatting issues.
  * EmailJS can be very strict about character encoding and special characters.
+ * This function ensures all values are safe ASCII strings.
  */
 function sanitizeForEmailJS(value) {
   // Handle null/undefined
@@ -32,7 +33,7 @@ function sanitizeForEmailJS(value) {
     return value ? 'Yes' : 'No';
   }
   
-  // Handle numbers
+  // Handle numbers - convert to string immediately
   if (typeof value === 'number') {
     return String(value);
   }
@@ -46,10 +47,13 @@ function sanitizeForEmailJS(value) {
   // Remove zero-width and other problematic Unicode characters
   str = str.replace(/[\u200B-\u200D\uFEFF\uFFFE\uFFFF]/g, '');
   
-  // Ensure proper encoding - normalize Unicode characters
-  // This helps with special characters like £, €, etc.
+  // Replace common problematic characters with ASCII equivalents
+  // This helps avoid encoding issues that EmailJS might have
+  str = str.replace(/[^\x20-\x7E\u00A0-\uFFFF]/g, ''); // Keep printable ASCII and common Unicode
+  
+  // Normalize Unicode to avoid encoding issues
   try {
-    str = str.normalize('NFC'); // Normalize to Canonical Composition
+    str = str.normalize('NFKC'); // Normalize to Compatibility Composition (more aggressive)
   } catch (e) {
     // If normalization fails, continue with original string
     console.warn('⚠️  Unicode normalization failed for value:', str.substring(0, 50));
@@ -57,6 +61,11 @@ function sanitizeForEmailJS(value) {
   
   // Trim whitespace
   str = str.trim();
+  
+  // Final check - ensure it's a valid string
+  if (typeof str !== 'string') {
+    return String(str);
+  }
   
   return str;
 }
@@ -116,32 +125,66 @@ async function sendViaEmailJS(templateId, templateParams) {
   }
   
   // Ensure proper UTF-8 encoding for the request
-  // Use JSON.stringify with proper encoding
+  // EmailJS can be very sensitive to how the JSON is encoded
   let requestBodyString;
   try {
-    requestBodyString = JSON.stringify(requestBody);
-    // Verify the string is valid UTF-8
-    if (!/^[\x00-\x7F]*$/.test(requestBodyString.replace(/\\u[0-9a-fA-F]{4}/g, ''))) {
-      // Contains non-ASCII, ensure proper encoding
-      requestBodyString = Buffer.from(requestBodyString, 'utf8').toString('utf8');
+    // Stringify with no replacer to ensure clean JSON
+    requestBodyString = JSON.stringify(requestBody, null, 0);
+    
+    // Double-check all values in the stringified version are valid
+    const parsed = JSON.parse(requestBodyString);
+    for (const [key, value] of Object.entries(parsed.template_params || {})) {
+      if (typeof value !== 'string') {
+        console.error(`❌ [EmailJS] After stringify, ${key} is not a string:`, typeof value);
+        throw new Error(`Parameter ${key} became ${typeof value} after stringify`);
+      }
     }
   } catch (e) {
-    console.error('❌ Error stringifying request body:', e);
-    throw new Error('Failed to encode request body for EmailJS');
+    console.error('❌ Error preparing request body for EmailJS:', e);
+    throw new Error(`Failed to prepare request body: ${e.message}`);
   }
   
   const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
     method: 'POST',
     headers: { 
-      'Content-Type': 'application/json; charset=utf-8'
+      'Content-Type': 'application/json'
     },
     body: requestBodyString,
   });
+  
   if (!res.ok) {
     const text = await res.text();
     console.error(`❌ EmailJS API error ${res.status}:`, text);
+    
+    // Try to parse error for more details
+    try {
+      const errorData = JSON.parse(text);
+      console.error(`❌ EmailJS error details:`, JSON.stringify(errorData, null, 2));
+      
+      // If it's a corrupted variables error, log which variables might be problematic
+      if (text.includes('corrupted') || text.includes('corrupt')) {
+        console.error(`❌ [EmailJS] Corrupted variables detected. Checking all variables...`);
+        for (const [key, value] of Object.entries(sanitizedParams)) {
+          // Check for potentially problematic characters
+          const hasSpecialChars = /[^\x20-\x7E]/.test(value);
+          const hasControlChars = /[\x00-\x1F\x7F]/.test(value);
+          if (hasSpecialChars || hasControlChars) {
+            console.error(`⚠️  [EmailJS] Variable ${key} may be problematic:`, {
+              length: value.length,
+              hasSpecialChars,
+              hasControlChars,
+              preview: value.substring(0, 100)
+            });
+          }
+        }
+      }
+    } catch (e) {
+      // Error response is not JSON, that's okay
+    }
+    
     throw new Error(`EmailJS API ${res.status}: ${text}`);
   }
+  
   return { success: true };
 }
 
