@@ -346,13 +346,6 @@ const ChamonixRetreatPage = () => {
                 Stay in a cozy <span className="text-[#F7F5EB] font-semibold">alpine chalet</span> with panoramic Mont Blanc views. Meals are crafted by our <span className="text-[#F7F5EB] font-semibold">private chef</span>, using wholesome, locally sourced ingredients to energize and delight. Healthy snacks and natural energy bars are available anytime at the chalet's <span className="text-[#F7F5EB] font-semibold">honesty bar</span>. Shared spaces encourage authentic conversations and a sense of community.
               </p>
               
-              {/* Early Bird Banner */}
-              <div className="bg-gradient-to-r from-[#C65D2B] to-[#E07B4B] border-2 border-[#C65D2B]/50 rounded-lg px-4 py-3 mb-6 text-center">
-                <p className="text-[#F7F5EB] font-bold text-lg sm:text-xl">
-                  🎉 Early Bird prices! - Valid until the 28th of February 2026
-                </p>
-              </div>
-              
               {/* Accommodation Options */}
               <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <div className="bg-[#2E4A34]/50 rounded-lg p-4 border-2 border-[#6B8E23]/30">
@@ -360,8 +353,7 @@ const ChamonixRetreatPage = () => {
                   <p className="text-sm text-[#DCCCA3]">Shared room (up to 3 total)</p>
                   <p className="text-sm text-[#DCCCA3]">Ensuite bathroom</p>
                   <div className="mt-3">
-                    <p className="text-2xl font-bold text-[#C65D2B]">£1,100</p>
-                    <p className="text-lg text-[#DCCCA3] line-through">£1,250</p>
+                    <p className="text-2xl font-bold text-[#C65D2B]">£1,250</p>
                   </div>
                 </div>
                 <div className="bg-[#2E4A34]/50 rounded-lg p-4 border-2 border-[#6B8E23]/30">
@@ -369,17 +361,17 @@ const ChamonixRetreatPage = () => {
                   <p className="text-sm text-[#DCCCA3]">One bed in shared twin</p>
                   <p className="text-sm text-[#DCCCA3]">Same-gender accommodation</p>
                   <div className="mt-3">
-                    <p className="text-2xl font-bold text-[#C65D2B]">£1,320</p>
-                    <p className="text-lg text-[#DCCCA3] line-through">£1,450</p>
+                    <p className="text-2xl font-bold text-[#C65D2B]">£1,450</p>
                   </div>
                 </div>
-                <div className="bg-[#2E4A34]/50 rounded-lg p-4 border-2 border-[#6B8E23]/30">
+                <div className="relative bg-[#2E4A34]/50 rounded-lg p-4 border-2 border-[#6B8E23]/30 opacity-60">
+                  <span className="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">SOLD OUT</span>
                   <p className="font-semibold text-[#F7F5EB] mb-2">Double</p>
                   <p className="text-sm text-[#DCCCA3]">Single occupancy</p>
                   <p className="text-sm text-[#DCCCA3]">Double room</p>
                   <div className="mt-3">
-                    <p className="text-2xl font-bold text-[#C65D2B]">£1,550</p>
-                    <p className="text-lg text-[#DCCCA3] line-through">£1,750</p>
+                    <p className="text-2xl font-bold text-gray-500 line-through">£1,550</p>
+                    <p className="text-lg text-gray-600 line-through">£1,750</p>
                   </div>
                 </div>
               </div>
