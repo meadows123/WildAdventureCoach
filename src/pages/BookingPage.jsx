@@ -41,15 +41,15 @@ const BookingPage = () => {
       accommodationOptions: [
         {
           name: 'Basic Single',
-          price: 1100,
-          originalPrice: 1250,
+          price: 1250,
+          originalPrice: null,
           deposit: 250,
           description: 'Single bed in a shared room (up to 3 total), ensuite bathroom, no windows'
         },
         {
           name: 'Economy Single',
-          price: 1320,
-          originalPrice: 1450,
+          price: 1450,
+          originalPrice: null,
           deposit: 250,
           description: 'One bed in a shared twin, same-gender accommodation'
         },
@@ -615,13 +615,6 @@ const BookingPage = () => {
                   {retreat.hasAccommodationOptions && (
                     <div className="bg-[#C65D2B]/10 border border-[#C65D2B]/30 rounded-lg sm:rounded-xl p-4 sm:p-6 mb-6">
                       <h2 className="text-xl sm:text-2xl font-bold text-[#F7F5EB] mb-4">Choose Your Accommodation</h2>
-                      
-                      {/* Early Bird Banner */}
-                      <div className="bg-gradient-to-r from-[#C65D2B] to-[#E07B4B] border-2 border-[#C65D2B]/50 rounded-lg px-4 py-3 mb-6 text-center">
-                        <p className="text-[#F7F5EB] font-bold text-lg sm:text-xl">
-                          🎉 Early Bird prices! - Valid until the 28th of February 2026
-                        </p>
-                      </div>
                       
                       <div className="grid md:grid-cols-2 gap-4">
                         {retreat.accommodationOptions.map((option, index) => (
