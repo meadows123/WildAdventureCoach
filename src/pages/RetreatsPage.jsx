@@ -174,15 +174,15 @@ const RetreatsPage = () => {
     setIsSubmittingInterest(true);
 
     try {
-      const response = await fetch(`${API_URL}/send-contact`, {
+      const response = await fetch(`${API_URL}/register-interest`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name: '2027 Retreat Interest Lead',
           email: interestEmail,
-          message: 'Lead interested in Adventures in 2027 Spring & Summer from the Retreats page.',
+          interest: '2027 Spring & Summer',
+          source: 'retreats-page',
         }),
       });
 

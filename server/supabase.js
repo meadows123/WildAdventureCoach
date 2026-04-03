@@ -220,6 +220,27 @@ export async function getAvailableSpots(retreatName) {
 }
 
 /**
+ * Save a retreat interest lead to the database.
+ * Duplicate email + interest combinations are silently ignored (unique index).
+ */
+export async function saveLead({ email, interest = '2027 Spring & Summer', source = 'retreats-page' }) {
+  const { data, error } = await supabase
+    .from('leads')
+    .upsert(
+      [{ email, interest, source }],
+      { onConflict: 'email,interest', ignoreDuplicates: true }
+    )
+    .select();
+
+  if (error) {
+    console.error('❌ Error saving lead:', error);
+    throw error;
+  }
+
+  return data;
+}
+
+/**
  * Get all bookings for a retreat
  */
 export async function getRetreatBookings(retreatName) {

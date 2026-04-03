@@ -4,7 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { addBooking, getAvailableSpots, getRetreatStats, supabase } from './supabase.js';
+import { addBooking, getAvailableSpots, getRetreatStats, supabase, saveLead } from './supabase.js';
 import { sendBookingConfirmationEmail, sendAdminNotification, sendContactEmail } from './sendEmail.js';
 
 dotenv.config();
@@ -471,6 +471,44 @@ app.post('/send-contact', async (req, res) => {
   }
 });
 
+// Register interest endpoint — saves lead to Supabase and notifies owner by email
+app.post('/register-interest', async (req, res) => {
+  const { email, interest = '2027 Spring & Summer', source = 'retreats-page' } = req.body;
+
+  if (!email || !email.trim()) {
+    return res.status(400).json({ error: 'Email is required' });
+  }
+
+  // Basic email format validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email.trim())) {
+    return res.status(400).json({ error: 'Invalid email address' });
+  }
+
+  try {
+    // Save to Supabase leads table
+    await saveLead({ email: email.trim().toLowerCase(), interest, source });
+    console.log('✅ Lead saved:', { email: email.trim(), interest, source });
+
+    // Notify owner by reusing the contact email helper
+    try {
+      await sendContactEmail({
+        name: 'New 2027 Interest Lead',
+        email: email.trim(),
+        message: `A visitor registered interest in: ${interest}\n\nSource: ${source}\nTimestamp: ${new Date().toLocaleString()}`,
+      });
+    } catch (emailErr) {
+      console.error('⚠️  Lead saved but owner notification failed:', emailErr);
+      // Non-fatal — lead is already stored in the database
+    }
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('❌ Error registering interest:', error);
+    res.status(500).json({ error: 'Failed to register interest. Please try again.' });
+  }
+});
+
 // Webhook endpoint for Stripe events (optional but recommended for production)
 app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
   const sig = req.headers['stripe-signature'];
@@ -583,6 +621,7 @@ app.get(/.*/, (req, res, next) => {
       req.path.startsWith('/checkout-session') ||
       req.path.startsWith('/retreat-capacity') ||
       req.path.startsWith('/send-contact') ||
+      req.path.startsWith('/register-interest') ||
       req.path.startsWith('/waitlist') ||
       req.path.startsWith('/webhook')) {
     return next();
