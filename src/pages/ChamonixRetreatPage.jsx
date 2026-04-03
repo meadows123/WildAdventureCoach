@@ -370,8 +370,7 @@ const ChamonixRetreatPage = () => {
                   <p className="text-sm text-[#DCCCA3]">Single occupancy</p>
                   <p className="text-sm text-[#DCCCA3]">Double room</p>
                   <div className="mt-3">
-                    <p className="text-2xl font-bold text-gray-500 line-through">£1,550</p>
-                    <p className="text-lg text-gray-600 line-through">£1,750</p>
+                    <p className="text-2xl font-bold text-gray-500 line-through">£1,750</p>
                   </div>
                 </div>
               </div>

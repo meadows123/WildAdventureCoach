@@ -661,9 +661,11 @@ const BookingPage = () => {
                                   {option.name}
                                 </h3>
                                 <div className="flex flex-col items-end gap-1">
-                                  <span className={`text-2xl font-bold ${option.soldOut ? 'text-gray-500' : 'text-[#C65D2B]'}`}>£{option.price}</span>
+                                  {!option.soldOut && (
+                                    <span className="text-2xl font-bold text-[#C65D2B]">£{option.price}</span>
+                                  )}
                                   {option.originalPrice && (
-                                    <span className={`text-base line-through ${option.soldOut ? 'text-gray-600' : 'text-[#DCCCA3]'}`}>£{option.originalPrice}</span>
+                                    <span className={`text-base line-through ${option.soldOut ? 'text-gray-500 text-2xl' : 'text-[#DCCCA3]'}`}>£{option.originalPrice}</span>
                                   )}
                                 </div>
                               </div>

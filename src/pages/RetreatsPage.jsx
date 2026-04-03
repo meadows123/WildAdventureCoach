@@ -7,6 +7,9 @@ import { Button } from '@/components/ui/button';
 
 const RetreatsPage = () => {
   const [capacityData, setCapacityData] = useState({});
+  const [interestEmail, setInterestEmail] = useState('');
+  const [isSubmittingInterest, setIsSubmittingInterest] = useState(false);
+  const [interestStatus, setInterestStatus] = useState({ type: '', message: '' });
 
   // API URL - for localhost, default to http://localhost:4242 if not set
   const API_URL = import.meta.env.VITE_API_URL || 
@@ -165,6 +168,45 @@ const RetreatsPage = () => {
     transition: { duration: 0.6 }
   };
 
+  const handleInterestSubmit = async (e) => {
+    e.preventDefault();
+    setInterestStatus({ type: '', message: '' });
+    setIsSubmittingInterest(true);
+
+    try {
+      const response = await fetch(`${API_URL}/send-contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: '2027 Retreat Interest Lead',
+          email: interestEmail,
+          message: 'Lead interested in Adventures in 2027 Spring & Summer from the Retreats page.',
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to submit your interest');
+      }
+
+      setInterestStatus({
+        type: 'success',
+        message: 'Thank you. We will get back to you with 2027 Spring & Summer options.',
+      });
+      setInterestEmail('');
+    } catch (error) {
+      setInterestStatus({
+        type: 'error',
+        message: error.message || 'Something went wrong. Please try again.',
+      });
+    } finally {
+      setIsSubmittingInterest(false);
+    }
+  };
+
   // Component for individual retreat card - Horizontal Banner Style
   const RetreatCard = ({ retreat }) => {
     const isJune = retreat.id === 'july-retreat' || retreat.title.includes('Chamonix');
@@ -306,6 +348,46 @@ const RetreatsPage = () => {
               <RetreatCard key={retreat.id} retreat={retreat} />
             ))}
           </div>
+
+          <motion.div
+            {...fadeInUp}
+            className="max-w-4xl mx-auto bg-[#6B8E23]/10 backdrop-blur-sm rounded-2xl border border-[#6B8E23]/30 p-5 sm:p-8"
+          >
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#F7F5EB] mb-3 text-center">
+              Adventures in 2027 Spring & Summer
+            </h2>
+            <p className="text-[#DCCCA3] text-sm sm:text-base md:text-lg text-center mb-6">
+              Can't find the retreat that works for you now? Leave your email and we will get back to you with more options.
+            </p>
+
+            <form onSubmit={handleInterestSubmit} className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center">
+              <input
+                type="email"
+                value={interestEmail}
+                onChange={(e) => setInterestEmail(e.target.value)}
+                placeholder="Enter your email"
+                className="w-full bg-[#2E4A34] border border-[#6B8E23] rounded-md px-4 py-3 text-[#F7F5EB] placeholder:text-[#DCCCA3]/70 focus:border-[#C65D2B] focus:outline-none focus:ring-2 focus:ring-[#C65D2B]/50 min-h-[48px]"
+                required
+              />
+              <Button
+                type="submit"
+                disabled={isSubmittingInterest}
+                className="bg-[#C65D2B] hover:bg-[#C65D2B]/90 text-[#F7F5EB] px-6 py-3 rounded-full min-h-[48px] disabled:opacity-50"
+              >
+                {isSubmittingInterest ? 'Submitting...' : 'Register Interest'}
+              </Button>
+            </form>
+
+            {interestStatus.message && (
+              <p
+                className={`mt-4 text-sm sm:text-base text-center ${
+                  interestStatus.type === 'success' ? 'text-[#BFEA8A]' : 'text-[#FFB4A2]'
+                }`}
+              >
+                {interestStatus.message}
+              </p>
+            )}
+          </motion.div>
         </div>
       </div>
     </>

@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Compass, Heart, Users, Instagram, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight, Compass, Heart, Users, Instagram, ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const HomePage = () => {
   const [currentReview, setCurrentReview] = useState(0);
   const [widgetKey, setWidgetKey] = useState(0);
+  const [activeFeature, setActiveFeature] = useState(0);
+  const [isReviewPaused, setIsReviewPaused] = useState(false);
+  const [reviewProgress, setReviewProgress] = useState(0);
 
   // Load Behold.so widget script
   useEffect(() => {
@@ -86,6 +89,32 @@ const HomePage = () => {
       review: "For me, the retreat was a whole new way of experiencing the Alps. Rugile and Sandra brought a balanced approach of connecting with the environment, with the fellow hikers in the group and within myself. The routes and schedule were rewarding and challenging, in perfect measures and I made lasting new friendships and special memories.",
       initial: "R",
       rating: 5
+    },
+    {
+      id: 5,
+      name: "Kris",
+      retreat: "Guest Review",
+      review: `I joined this 6-day hiking and yoga retreat not quite knowing what to expect, and it exceeded everything I had in mind.
+
+The hikes were challenging in the best way. Each day pushed me physically but always felt achievable. The routes were well planned, with incredible views and a real sense of progression through the week. The group moved with purpose but without ego, which created a supportive rather than competitive atmosphere.
+
+The yoga sessions were a game changer. After long days on the trail, the mobility and recovery work made a noticeable difference. The classes balanced strength, stability, flexibility, and breathwork well. Even as someone fairly new to yoga, I felt completely comfortable.
+
+What stood out most was the overall atmosphere: driven, outdoors-oriented people, great conversations and the satisfying kind of tiredness at the end of each day. It felt like a real reset, both physically and mentally.
+
+I came back stronger, clearer, and already looking at dates for next year. Highly recommended for anyone who enjoys pushing themselves, values recovery, and wants a meaningful week in nature.`,
+      initial: "K",
+      rating: 5
+    },
+    {
+      id: 6,
+      name: "Zak",
+      retreat: "Guest Review",
+      review: `Rugile stands out in her professionalism and the care she brings to everything she organises. She has a natural ability to create a welcoming and supportive space where people feel comfortable, grounded, and open to personal growth and transformation. At the same time, she is extremely organised, well prepared, and attentive to detail, which creates a strong sense of trust and reliability for everyone involved.
+
+Rugile's experience as a mountain guide is clearly reflected in the way she leads and plans activities, with confidence, responsibility, and a strong focus on safety and quality. She brings a rare combination of professionalism, structure, and genuine presence to the experiences she creates.`,
+      initial: "Z",
+      rating: 5
     }
   ];
 
@@ -101,19 +130,57 @@ const HomePage = () => {
     {
       icon: Compass,
       title: 'Guided Adventures',
-      description: 'Expert-led expeditions through breathtaking landscapes'
+      description: 'Expert-led expeditions through breathtaking landscapes',
+      detail: 'Every route is crafted with care, blending challenge, safety, and unforgettable alpine views so each day feels purposeful.'
     },
     {
       icon: Heart,
       title: 'Wellness Focus',
-      description: 'Mindful practices combined with outdoor exploration'
+      description: 'Mindful practices combined with outdoor exploration',
+      detail: 'Yoga, mobility work, and breath-led recovery sessions help your body bounce back and your mind stay clear throughout the week.'
     },
     {
       icon: Users,
       title: 'Community',
-      description: 'Connect with like-minded adventurers and nature lovers'
+      description: 'Connect with like-minded adventurers and nature lovers',
+      detail: 'Expect a grounded, no-ego group culture where shared effort on the trail naturally turns into meaningful connection.'
     }
   ];
+
+  useEffect(() => {
+    if (isReviewPaused) {
+      return;
+    }
+
+    const autoAdvanceInterval = setInterval(() => {
+      setReviewProgress((prev) => {
+        if (prev >= 100) {
+          setCurrentReview((index) => (index + 1) % reviews.length);
+          return 0;
+        }
+        return prev + 2;
+      });
+    }, 150);
+
+    return () => clearInterval(autoAdvanceInterval);
+  }, [isReviewPaused, reviews.length]);
+
+  useEffect(() => {
+    const handleArrowNavigation = (event) => {
+      if (event.key === 'ArrowRight') {
+        nextReview();
+        setReviewProgress(0);
+      }
+
+      if (event.key === 'ArrowLeft') {
+        prevReview();
+        setReviewProgress(0);
+      }
+    };
+
+    window.addEventListener('keydown', handleArrowNavigation);
+    return () => window.removeEventListener('keydown', handleArrowNavigation);
+  }, [reviews.length]);
 
   return (
     <>
@@ -192,7 +259,12 @@ const HomePage = () => {
                   viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: 0.6, delay: index * 0.15, ease: "easeOut" }}
                   whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                  className="bg-[#6B8E23]/20 backdrop-blur-sm p-6 sm:p-8 md:p-10 rounded-2xl border border-[#6B8E23]/30 hover:border-[#C65D2B]/50 transition-all"
+                  onClick={() => setActiveFeature(index)}
+                  className={`bg-[#6B8E23]/20 backdrop-blur-sm p-6 sm:p-8 md:p-10 rounded-2xl border transition-all cursor-pointer ${
+                    activeFeature === index
+                      ? 'border-[#C65D2B] ring-2 ring-[#C65D2B]/30'
+                      : 'border-[#6B8E23]/30 hover:border-[#C65D2B]/50'
+                  }`}
                 >
                   <motion.div
                     initial={{ scale: 0 }}
@@ -207,6 +279,21 @@ const HomePage = () => {
                 </motion.div>
               ))}
             </div>
+
+            <motion.div
+              key={activeFeature}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, ease: 'easeOut' }}
+              className="mt-8 sm:mt-10 md:mt-12 max-w-4xl mx-auto bg-[#1a2d20]/70 border border-[#6B8E23]/40 rounded-2xl p-5 sm:p-7 md:p-8"
+            >
+              <p className="text-[#F7F5EB] text-lg sm:text-xl md:text-2xl font-semibold mb-3">
+                {features[activeFeature].title}
+              </p>
+              <p className="text-[#DCCCA3] text-sm sm:text-base md:text-lg leading-relaxed">
+                {features[activeFeature].detail}
+              </p>
+            </motion.div>
           </div>
         </section>
 
@@ -321,7 +408,31 @@ const HomePage = () => {
             <motion.div
               {...fadeInUp}
               className="relative max-w-4xl mx-auto mb-12 sm:mb-16 md:mb-20 px-2 sm:px-0"
+              onMouseEnter={() => setIsReviewPaused(true)}
+              onMouseLeave={() => setIsReviewPaused(false)}
             >
+              <div className="flex items-center justify-between mb-3 px-1">
+                <p className="text-[#DCCCA3] text-xs sm:text-sm">
+                  {isReviewPaused ? 'Paused' : 'Auto-playing testimonials'}
+                </p>
+                <button
+                  onClick={() => setIsReviewPaused((prev) => !prev)}
+                  className="inline-flex items-center gap-2 text-[#F7F5EB] bg-[#2E4A34]/80 hover:bg-[#2E4A34] rounded-full px-3 py-1.5 text-xs sm:text-sm border border-[#6B8E23]/40"
+                  aria-label={isReviewPaused ? 'Resume auto-play' : 'Pause auto-play'}
+                >
+                  {isReviewPaused ? <Play className="w-3.5 h-3.5" /> : <Pause className="w-3.5 h-3.5" />}
+                  {isReviewPaused ? 'Resume' : 'Pause'}
+                </button>
+              </div>
+
+              <div className="h-1.5 w-full bg-[#F7F5EB]/20 rounded-full mb-4 overflow-hidden">
+                <motion.div
+                  className="h-full bg-[#C65D2B] rounded-full"
+                  animate={{ width: `${reviewProgress}%` }}
+                  transition={{ duration: 0.12, ease: 'linear' }}
+                />
+              </div>
+
               {/* Review Card */}
               <div className="relative bg-[#6B8E23]/10 backdrop-blur-sm p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl border border-[#6B8E23]/30">
                 <motion.div
@@ -342,7 +453,7 @@ const HomePage = () => {
                   </div>
 
                   {/* Review Text */}
-                  <blockquote className="text-[#DCCCA3] mb-6 sm:mb-8 italic text-base sm:text-lg md:text-xl leading-relaxed">
+                  <blockquote className="text-[#DCCCA3] mb-6 sm:mb-8 italic text-base sm:text-lg md:text-xl leading-relaxed whitespace-pre-line">
                     "{reviews[currentReview].review}"
                   </blockquote>
 
@@ -360,7 +471,10 @@ const HomePage = () => {
 
                 {/* Navigation Arrows */}
                 <button
-                  onClick={prevReview}
+                  onClick={() => {
+                    prevReview();
+                    setReviewProgress(0);
+                  }}
                   className="absolute left-1 sm:left-2 md:left-4 top-1/2 -translate-y-1/2 bg-[#2E4A34]/90 hover:bg-[#2E4A34] text-[#F7F5EB] p-2 sm:p-3 rounded-full transition-all duration-300 touch-manipulation active:scale-95"
                   aria-label="Previous review"
                 >
@@ -368,7 +482,10 @@ const HomePage = () => {
                 </button>
                 
                 <button
-                  onClick={nextReview}
+                  onClick={() => {
+                    nextReview();
+                    setReviewProgress(0);
+                  }}
                   className="absolute right-1 sm:right-2 md:right-4 top-1/2 -translate-y-1/2 bg-[#2E4A34]/90 hover:bg-[#2E4A34] text-[#F7F5EB] p-2 sm:p-3 rounded-full transition-all duration-300 touch-manipulation active:scale-95"
                   aria-label="Next review"
                 >
@@ -381,7 +498,10 @@ const HomePage = () => {
                 {reviews.map((_, index) => (
                   <button
                     key={index}
-                    onClick={() => setCurrentReview(index)}
+                    onClick={() => {
+                      setCurrentReview(index);
+                      setReviewProgress(0);
+                    }}
                     className={`h-2 sm:h-3 rounded-full transition-all duration-300 touch-manipulation ${
                       index === currentReview
                         ? 'bg-[#C65D2B] w-6 sm:w-8'
