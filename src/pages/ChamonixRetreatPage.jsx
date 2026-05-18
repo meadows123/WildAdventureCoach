@@ -348,12 +348,13 @@ const ChamonixRetreatPage = () => {
               
               {/* Accommodation Options */}
               <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-                <div className="bg-[#2E4A34]/50 rounded-lg p-4 border-2 border-[#6B8E23]/30">
+                <div className="relative bg-[#2E4A34]/50 rounded-lg p-4 border-2 border-[#6B8E23]/30 opacity-60">
+                  <span className="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">SOLD OUT</span>
                   <p className="font-semibold text-[#F7F5EB] mb-2">Basic Single</p>
                   <p className="text-sm text-[#DCCCA3]">Shared room (up to 3 total)</p>
                   <p className="text-sm text-[#DCCCA3]">Ensuite bathroom</p>
                   <div className="mt-3">
-                    <p className="text-2xl font-bold text-[#C65D2B]">£1,250</p>
+                    <p className="text-2xl font-bold text-gray-500 line-through">£1,250</p>
                   </div>
                 </div>
                 <div className="bg-[#2E4A34]/50 rounded-lg p-4 border-2 border-[#6B8E23]/30">

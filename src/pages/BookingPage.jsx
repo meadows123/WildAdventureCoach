@@ -42,9 +42,10 @@ const BookingPage = () => {
         {
           name: 'Basic Single',
           price: 1250,
-          originalPrice: null,
+          originalPrice: 1250,
           deposit: 250,
-          description: 'Single bed in a shared room (up to 3 total), ensuite bathroom, no windows'
+          description: 'Single bed in a shared room (up to 3 total), ensuite bathroom, no windows',
+          soldOut: true
         },
         {
           name: 'Economy Single',
