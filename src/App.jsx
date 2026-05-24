@@ -13,6 +13,7 @@ import AboutPage from '@/pages/AboutPage';
 import ChamonixRetreatPage from '@/pages/ChamonixRetreatPage';
 import AugustRetreatPage from '@/pages/AugustRetreatPage';
 import TermsAndConditionsPage from '@/pages/TermsAndConditionsPage';
+import BlogInternetTroubleshooting from '@/pages/BlogInternetTroubleshooting';
 
 function App() {
   // Enable smooth scrolling
@@ -38,6 +39,7 @@ function App() {
           <Route path="/terms" element={<TermsAndConditionsPage />} />
           <Route path="/booking" element={<BookingPage />} />
           <Route path="/booking/success" element={<BookingSuccessPage />} />
+          <Route path="/blog/internet-troubleshooting" element={<BlogInternetTroubleshooting />} />
         </Routes>
       </main>
       <Footer />

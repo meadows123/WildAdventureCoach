@@ -1,5 +1,5 @@
 ## Pages
 - [About - Wild Adventure Coach](/about): Learn about Wild Adventure Coach, our mission, and the experienced team behind transformative mountain retreats in the Alps.
-- [Adventure Retreat - Wild Adventure Coach](/retreats): Explore our transformative adventure retreat. Join us for an unforgettable journey through the stunning landscapes of Mont Blanc.
 - [Booking Confirmed - Wild Adventure Coach](/bookingsuccess): Your adventure retreat booking has been confirmed!
+- [Home Internet Troubleshooting Guide | Wild Adventure Coach](/bloginternettroubleshooting): A step-by-step guide to diagnosing and fixing home internet issues — from asking the right questions to running a continuous ping test and reading the results.
 - [Terms & Conditions | Wild Adventure Retreat](/termsandconditions): Read our terms and conditions for Wild Adventure Retreat experiences
