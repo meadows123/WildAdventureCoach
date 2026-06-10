@@ -192,10 +192,16 @@ Rugile's experience as a mountain guide is clearly reflected in the way she lead
       <div className="min-h-screen">
         <section className="relative h-screen flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 z-0">
-            <img 
-              className="w-full h-full object-cover opacity-40"
-              alt="Mountain adventure landscape with hikers"
-             src="https://images.unsplash.com/photo-1612003023592-7b989fc384ea" />
+            <video
+              className="w-full h-full object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+            >
+              <source src="/images/homepage/hero-video.mp4" type="video/mp4" />
+            </video>
+            <div className="absolute inset-0 bg-black/50" />
           </div>
           
           <div className="relative z-10 text-center px-4 sm:px-6 md:px-8 max-w-4xl mx-auto py-8 sm:py-12">
