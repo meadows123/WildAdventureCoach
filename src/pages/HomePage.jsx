@@ -16,7 +16,24 @@ const HomePage = () => {
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    video.play().catch(() => {});
+
+    const attemptPlay = () => video.play().catch(() => {});
+
+    if (video.readyState >= 3) {
+      attemptPlay();
+    } else {
+      video.addEventListener('canplay', attemptPlay, { once: true });
+    }
+
+    const handleVisibilityChange = () => {
+      if (!document.hidden) attemptPlay();
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      video.removeEventListener('canplay', attemptPlay);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   // Load Behold.so widget script
