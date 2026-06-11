@@ -210,7 +210,7 @@ Rugile's experience as a mountain guide is clearly reflected in the way she lead
             >
               <source src="/images/homepage/hero-video.mp4" type="video/mp4" />
             </video>
-            <div className="absolute inset-0 bg-black/50" />
+            <div className="absolute inset-0 bg-black/30" />
           </div>
           
           <div className="relative z-10 text-center px-4 sm:px-6 md:px-8 max-w-4xl mx-auto py-8 sm:py-12">
