@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -6,11 +6,18 @@ import { ArrowRight, Compass, Heart, Users, Instagram, ChevronLeft, ChevronRight
 import { Button } from '@/components/ui/button';
 
 const HomePage = () => {
+  const videoRef = useRef(null);
   const [currentReview, setCurrentReview] = useState(0);
   const [widgetKey, setWidgetKey] = useState(0);
   const [activeFeature, setActiveFeature] = useState(0);
   const [isReviewPaused, setIsReviewPaused] = useState(false);
   const [reviewProgress, setReviewProgress] = useState(0);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.play().catch(() => {});
+  }, []);
 
   // Load Behold.so widget script
   useEffect(() => {
@@ -193,11 +200,13 @@ Rugile's experience as a mountain guide is clearly reflected in the way she lead
         <section className="relative h-screen flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 z-0">
             <video
+              ref={videoRef}
               className="w-full h-full object-cover"
               autoPlay
               muted
               loop
               playsInline
+              preload="auto"
             >
               <source src="/images/homepage/hero-video.mp4" type="video/mp4" />
             </video>

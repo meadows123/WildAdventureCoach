@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(apt list *)",
+      "Bash(sudo apt-get install -y ffmpeg)",
+      "Bash(find /usr /opt /home -name \"ffmpeg\" 2>/dev/null | head -5; ls /home/cisco/.local/bin/ 2>/dev/null | head -10)",
+      "Read(//usr/**)",
+      "Read(//home/cisco/.local/bin/**)",
+      "Bash(python3 -c \"import imageio; imageio.plugins.ffmpeg.download\\(\\)\")",
+      "Bash(pip install *)",
+      "Bash(python3 -c \"import imageio_ffmpeg; print\\(imageio_ffmpeg.get_ffmpeg_exe\\(\\)\\)\")",
+      "Bash(/home/cisco/.local/lib/python3.12/site-packages/imageio_ffmpeg/binaries/ffmpeg-linux-x86_64-v7.0.2 -i /home/cisco/wildadventureretreat/build/images/homepage/Homepagevidwildadventurecoach.mp4)",
+      "Bash(/home/cisco/.local/lib/python3.12/site-packages/imageio_ffmpeg/binaries/ffmpeg-linux-x86_64-v7.0.2 -i /home/cisco/wildadventureretreat/build/images/homepage/Homepagevidwildadventurecoach.mp4 -vf scale=1920:1080 -c:v libx264 -crf 26 -preset fast -an -movflags +faststart /home/cisco/wildadventureretreat/public/images/homepage/hero-video.mp4 -y)"
+    ]
+  }
+}
