@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import { Calendar, MapPin, Users, Mountain, WifiOff, ChevronLeft, ChevronRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 const ChamonixRetreatPage = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -196,11 +194,9 @@ const ChamonixRetreatPage = () => {
               A transformative 6-day alpine adventure combining mindful movement, breathtaking hikes and daily restorative yoga
             </p>
             <div className="mt-6 sm:mt-8">
-              <Link to="/booking?retreat=Hiking and Yoga Retreat in Chamonix" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                <Button className="text-base sm:text-lg md:text-xl py-4 sm:py-5 md:py-6 px-8 sm:px-10 md:px-12 rounded-full shadow-lg transition-all touch-manipulation bg-[#C65D2B] hover:bg-[#C65D2B]/90 hover:shadow-xl active:scale-95 text-[#F7F5EB] w-full sm:w-auto min-h-[48px]">
-                  Join the Experience
-                </Button>
-              </Link>
+              <span className="inline-block bg-red-700/80 text-white text-base font-bold px-8 py-4 rounded-full uppercase tracking-widest">
+                Sold Out
+              </span>
             </div>
           </motion.div>
 
@@ -242,23 +238,10 @@ const ChamonixRetreatPage = () => {
                 </div>
               </div>
               
-              {/* Available Spots Indicator */}
+              {/* Sold Out Notice */}
               <div className="mt-4 pt-4 border-t border-[#6B8E23]/30">
-                <div className="bg-[#6B8E23]/30 rounded-lg p-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[#F7F5EB] font-semibold text-lg">Spots Remaining:</span>
-                    <span className="text-[#F7F5EB] text-2xl font-bold">
-                      {availableSpots !== null ? availableSpots : 7} / {maxCapacity !== null ? maxCapacity : 9}
-                    </span>
-                  </div>
-                  <div className="w-full bg-[#2E4A34] rounded-full h-3 mt-2 overflow-hidden">
-                    <div 
-                      className="h-full bg-[#C65D2B] rounded-full transition-all duration-300"
-                      style={{ 
-                        width: `${((availableSpots !== null ? availableSpots : 7) / (maxCapacity !== null ? maxCapacity : 9)) * 100}%` 
-                      }}
-                    ></div>
-                  </div>
+                <div className="bg-red-900/30 border border-red-700/50 rounded-lg p-3 flex items-center justify-center">
+                  <span className="text-red-300 font-bold text-lg uppercase tracking-widest">This retreat is fully booked</span>
                 </div>
               </div>
             </div>
@@ -573,49 +556,9 @@ const ChamonixRetreatPage = () => {
             </div>
           </motion.div>
 
-          {/* CTA Button */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-12"
-          >
-            <Link to="/booking?retreat=Hiking and Yoga Retreat in Chamonix" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-              <Button 
-                className="text-lg md:text-xl py-6 px-12 rounded-full shadow-lg transition-all touch-manipulation bg-[#C65D2B] hover:bg-[#C65D2B]/90 hover:shadow-xl active:scale-98 text-[#F7F5EB]"
-              >
-                Book Your Spot
-              </Button>
-            </Link>
-          </motion.div>
         </div>
       </div>
 
-      {/* Floating Book Now Button */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-        className="fixed bottom-6 left-0 right-0 z-50 flex justify-center"
-      >
-        <Link to="/booking?retreat=Hiking and Yoga Retreat in Chamonix" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-          <motion.div
-            whileHover={{ scale: 1.06 }}
-            whileTap={{ scale: 0.96 }}
-            animate={{ y: [0, -4, 0] }}
-            transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-            className="relative group"
-          >
-            {/* Glow/Pulse behind button */}
-            <span className="absolute inset-0 blur-xl rounded-full bg-[#C65D2B]/40 opacity-70 group-hover:opacity-90 transition-opacity"></span>
-            <span className="absolute inset-0 blur-2xl rounded-full bg-[#C65D2B]/30 animate-pulse"></span>
-
-            <div className="relative bg-gradient-to-r from-[#C65D2B] to-[#E07B4B] hover:from-[#C65D2B] hover:to-[#cf6f43] text-[#F7F5EB] px-8 py-5 rounded-full shadow-2xl font-semibold text-xl transition-all cursor-pointer flex items-center gap-3 ring-2 ring-[#C65D2B]/40">
-              <span>🍃 Book Now</span>
-            </div>
-          </motion.div>
-        </Link>
-      </motion.div>
     </>
   );
 };

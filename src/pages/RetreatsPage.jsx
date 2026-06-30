@@ -30,6 +30,8 @@ const RetreatsPage = () => {
     {
       id: 'july-retreat',
       title: 'Hiking and Yoga Retreat in Chamonix',
+      past: true,
+      soldOut: true,
       location: 'Chamonix, French Alps',
       duration: '6 days / 5 nights',
       dates: 'June 4 - 9, 2026',
@@ -274,8 +276,8 @@ const RetreatsPage = () => {
               </div>
             </div>
 
-            {/* Spots Remaining - Show if data is available */}
-            {availableSpots !== null && availableSpots !== undefined && maxCapacity && (
+            {/* Spots Remaining - Show if data is available and not sold out */}
+            {!retreat.soldOut && availableSpots !== null && availableSpots !== undefined && maxCapacity && (
               <div className="mt-3 pt-3 border-t border-[#6B8E23]/30">
                 <div className="flex items-center gap-2">
                   <span className="text-[#F7F5EB] font-semibold text-sm">⚡</span>
@@ -285,21 +287,29 @@ const RetreatsPage = () => {
                 </div>
               </div>
             )}
+            {/* Sold Out badge */}
+            {retreat.soldOut && (
+              <div className="mt-3 pt-3 border-t border-[#6B8E23]/30">
+                <span className="inline-block bg-red-700/80 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                  Sold Out
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Right Column: Button */}
           <div className="flex-shrink-0">
-            {isJune ? (
+            {retreat.soldOut ? (
               <Link to="/retreat/chamonix" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                <Button 
-                  className="w-full sm:w-auto text-sm sm:text-base py-3 sm:py-4 px-6 sm:px-8 rounded-full shadow-lg transition-all touch-manipulation bg-[#C65D2B] hover:bg-[#C65D2B]/90 hover:shadow-xl active:scale-95 text-[#F7F5EB] whitespace-nowrap min-h-[48px]"
+                <Button
+                  className="w-full sm:w-auto text-sm sm:text-base py-3 sm:py-4 px-6 sm:px-8 rounded-full shadow-lg transition-all touch-manipulation bg-[#6B8E23]/30 hover:bg-[#6B8E23]/40 text-[#DCCCA3] whitespace-nowrap min-h-[48px] cursor-default"
                 >
-                  Join The Experience
+                  View Details
                 </Button>
               </Link>
             ) : isAugust ? (
               <Link to="/retreat/august" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                <Button 
+                <Button
                   className="w-full sm:w-auto text-sm sm:text-base py-3 sm:py-4 px-6 sm:px-8 rounded-full shadow-lg transition-all touch-manipulation bg-[#C65D2B] hover:bg-[#C65D2B]/90 hover:shadow-xl active:scale-95 text-[#F7F5EB] whitespace-nowrap min-h-[48px]"
                 >
                   Join the Experience
@@ -307,7 +317,7 @@ const RetreatsPage = () => {
               </Link>
             ) : (
               <Link to={`/booking?retreat=${encodeURIComponent(retreat.title)}`} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                <Button 
+                <Button
                   className="w-full sm:w-auto text-sm sm:text-base py-3 sm:py-4 px-6 sm:px-8 rounded-full shadow-lg transition-all touch-manipulation bg-[#C65D2B] hover:bg-[#C65D2B]/90 hover:shadow-xl active:scale-95 text-[#F7F5EB] whitespace-nowrap min-h-[48px]"
                 >
                   Join The Experience
@@ -344,14 +354,14 @@ const RetreatsPage = () => {
           </motion.div>
 
           <div className="space-y-4 sm:space-y-6 mb-16 sm:mb-24">
-            {retreats.map((retreat) => (
+            {retreats.filter(r => !r.past).map((retreat) => (
               <RetreatCard key={retreat.id} retreat={retreat} />
             ))}
           </div>
 
           <motion.div
             {...fadeInUp}
-            className="max-w-4xl mx-auto bg-[#6B8E23]/10 backdrop-blur-sm rounded-2xl border border-[#6B8E23]/30 p-5 sm:p-8"
+            className="bg-[#6B8E23]/10 backdrop-blur-sm rounded-2xl border border-[#6B8E23]/30 p-5 sm:p-8"
           >
             <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#F7F5EB] mb-3 text-center">
               Adventures in 2027 Spring & Summer
@@ -388,6 +398,24 @@ const RetreatsPage = () => {
               </p>
             )}
           </motion.div>
+
+          {/* Past Retreats */}
+          {retreats.some(r => r.past) && (
+            <motion.div {...fadeInUp} className="mt-16 sm:mt-24">
+              <div className="flex items-center gap-4 mb-6 sm:mb-8">
+                <div className="flex-1 h-px bg-[#6B8E23]/30"></div>
+                <h2 className="text-xl sm:text-2xl font-bold text-[#DCCCA3] uppercase tracking-widest whitespace-nowrap">
+                  Past Retreats
+                </h2>
+                <div className="flex-1 h-px bg-[#6B8E23]/30"></div>
+              </div>
+              <div className="space-y-4 sm:space-y-6 opacity-80">
+                {retreats.filter(r => r.past).map((retreat) => (
+                  <RetreatCard key={retreat.id} retreat={retreat} />
+                ))}
+              </div>
+            </motion.div>
+          )}
         </div>
       </div>
     </>
