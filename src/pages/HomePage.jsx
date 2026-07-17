@@ -25,6 +25,7 @@ const HomePage = () => {
     '/images/homepage/Slide-Photo/IMG_5510.jpg',
     '/images/homepage/Slide-Photo/IMG_7465.jpg',
     '/images/homepage/Slide-Photo/IMG_7502.jpg',
+    '/images/homepage/Slide-Photo/IMG_host_hike.jpg',
   ];
 
   useEffect(() => {
