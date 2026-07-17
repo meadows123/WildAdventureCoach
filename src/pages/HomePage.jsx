@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Compass, Heart, Users, Instagram, ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -12,6 +12,35 @@ const HomePage = () => {
   const [activeFeature, setActiveFeature] = useState(0);
   const [isReviewPaused, setIsReviewPaused] = useState(false);
   const [reviewProgress, setReviewProgress] = useState(0);
+  const [journeySlide, setJourneySlide] = useState(0);
+
+  const journeySlides = [
+    '/images/homepage/Slide-Photo/IMG_5063.jpg',
+    '/images/homepage/Slide-Photo/IMG_5200.jpg',
+    '/images/homepage/Slide-Photo/IMG_5212.jpg',
+    '/images/homepage/Slide-Photo/IMG_5292.jpg',
+    '/images/homepage/Slide-Photo/IMG_5335.jpg',
+    '/images/homepage/Slide-Photo/IMG_5354.jpg',
+    '/images/homepage/Slide-Photo/IMG_5473.jpg',
+    '/images/homepage/Slide-Photo/IMG_5510.jpg',
+    '/images/homepage/Slide-Photo/IMG_7465.jpg',
+    '/images/homepage/Slide-Photo/IMG_7502.jpg',
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setJourneySlide((prev) => (prev + 1) % journeySlides.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [journeySlide]);
+
+  const prevJourneySlide = () => {
+    setJourneySlide((prev) => (prev - 1 + journeySlides.length) % journeySlides.length);
+  };
+
+  const nextJourneySlide = () => {
+    setJourneySlide((prev) => (prev + 1) % journeySlides.length);
+  };
 
   useEffect(() => {
     const video = videoRef.current;
@@ -332,11 +361,35 @@ Rugile's experience as a mountain guide is clearly reflected in the way she lead
         <section className="py-20 px-4 bg-gradient-to-b from-[#2E4A34] to-[#1a2d20]">
           <div className="max-w-6xl mx-auto">
             <div className="grid md:grid-cols-2 gap-12 items-center">
-              <motion.div {...fadeInLeft}>
-                <img 
-                  className="rounded-2xl shadow-2xl w-full h-[300px] sm:h-[400px] md:h-[500px] object-cover"
-                  alt="Adventure coach leading group in nature"
-                 src="/images/journey/journey.jpg" />
+              <motion.div {...fadeInLeft} className="relative rounded-2xl shadow-2xl w-full h-[300px] sm:h-[400px] md:h-[500px] overflow-hidden">
+                <AnimatePresence mode="sync">
+                  <motion.img
+                    key={journeySlide}
+                    src={journeySlides[journeySlide]}
+                    alt="Wild Adventure Retreat moments"
+                    className="absolute inset-0 w-full h-full object-cover"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.8, ease: 'easeInOut' }}
+                  />
+                </AnimatePresence>
+
+                <button
+                  onClick={prevJourneySlide}
+                  className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 bg-[#2E4A34]/90 hover:bg-[#2E4A34] text-[#F7F5EB] p-2 sm:p-3 rounded-full transition-all duration-300 touch-manipulation active:scale-95 z-10"
+                  aria-label="Previous photo"
+                >
+                  <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+                </button>
+
+                <button
+                  onClick={nextJourneySlide}
+                  className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 bg-[#2E4A34]/90 hover:bg-[#2E4A34] text-[#F7F5EB] p-2 sm:p-3 rounded-full transition-all duration-300 touch-manipulation active:scale-95 z-10"
+                  aria-label="Next photo"
+                >
+                  <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+                </button>
               </motion.div>
               
               <motion.div {...fadeInRight}>
@@ -374,7 +427,7 @@ Rugile's experience as a mountain guide is clearly reflected in the way she lead
                 </Button>
               </Link>
               <p className="text-[#6B8E23] font-semibold">
-                💳 Secure your spot with just £250 deposit
+                💳 Secure your spot with a small deposit
               </p>
             </motion.div>
               </motion.div>
