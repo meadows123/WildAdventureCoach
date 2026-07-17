@@ -336,32 +336,18 @@ const ChamonixRetreatPage = () => {
                   <p className="font-semibold text-[#F7F5EB] mb-2">Basic Single</p>
                   <p className="text-sm text-[#DCCCA3]">Shared room (up to 3 total)</p>
                   <p className="text-sm text-[#DCCCA3]">Ensuite bathroom</p>
-                  <div className="mt-3">
-                    <p className="text-2xl font-bold text-gray-500 line-through">£1,250</p>
-                  </div>
                 </div>
                 <div className="bg-[#2E4A34]/50 rounded-lg p-4 border-2 border-[#6B8E23]/30">
                   <p className="font-semibold text-[#F7F5EB] mb-2">Economy Single</p>
                   <p className="text-sm text-[#DCCCA3]">One bed in shared twin</p>
                   <p className="text-sm text-[#DCCCA3]">Same-gender accommodation</p>
-                  <div className="mt-3">
-                    <p className="text-2xl font-bold text-[#C65D2B]">£1,450</p>
-                  </div>
                 </div>
                 <div className="relative bg-[#2E4A34]/50 rounded-lg p-4 border-2 border-[#6B8E23]/30 opacity-60">
                   <span className="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">SOLD OUT</span>
                   <p className="font-semibold text-[#F7F5EB] mb-2">Double</p>
                   <p className="text-sm text-[#DCCCA3]">Single occupancy</p>
                   <p className="text-sm text-[#DCCCA3]">Double room</p>
-                  <div className="mt-3">
-                    <p className="text-2xl font-bold text-gray-500 line-through">£1,750</p>
-                  </div>
                 </div>
-              </div>
-              <div className="bg-[#6B8E23]/20 border border-[#6B8E23]/40 rounded-lg px-4 py-3 mt-4">
-                <p className="text-center text-[#DCCCA3] text-sm">
-                  Secure your place now for £250 and decide on accommodation later.
-                </p>
               </div>
             </div>
           </motion.div>

@@ -230,8 +230,8 @@ const RetreatsPage = () => {
       >
         {/* Single Image - Left Side */}
         <div className="w-full sm:w-40 md:w-48 h-full flex-shrink-0 rounded-l-xl relative">
-          {/* Deposit Badge - Top of Image (June and August) */}
-          {(isJune || isAugust) && (
+          {/* Deposit Badge - Top of Image (June and August, excluding past retreats) */}
+          {(isJune || isAugust) && !retreat.past && (
             <div className="absolute -top-2 left-2 sm:-top-2 sm:left-2 z-20">
               <span className="px-3 py-1 text-xs sm:text-sm font-semibold text-[#F7F5EB] bg-gradient-to-r from-[#C65D2B] to-[#E07B4B] rounded-full whitespace-nowrap shadow-lg border-2 border-[#6B8E23]/50">
                 £250 Deposit

@@ -25,8 +25,28 @@ const HomePage = () => {
     '/images/homepage/Slide-Photo/IMG_5510.jpg',
     '/images/homepage/Slide-Photo/IMG_7465.jpg',
     '/images/homepage/Slide-Photo/IMG_7502.jpg',
+  ];
+
+  const hostSlides = [
+    '/images/homepage/host_hq.jpg',
     '/images/homepage/Slide-Photo/IMG_host_hike.jpg',
   ];
+  const [hostSlide, setHostSlide] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHostSlide((prev) => (prev + 1) % hostSlides.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [hostSlide]);
+
+  const prevHostSlide = () => {
+    setHostSlide((prev) => (prev - 1 + hostSlides.length) % hostSlides.length);
+  };
+
+  const nextHostSlide = () => {
+    setHostSlide((prev) => (prev + 1) % hostSlides.length);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -461,16 +481,38 @@ Rugile's experience as a mountain guide is clearly reflected in the way she lead
                 </motion.div>
               </motion.div>
               
-              <motion.div {...fadeInRight}>
-                <img 
-                  src="/images/homepage/host_hq.jpg" 
-                  alt="Rugilė - Adventure Host"
-                  className="rounded-2xl shadow-2xl w-full h-[300px] sm:h-[400px] md:h-[500px] object-cover"
-                  onError={(e) => {
-                    // Fallback if image not found
-                    e.target.src = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop";
-                  }}
-                />
+              <motion.div {...fadeInRight} className="relative rounded-2xl shadow-2xl w-full h-[300px] sm:h-[400px] md:h-[500px] overflow-hidden">
+                <AnimatePresence mode="sync">
+                  <motion.img
+                    key={hostSlide}
+                    src={hostSlides[hostSlide]}
+                    alt="Rugilė - Adventure Host"
+                    className="absolute inset-0 w-full h-full object-cover"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.8, ease: 'easeInOut' }}
+                    onError={(e) => {
+                      e.target.src = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop";
+                    }}
+                  />
+                </AnimatePresence>
+
+                <button
+                  onClick={prevHostSlide}
+                  className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 bg-[#2E4A34]/90 hover:bg-[#2E4A34] text-[#F7F5EB] p-2 sm:p-3 rounded-full transition-all duration-300 touch-manipulation active:scale-95 z-10"
+                  aria-label="Previous host photo"
+                >
+                  <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+                </button>
+
+                <button
+                  onClick={nextHostSlide}
+                  className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 bg-[#2E4A34]/90 hover:bg-[#2E4A34] text-[#F7F5EB] p-2 sm:p-3 rounded-full transition-all duration-300 touch-manipulation active:scale-95 z-10"
+                  aria-label="Next host photo"
+                >
+                  <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+                </button>
               </motion.div>
             </div>
           </div>
