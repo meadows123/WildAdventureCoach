@@ -99,6 +99,7 @@ const RetreatsPage = () => {
     {
       id: 'august-retreat',
       title: 'Hiking & Yoga Retreat - Tour du Mont Blanc',
+      registrationsClosed: true,
       location: 'Chamonix - French, Italian & Swiss Alps',
       duration: '6 days / 5 nights',
       dates: 'August 6–11, 2026',
@@ -276,8 +277,20 @@ const RetreatsPage = () => {
               </div>
             </div>
 
+            {/* Registrations Closed badge */}
+            {!retreat.soldOut && retreat.registrationsClosed && (
+              <div className="mt-3 pt-3 border-t border-[#6B8E23]/30">
+                <div className="flex items-center gap-2">
+                  <span className="text-[#F7F5EB] font-semibold text-sm">⚡</span>
+                  <span className="text-[#F7F5EB] font-semibold text-sm">
+                    Registrations Closed
+                  </span>
+                </div>
+              </div>
+            )}
+
             {/* Spots Remaining - Show if data is available and not sold out */}
-            {!retreat.soldOut && availableSpots !== null && availableSpots !== undefined && maxCapacity && (
+            {!retreat.soldOut && !retreat.registrationsClosed && availableSpots !== null && availableSpots !== undefined && maxCapacity && (
               <div className="mt-3 pt-3 border-t border-[#6B8E23]/30">
                 <div className="flex items-center gap-2">
                   <span className="text-[#F7F5EB] font-semibold text-sm">⚡</span>
