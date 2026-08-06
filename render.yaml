@@ -18,7 +18,7 @@ services:
         find . -name "package.json" -type f
       fi
       echo "🚀 Installing dependencies..."
-      npm install
+      npm ci
       echo "🏗️ Building project..."
       npm run build
     startCommand: npm start
