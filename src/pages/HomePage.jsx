@@ -33,13 +33,6 @@ const HomePage = () => {
   ];
   const [hostSlide, setHostSlide] = useState(0);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setHostSlide((prev) => (prev + 1) % hostSlides.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, [hostSlide]);
-
   const prevHostSlide = () => {
     setHostSlide((prev) => (prev - 1 + hostSlides.length) % hostSlides.length);
   };
@@ -47,13 +40,6 @@ const HomePage = () => {
   const nextHostSlide = () => {
     setHostSlide((prev) => (prev + 1) % hostSlides.length);
   };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setJourneySlide((prev) => (prev + 1) % journeySlides.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, [journeySlide]);
 
   const prevJourneySlide = () => {
     setJourneySlide((prev) => (prev - 1 + journeySlides.length) % journeySlides.length);
