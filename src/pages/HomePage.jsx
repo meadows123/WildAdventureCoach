@@ -15,16 +15,18 @@ const HomePage = () => {
   const [journeySlide, setJourneySlide] = useState(0);
 
   const journeySlides = [
+    '/images/homepage/Copy of IMG_0269.jpg',
+    '/images/your journey starts here/IMG_6540.jpg',
+    '/images/your journey starts here/Copy of IMG_0356.jpg',
     '/images/homepage/Slide-Photo/IMG_5063.jpg',
     '/images/homepage/Slide-Photo/IMG_5200.jpg',
     '/images/homepage/Slide-Photo/IMG_5212.jpg',
-    '/images/homepage/Slide-Photo/IMG_5292.jpg',
     '/images/homepage/Slide-Photo/IMG_5335.jpg',
-    '/images/homepage/Slide-Photo/IMG_5354.jpg',
     '/images/homepage/Slide-Photo/IMG_5473.jpg',
-    '/images/homepage/Slide-Photo/IMG_5510.jpg',
-    '/images/homepage/Slide-Photo/IMG_7465.jpg',
     '/images/homepage/Slide-Photo/IMG_7502.jpg',
+    '/images/your journey starts here/Copy of IMG_0079.jpg',
+    '/images/your journey starts here/IMG_6461.jpg',
+    '/images/your journey starts here/IMG_6531.jpg',
   ];
 
   const hostSlides = [
@@ -191,7 +193,7 @@ Rugile's experience as a mountain guide is clearly reflected in the way she lead
       icon: Compass,
       title: 'Guided Adventures',
       description: 'Expert-led expeditions through breathtaking landscapes',
-      detail: 'Every route is crafted with care, blending challenge, safety, and unforgettable alpine views so each day feels purposeful.'
+      detail: 'Every route is crafted with care, blending challenge, safety, and unforgettable views so each day feels purposeful.'
     },
     {
       icon: Heart,
@@ -462,7 +464,7 @@ Rugile's experience as a mountain guide is clearly reflected in the way she lead
                     For over twenty years, I've spent extensive time in the Alps, honing my skills in alpine terrain, high-altitude navigation, and mountain safety. I'm currently a Mountain Leader trainee and a certified Vinyasa Yoga instructor, combining technical expertise with mindful practice to guide journeys that are both safe and transformative.
                   </p>
                   <p className="text-base sm:text-lg text-[#DCCCA3] text-justify">
-                    Raised in a family of experienced mountaineers, the mountains have been a central part of my life from an early age. This lifelong immersion inspired WildAdventureCoach, a space where careful guidance, presence, and the restorative power of the mountains come together. Leading a group through this environment is not just my work — it's a chance to share a meaningful experience, helping everyone feel confident, supported, and fully present in the journey.
+                    Raised in a family of experienced mountaineers, the mountains have been a central part of my life from an early age. This lifelong immersion inspired WildAdventureCoach, a space where careful guidance, presence, and the restorative power of the mountains come together. Leading a group through this environment is not just my work — it's a chance to share a meaningful experience, helping everyone feel confident, supported, and fully present in their journey.
                   </p>
                 </motion.div>
               </motion.div>

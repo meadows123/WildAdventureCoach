@@ -337,7 +337,8 @@ const ChamonixRetreatPage = () => {
                   <p className="text-sm text-[#DCCCA3]">Shared room (up to 3 total)</p>
                   <p className="text-sm text-[#DCCCA3]">Ensuite bathroom</p>
                 </div>
-                <div className="bg-[#2E4A34]/50 rounded-lg p-4 border-2 border-[#6B8E23]/30">
+                <div className="relative bg-[#2E4A34]/50 rounded-lg p-4 border-2 border-[#6B8E23]/30 opacity-60">
+                  <span className="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">SOLD OUT</span>
                   <p className="font-semibold text-[#F7F5EB] mb-2">Economy Single</p>
                   <p className="text-sm text-[#DCCCA3]">One bed in shared twin</p>
                   <p className="text-sm text-[#DCCCA3]">Same-gender accommodation</p>

@@ -99,15 +99,14 @@ const RetreatsPage = () => {
     {
       id: 'august-retreat',
       title: 'Hiking & Yoga Retreat - Tour du Mont Blanc',
-      registrationsClosed: true,
+      past: true,
+      soldOut: true,
       location: 'Chamonix - French, Italian & Swiss Alps',
       duration: '6 days / 5 nights',
       dates: 'August 6–11, 2026',
       participants: 'Up to 10 people',
       description: '4 iconic stages of the Tour du Mont Blanc covering 65 km across France and Italy. 15 km each day and 1000 D+ each day. Good fitness level is required.',
       status: 'upcoming',
-      price: '£1,499',
-      priceNote: 'per person',
       beginnerFriendly: false,
       included: [
         '5 nights accommodation',
@@ -313,7 +312,7 @@ const RetreatsPage = () => {
           {/* Right Column: Button */}
           <div className="flex-shrink-0">
             {retreat.soldOut ? (
-              <Link to="/retreat/chamonix" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+              <Link to={isAugust ? '/retreat/august' : '/retreat/chamonix'} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                 <Button
                   className="w-full sm:w-auto text-sm sm:text-base py-3 sm:py-4 px-6 sm:px-8 rounded-full shadow-lg transition-all touch-manipulation bg-[#6B8E23]/30 hover:bg-[#6B8E23]/40 text-[#DCCCA3] whitespace-nowrap min-h-[48px] cursor-default"
                 >
@@ -366,7 +365,7 @@ const RetreatsPage = () => {
             </p>
           </motion.div>
 
-          <div className="space-y-4 sm:space-y-6 mb-16 sm:mb-24">
+          <div className="space-y-4 sm:space-y-6 mb-8 sm:mb-12">
             {retreats.filter(r => !r.past).map((retreat) => (
               <RetreatCard key={retreat.id} retreat={retreat} />
             ))}
@@ -377,10 +376,10 @@ const RetreatsPage = () => {
             className="bg-[#6B8E23]/10 backdrop-blur-sm rounded-2xl border border-[#6B8E23]/30 p-5 sm:p-8"
           >
             <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#F7F5EB] mb-3 text-center">
-              Adventures in 2027 Spring & Summer
+              Stay in the Loop
             </h2>
             <p className="text-[#DCCCA3] text-sm sm:text-base md:text-lg text-center mb-6">
-              Can't find the retreat that works for you now? Leave your email and we will get back to you with more options.
+              Be the first to hear about upcoming retreats, new dates, special offers and early-bird opportunities.
             </p>
 
             <form onSubmit={handleInterestSubmit} className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center">
@@ -397,7 +396,7 @@ const RetreatsPage = () => {
                 disabled={isSubmittingInterest}
                 className="bg-[#C65D2B] hover:bg-[#C65D2B]/90 text-[#F7F5EB] px-6 py-3 rounded-full min-h-[48px] disabled:opacity-50"
               >
-                {isSubmittingInterest ? 'Submitting...' : 'Register Interest'}
+                {isSubmittingInterest ? 'Submitting...' : 'Keep Me Updated'}
               </Button>
             </form>
 
