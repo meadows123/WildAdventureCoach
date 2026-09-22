@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Calendar, MapPin, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -27,6 +27,24 @@ const RetreatsPage = () => {
 
   // Define retreats array (moved before useEffect)
   const retreats = [
+    {
+      id: 'lake-district-retreat',
+      title: 'Beyond The Summit - Adventure for Leaders',
+      past: false,
+      soldOut: false,
+      location: 'Lake District, England',
+      duration: '3 days / 2 nights',
+      dates: 'March 12–14, 2027',
+      participants: 'Small group of like-minded people',
+      description: 'A restorative 3-day mountain escape combining fun guided hikes, grounding yoga, nourishing food, and time to slow down, reconnect, and reset. Open to all levels.',
+      status: 'upcoming',
+      price: '£455',
+      priceNote: 'per person · £399 with promo code',
+      beginnerFriendly: true,
+      images: [
+        '/images/retreat/lake-district/bts-1.jpg'
+      ]
+    },
     {
       id: 'july-retreat',
       title: 'Hiking and Yoga Retreat in Chamonix',
@@ -196,7 +214,7 @@ const RetreatsPage = () => {
 
       setInterestStatus({
         type: 'success',
-        message: 'Thank you. We will get back to you with 2027 Spring & Summer options.',
+        message: "You're in ✨\nThanks for signing up! We'll be in touch soon. Until then, don't stop exploring. 🌿",
       });
       setInterestEmail('');
     } catch (error) {
@@ -211,9 +229,26 @@ const RetreatsPage = () => {
 
   // Component for individual retreat card - Horizontal Banner Style
   const RetreatCard = ({ retreat }) => {
+    const navigate = useNavigate();
     const isJune = retreat.id === 'july-retreat' || retreat.title.includes('Chamonix');
     const isAugust = retreat.id === 'august-retreat' || retreat.title.includes('August') || retreat.title.includes('Tour du Mont Blanc');
-    
+    const isLakeDistrict = retreat.id === 'lake-district-retreat';
+
+    // Where clicking the card (not just the button) should go
+    const detailPath = isJune
+      ? '/retreat/chamonix'
+      : isAugust
+      ? '/retreat/august'
+      : isLakeDistrict
+      ? '/retreat/lake-district'
+      : null;
+
+    const handleCardClick = () => {
+      if (!detailPath) return;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      navigate(detailPath);
+    };
+
     // Determine fitness level text
     const fitnessLevel = retreat.beginnerFriendly ? 'Beginner Friendly' : 'Moderate to Advanced';
 
@@ -226,15 +261,23 @@ const RetreatsPage = () => {
     return (
       <motion.div
         {...fadeInUp}
-        className="bg-[#6B8E23]/10 backdrop-blur-sm rounded-xl overflow-visible border border-[#6B8E23]/30 flex flex-col sm:flex-row min-h-[240px] sm:h-[180px] md:h-[200px] relative"
+        onClick={handleCardClick}
+        className={`bg-[#6B8E23]/10 backdrop-blur-sm rounded-xl overflow-visible border border-[#6B8E23]/30 flex flex-col sm:flex-row min-h-[240px] sm:h-[180px] md:h-[200px] relative ${detailPath ? 'cursor-pointer hover:border-[#C65D2B]/50 transition-colors' : ''}`}
       >
         {/* Single Image - Left Side */}
         <div className="w-full sm:w-40 md:w-48 h-full flex-shrink-0 rounded-l-xl relative">
-          {/* Deposit Badge - Top of Image (June and August, excluding past retreats) */}
+          {/* Deposit Badge - Top of Image (excluding past retreats) */}
           {(isJune || isAugust) && !retreat.past && (
             <div className="absolute -top-2 left-2 sm:-top-2 sm:left-2 z-20">
               <span className="px-3 py-1 text-xs sm:text-sm font-semibold text-[#F7F5EB] bg-gradient-to-r from-[#C65D2B] to-[#E07B4B] rounded-full whitespace-nowrap shadow-lg border-2 border-[#6B8E23]/50">
                 £250 Deposit
+              </span>
+            </div>
+          )}
+          {isLakeDistrict && !retreat.past && (
+            <div className="absolute -top-2 left-2 sm:-top-2 sm:left-2 z-20">
+              <span className="px-3 py-1 text-xs sm:text-sm font-semibold text-[#F7F5EB] bg-gradient-to-r from-[#C65D2B] to-[#E07B4B] rounded-full whitespace-nowrap shadow-lg border-2 border-[#6B8E23]/50">
+                £50 Deposit
               </span>
             </div>
           )}
@@ -310,7 +353,7 @@ const RetreatsPage = () => {
           </div>
 
           {/* Right Column: Button */}
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0" onClick={(e) => e.stopPropagation()}>
             {retreat.soldOut ? (
               <Link to={isAugust ? '/retreat/august' : '/retreat/chamonix'} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                 <Button
@@ -325,6 +368,14 @@ const RetreatsPage = () => {
                   className="w-full sm:w-auto text-sm sm:text-base py-3 sm:py-4 px-6 sm:px-8 rounded-full shadow-lg transition-all touch-manipulation bg-[#C65D2B] hover:bg-[#C65D2B]/90 hover:shadow-xl active:scale-95 text-[#F7F5EB] whitespace-nowrap min-h-[48px]"
                 >
                   Join the Experience
+                </Button>
+              </Link>
+            ) : isLakeDistrict ? (
+              <Link to="/retreat/lake-district" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                <Button
+                  className="w-full sm:w-auto text-sm sm:text-base py-3 sm:py-4 px-6 sm:px-8 rounded-full shadow-lg transition-all touch-manipulation bg-[#C65D2B] hover:bg-[#C65D2B]/90 hover:shadow-xl active:scale-95 text-[#F7F5EB] whitespace-nowrap min-h-[48px]"
+                >
+                  Join The Experience
                 </Button>
               </Link>
             ) : (
@@ -402,11 +453,18 @@ const RetreatsPage = () => {
 
             {interestStatus.message && (
               <p
-                className={`mt-4 text-sm sm:text-base text-center ${
+                className={`mt-4 text-sm sm:text-base text-center whitespace-pre-line ${
                   interestStatus.type === 'success' ? 'text-[#BFEA8A]' : 'text-[#FFB4A2]'
                 }`}
               >
-                {interestStatus.message}
+                {interestStatus.type === 'success' ? (
+                  <>
+                    <span className="block font-semibold text-base sm:text-lg mb-1">You're in ✨</span>
+                    <span>Thanks for signing up! We'll be in touch soon. Until then, don't stop exploring. 🌿</span>
+                  </>
+                ) : (
+                  interestStatus.message
+                )}
               </p>
             )}
           </motion.div>
