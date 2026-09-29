@@ -138,7 +138,7 @@ const LakeDistrictRegistrationPage = () => {
             <CheckCircle className="w-16 h-16 text-[#6B8E23] mx-auto mb-6" />
             <h1 className="text-3xl sm:text-4xl font-bold text-[#F7F5EB] mb-4">You're in ✨</h1>
             <p className="text-lg text-[#DCCCA3] mb-2">
-              Thanks for registering for Beyond the Summit, {formData.firstName}!
+              Thanks for registering for Beyond the Summit with Rugilė!
             </p>
             <p className="text-base text-[#DCCCA3] mb-8">
               We've received your details and will be in touch soon with next steps, including how to send your £50 deposit to secure your spot. Until then, don't stop exploring 🌿
