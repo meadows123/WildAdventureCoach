@@ -15,13 +15,14 @@ export const supabase = createClient(supabaseUrl, supabaseKey);
 // Database functions for bookings
 
 /**
- * Generate a booking/payment reference from the guest's email, so it's
- * something recognisable to match against an incoming bank transfer.
- * Disambiguates with a numeric suffix in the rare case that email has
+ * Generate a booking/payment reference from the guest's name, so it's
+ * something recognisable to match against an incoming bank transfer
+ * (bank transfers typically show the sender's own account name).
+ * Disambiguates with a numeric suffix in the rare case that name has
  * already been used as a reference before.
  */
-export async function generateBookingReference(email) {
-  const base = (email || '').trim();
+export async function generateBookingReference(firstName, lastName) {
+  const base = `${firstName || ''} ${lastName || ''}`.trim().replace(/\s+/g, ' ');
   let candidate = base;
   let attempt = 1;
 

@@ -157,7 +157,7 @@ app.post('/create-booking', async (req, res) => {
   }
 
   // Booking reference the guest quotes on their bank transfer, so it can be matched to this booking
-  const bookingReference = await generateBookingReference(email);
+  const bookingReference = await generateBookingReference(firstName, lastName);
 
   try {
     const bookingData = {
@@ -235,7 +235,7 @@ app.post('/register-lake-district', async (req, res) => {
     // Continue anyway if capacity check fails (better to allow registration than block)
   }
 
-  const bookingReference = await generateBookingReference(email);
+  const bookingReference = await generateBookingReference(firstName, lastName);
 
   try {
     const savedBooking = await addBooking({
