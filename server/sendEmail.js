@@ -420,10 +420,9 @@ export async function sendBookingConfirmationEmail(booking) {
       <div class="next-steps">
         <h3>✅ What Happens Next?</h3>
         <ul>
-          <li><strong>Now:</strong> Pay your deposit by bank transfer using the details above.</li>
-          <li><strong>Within 48 hours:</strong> You will receive a detailed itinerary, general information and transportation options.</li>
-          <li><strong>90 - 60 days before:</strong> You will receive a comprehensive packing list, recommended training plan and a consent form to sign. The final payment is due.</li>
-          <li><strong>30 days before:</strong> You will be invited to an info session and an optional simulation hike.</li>
+          <li><strong>Within 48 hours:</strong> Please pay your deposit using the bank details above to secure your spot.</li>
+          <li><strong>Once your deposit is received:</strong> The organiser will contact you with details about logistics and how to join the WhatsApp group.</li>
+          <li><strong>30 days before the retreat:</strong> Please pay the remaining balance in full.</li>
         </ul>
       </div>
 
@@ -480,10 +479,9 @@ Please pay your £${amountInPounds} deposit by bank transfer to secure your spot
 Please use the payment reference above so we can match your transfer to your booking.
 
 What's Next?
-- Now: Pay your deposit by bank transfer using the details above.
-- Within 48 hours: You will receive a detailed itinerary, general information and transportation options.
-- 90 - 60 days before: You will receive a comprehensive packing list, recommended training plan and a consent form to sign. The final payment is due.
-- 30 days before: You will be invited to an info session and an optional simulation hike.
+- Within 48 hours: Please pay your deposit using the bank details above to secure your spot.
+- Once your deposit is received: The organiser will contact you with details about logistics and how to join the WhatsApp group.
+- 30 days before the retreat: Please pay the remaining balance in full.
 
 Questions?
 Visit: https://wildadventurecoach.com/contact
