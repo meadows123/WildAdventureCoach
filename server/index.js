@@ -1,10 +1,9 @@
 import express from 'express';
-import crypto from 'crypto';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { addBooking, getAvailableSpots, saveLead } from './supabase.js';
+import { addBooking, getAvailableSpots, generateBookingReference, saveLead } from './supabase.js';
 import { sendBookingConfirmationEmail, sendAdminNotification, sendContactEmail } from './sendEmail.js';
 
 dotenv.config();
@@ -158,7 +157,7 @@ app.post('/create-booking', async (req, res) => {
   }
 
   // Booking reference the guest quotes on their bank transfer, so it can be matched to this booking
-  const bookingReference = `WAC-${Date.now().toString(36).toUpperCase()}-${crypto.randomBytes(2).toString('hex').toUpperCase()}`;
+  const bookingReference = await generateBookingReference(email);
 
   try {
     const bookingData = {
@@ -236,7 +235,7 @@ app.post('/register-lake-district', async (req, res) => {
     // Continue anyway if capacity check fails (better to allow registration than block)
   }
 
-  const bookingReference = `WAC-${Date.now().toString(36).toUpperCase()}-${crypto.randomBytes(2).toString('hex').toUpperCase()}`;
+  const bookingReference = await generateBookingReference(email);
 
   try {
     const savedBooking = await addBooking({

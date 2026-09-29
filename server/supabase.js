@@ -15,6 +15,31 @@ export const supabase = createClient(supabaseUrl, supabaseKey);
 // Database functions for bookings
 
 /**
+ * Generate a booking/payment reference from the guest's email, so it's
+ * something recognisable to match against an incoming bank transfer.
+ * Disambiguates with a numeric suffix in the rare case that email has
+ * already been used as a reference before.
+ */
+export async function generateBookingReference(email) {
+  const base = (email || '').trim();
+  let candidate = base;
+  let attempt = 1;
+
+  while (true) {
+    const { data: existing } = await supabase
+      .from('bookings')
+      .select('id')
+      .eq('stripe_session_id', candidate)
+      .maybeSingle();
+
+    if (!existing) return candidate;
+
+    attempt += 1;
+    candidate = `${base}-${attempt}`;
+  }
+}
+
+/**
  * Add a new booking to the database
  */
 export async function addBooking(bookingData) {
