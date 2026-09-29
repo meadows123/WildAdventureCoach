@@ -33,7 +33,7 @@ const RetreatsPage = () => {
       title: 'Beyond the Summit - Yoga and Hiking Reset',
       past: false,
       soldOut: false,
-      location: 'Lake District, England',
+      location: 'Keswick, Lake District, England',
       duration: '3 days / 2 nights',
       dates: 'March 12–14, 2027',
       participants: 'Small group of like-minded people',

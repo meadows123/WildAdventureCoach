@@ -184,7 +184,7 @@ const LakeDistrictRetreatPage = () => {
                   <MapPin className="w-6 h-6 mr-4 text-[#C65D2B] flex-shrink-0 mt-1" />
                   <div>
                     <p className="text-xs text-[#DCCCA3] uppercase font-semibold mb-1">Location</p>
-                    <p className="text-lg text-[#F7F5EB]">Lake District, England</p>
+                    <p className="text-lg text-[#F7F5EB]">Keswick, Lake District, England</p>
                   </div>
                 </div>
                 <div className="flex items-start">
@@ -320,36 +320,36 @@ const LakeDistrictRetreatPage = () => {
             <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-4 sm:mb-6">Sample Daily Schedule</h2>
             <div className="bg-[#6B8E23]/10 border border-[#6B8E23]/30 rounded-lg p-4 sm:p-6 md:p-8">
               <div className="space-y-4">
-                <div className="flex items-center text-[#DCCCA3]">
-                  <span className="w-32 font-semibold text-[#F7F5EB]">7:30</span>
+                <div className="flex items-start text-[#DCCCA3]">
+                  <span className="w-32 flex-shrink-0 font-semibold text-[#F7F5EB]">7:30</span>
                   <span>Morning Yoga &amp; Breathwork</span>
                 </div>
-                <div className="flex items-center text-[#DCCCA3]">
-                  <span className="w-32 font-semibold text-[#F7F5EB]">8:30</span>
+                <div className="flex items-start text-[#DCCCA3]">
+                  <span className="w-32 flex-shrink-0 font-semibold text-[#F7F5EB]">8:30</span>
                   <span>Nourishing Breakfast</span>
                 </div>
-                <div className="flex items-center text-[#DCCCA3]">
-                  <span className="w-32 font-semibold text-[#F7F5EB]">10:00</span>
+                <div className="flex items-start text-[#DCCCA3]">
+                  <span className="w-32 flex-shrink-0 font-semibold text-[#F7F5EB]">10:00</span>
                   <span>Guided Mountain Hike</span>
                 </div>
-                <div className="flex items-center text-[#DCCCA3]">
-                  <span className="w-32 font-semibold text-[#F7F5EB]">13:00</span>
+                <div className="flex items-start text-[#DCCCA3]">
+                  <span className="w-32 flex-shrink-0 font-semibold text-[#F7F5EB]">13:00</span>
                   <span>Packed Lunch &amp; Mountain Views</span>
                 </div>
-                <div className="flex items-center text-[#DCCCA3]">
-                  <span className="w-32 font-semibold text-[#F7F5EB]">15:30</span>
+                <div className="flex items-start text-[#DCCCA3]">
+                  <span className="w-32 flex-shrink-0 font-semibold text-[#F7F5EB]">15:30</span>
                   <span>Free Time — Rest, Explore, or Simply Be</span>
                 </div>
-                <div className="flex items-center text-[#DCCCA3]">
-                  <span className="w-32 font-semibold text-[#F7F5EB]">17:30</span>
+                <div className="flex items-start text-[#DCCCA3]">
+                  <span className="w-32 flex-shrink-0 font-semibold text-[#F7F5EB]">17:30</span>
                   <span>Restorative Yoga &amp; Meditation</span>
                 </div>
-                <div className="flex items-center text-[#DCCCA3]">
-                  <span className="w-32 font-semibold text-[#F7F5EB]">19:00</span>
+                <div className="flex items-start text-[#DCCCA3]">
+                  <span className="w-32 flex-shrink-0 font-semibold text-[#F7F5EB]">19:00</span>
                   <span>Shared Dinner</span>
                 </div>
-                <div className="flex items-center text-[#DCCCA3]">
-                  <span className="w-32 font-semibold text-[#F7F5EB]">20:30</span>
+                <div className="flex items-start text-[#DCCCA3]">
+                  <span className="w-32 flex-shrink-0 font-semibold text-[#F7F5EB]">20:30</span>
                   <span>Relaxed Conversation, Journaling, or Time to Yourself</span>
                 </div>
               </div>

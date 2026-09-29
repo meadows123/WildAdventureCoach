@@ -246,7 +246,7 @@ const LakeDistrictRegistrationPage = () => {
                 </div>
                 <div className="flex items-center gap-1.5">
                   <MapPin className="w-4 h-4 text-[#C65D2B]" />
-                  <span>Lake District, England</span>
+                  <span>Keswick, Lake District, England</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Users className="w-4 h-4 text-[#C65D2B]" />
