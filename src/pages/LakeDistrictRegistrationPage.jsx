@@ -59,7 +59,21 @@ const LakeDistrictRegistrationPage = () => {
   }, [isTermsModalOpen]);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    let nextValue = value;
+
+    if (name === 'age') {
+      const digitsOnly = value.replace(/\D/g, '');
+
+      if (!digitsOnly) {
+        nextValue = '';
+      } else {
+        const parsed = parseInt(digitsOnly, 10);
+        nextValue = Number.isNaN(parsed) ? '' : Math.min(parsed, 100).toString();
+      }
+    }
+
+    setFormData({ ...formData, [name]: nextValue });
   };
 
   const fadeInUp = {
