@@ -237,6 +237,8 @@ function retreatDatesForName(retreatName) {
     'Hiking & Yoga Retreat Chamonix': 'June 4 - 9, 2026',
     'Hiking and Yoga Retreat - August': 'August 30 - September 4, 2026',
     'Hiking & Yoga Retreat - Tour du Mont Blanc': 'August 30 - September 4, 2026',
+    'Lake District Retreat': 'March 12–14, 2027',
+    'Beyond the Summit - Yoga and Hiking Reset': 'March 12–14, 2027',
   };
   return map[retreatName] || '';
 }

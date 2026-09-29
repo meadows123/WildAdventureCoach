@@ -256,6 +256,18 @@ app.post('/register-lake-district', async (req, res) => {
     console.log('✅ Lake District registration saved to Supabase:', bookingReference);
 
     try {
+      console.log('📧 Attempting to send confirmation email to:', savedBooking.email);
+      const emailResult = await sendBookingConfirmationEmail(savedBooking);
+      if (emailResult.success) {
+        console.log('✅ Lake District confirmation email sent successfully');
+      } else {
+        console.error('❌ Failed to send Lake District confirmation email:', emailResult.error);
+      }
+    } catch (emailError) {
+      console.error('❌ Error sending Lake District confirmation email:', emailError);
+    }
+
+    try {
       // Fold the fields this form collects (that the booking record has no columns for)
       // into hiking_experience so they still reach the owner via the admin template.
       const extraDetails = [
