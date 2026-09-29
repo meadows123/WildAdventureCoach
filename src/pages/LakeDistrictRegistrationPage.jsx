@@ -17,27 +17,53 @@ const ROOM_OPTIONS = [
 
 const RETREAT_NAME = 'Beyond the Summit - Yoga and Hiking Reset';
 
+const DRAFT_STORAGE_KEY = 'lakeDistrictRegistrationDraft';
+
+const DEFAULT_FORM_DATA = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+  gender: '',
+  age: '',
+  room: '',
+  dietary: '',
+  hikingExperience: '',
+  medical: ''
+};
+
+// Restore an in-progress draft (e.g. after navigating away to read the Terms & Conditions page) so nothing is lost.
+function loadDraft() {
+  try {
+    const saved = sessionStorage.getItem(DRAFT_STORAGE_KEY);
+    if (!saved) return null;
+    return JSON.parse(saved);
+  } catch (e) {
+    return null;
+  }
+}
+
 const LakeDistrictRegistrationPage = () => {
   const { toast } = useToast();
   const API_URL = import.meta.env.VITE_API_URL ||
     (import.meta.env.DEV ? 'http://localhost:4242' : '');
 
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    gender: '',
-    age: '',
-    room: '',
-    dietary: '',
-    hikingExperience: '',
-    medical: ''
-  });
-  const [termsAccepted, setTermsAccepted] = useState(false);
+  const draft = loadDraft();
+  const [formData, setFormData] = useState({ ...DEFAULT_FORM_DATA, ...draft?.formData });
+  const [termsAccepted, setTermsAccepted] = useState(draft?.termsAccepted || false);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  // Keep the in-progress draft saved so it survives navigating away and back
+  // (e.g. clicking the Terms & Conditions link in the site footer) or a refresh.
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify({ formData, termsAccepted }));
+    } catch (e) {
+      // Ignore storage errors (private browsing, storage disabled, etc.)
+    }
+  }, [formData, termsAccepted]);
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -140,6 +166,11 @@ const LakeDistrictRegistrationPage = () => {
         throw new Error(data.error || 'Failed to submit registration');
       }
 
+      try {
+        sessionStorage.removeItem(DRAFT_STORAGE_KEY);
+      } catch (e) {
+        // Ignore storage errors
+      }
       setSubmitted(true);
     } catch (error) {
       toast({
