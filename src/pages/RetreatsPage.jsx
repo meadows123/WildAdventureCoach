@@ -20,7 +20,8 @@ const RetreatsPage = () => {
   const getRetreatDatabaseName = (retreatTitle) => {
     const mapping = {
       'Hiking and Yoga Retreat in Chamonix': 'Hiking & Yoga Retreat Chamonix',
-      'Hiking & Yoga Retreat - Tour du Mont Blanc': 'Hiking and Yoga Retreat - August'
+      'Hiking & Yoga Retreat - Tour du Mont Blanc': 'Hiking and Yoga Retreat - August',
+      'Beyond the Summit - Yoga and Hiking Reset': 'Lake District Retreat'
     };
     return mapping[retreatTitle] || retreatTitle;
   };

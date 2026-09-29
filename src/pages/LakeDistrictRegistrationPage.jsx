@@ -91,26 +91,19 @@ const LakeDistrictRegistrationPage = () => {
     setIsSubmitting(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    const message = [
-      `New registration for: ${RETREAT_NAME}`,
-      '',
-      `Phone: ${formData.phone}`,
-      `Room preference: ${formData.room}`,
-      `Allergies & dietary requirements: ${formData.dietary || 'None provided'}`,
-      `Prior hiking experience: ${formData.hikingExperience || 'None provided'}`,
-      `Medical conditions: ${formData.medical || 'None provided'}`,
-      '',
-      'Terms & Conditions accepted: Yes'
-    ].join('\n');
-
     try {
-      const response = await fetch(`${API_URL}/send-contact`, {
+      const response = await fetch(`${API_URL}/register-lake-district`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: `${formData.firstName} ${formData.lastName}`.trim(),
+          firstName: formData.firstName,
+          lastName: formData.lastName,
           email: formData.email,
-          message
+          phone: formData.phone,
+          room: formData.room,
+          dietary: formData.dietary,
+          hikingExperience: formData.hikingExperience,
+          medical: formData.medical
         })
       });
 

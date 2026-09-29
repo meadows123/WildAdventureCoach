@@ -211,6 +211,80 @@ app.post('/create-booking', async (req, res) => {
   }
 });
 
+const LAKE_DISTRICT_RETREAT_NAME = 'Lake District Retreat';
+const LAKE_DISTRICT_DEPOSIT = 5000; // £50.00 in pence
+
+// Register for the Lake District retreat (holds a spot; deposit is collected later by bank transfer)
+app.post('/register-lake-district', async (req, res) => {
+  console.log('📝 Creating Lake District registration for:', req.body.email);
+  const { firstName, lastName, email, phone, room, dietary, hikingExperience, medical } = req.body;
+
+  if (!firstName || !firstName.trim() || !lastName || !lastName.trim() || !email || !email.trim() ||
+      !phone || !phone.trim() || !room || !room.trim()) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  try {
+    const availableSpots = await getAvailableSpots(LAKE_DISTRICT_RETREAT_NAME);
+    console.log('📊 Lake District available spots:', availableSpots);
+    if (availableSpots < 1) {
+      return res.status(400).json({ error: 'Sorry, this retreat is sold out!' });
+    }
+  } catch (capacityError) {
+    console.error('❌ Capacity check error:', capacityError);
+    // Continue anyway if capacity check fails (better to allow registration than block)
+  }
+
+  const bookingReference = `WAC-${Date.now().toString(36).toUpperCase()}-${crypto.randomBytes(2).toString('hex').toUpperCase()}`;
+
+  try {
+    const savedBooking = await addBooking({
+      stripe_session_id: bookingReference,
+      retreat_name: LAKE_DISTRICT_RETREAT_NAME,
+      first_name: firstName,
+      last_name: lastName,
+      email,
+      gender: null,
+      age: null,
+      been_hiking: null,
+      hiking_experience: hikingExperience || null,
+      accommodation_type: room,
+      participants: 1,
+      amount_paid: LAKE_DISTRICT_DEPOSIT,
+      payment_status: 'pending_transfer'
+    });
+    console.log('✅ Lake District registration saved to Supabase:', bookingReference);
+
+    try {
+      const message = [
+        `New registration for: ${LAKE_DISTRICT_RETREAT_NAME}`,
+        '',
+        `Booking reference: ${bookingReference}`,
+        `Phone: ${phone}`,
+        `Room preference: ${room}`,
+        `Allergies & dietary requirements: ${dietary || 'None provided'}`,
+        `Prior hiking experience: ${hikingExperience || 'None provided'}`,
+        `Medical conditions: ${medical || 'None provided'}`,
+        '',
+        'Terms & Conditions accepted: Yes'
+      ].join('\n');
+
+      await sendContactEmail({
+        name: `${firstName} ${lastName}`.trim(),
+        email,
+        message
+      });
+    } catch (emailError) {
+      console.error('❌ Error sending registration notification email:', emailError);
+    }
+
+    res.json({ success: true, booking: savedBooking });
+  } catch (error) {
+    console.error('❌ Error creating Lake District registration:', error);
+    res.status(500).json({ error: error.message || 'Failed to register' });
+  }
+});
+
 // Get retreat capacity and available spots
 app.get('/retreat-capacity/:retreatName', async (req, res) => {
   try {
@@ -344,6 +418,7 @@ app.get(/.*/, (req, res, next) => {
   // Skip API routes
   if (req.path.startsWith('/api/') ||
       req.path.startsWith('/create-booking') ||
+      req.path.startsWith('/register-lake-district') ||
       req.path.startsWith('/retreat-capacity') ||
       req.path.startsWith('/send-contact') ||
       req.path.startsWith('/register-interest') ||

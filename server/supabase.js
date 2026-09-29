@@ -116,12 +116,14 @@ export async function getAvailableSpots(retreatName) {
     'Hiking and Yoga Retreat in Chamonix': 'Hiking & Yoga Retreat Chamonix',
     'Hiking & Yoga Retreat Chamonix': 'Hiking & Yoga Retreat Chamonix',
     'Hiking and Yoga Retreat - August': 'Hiking and Yoga Retreat - August',
-    'Hiking & Yoga Retreat - Tour du Mont Blanc': 'Hiking and Yoga Retreat - August'
+    'Hiking & Yoga Retreat - Tour du Mont Blanc': 'Hiking and Yoga Retreat - August',
+    'Beyond the Summit - Yoga and Hiking Reset': 'Lake District Retreat',
+    'Lake District Retreat': 'Lake District Retreat'
   };
-  
+
   // Get the database name for capacity lookup
   const capacityRetreatName = retreatNameMapping[retreatName] || retreatName;
-  
+
   // Define name variations for each specific retreat (only include variations for the SAME retreat)
   // IMPORTANT: Each retreat ONLY checks its own exact names, never other retreats
   const retreatNameVariations = {
@@ -130,6 +132,9 @@ export async function getAvailableSpots(retreatName) {
     ],
     'Hiking and Yoga Retreat - August': [
       'Hiking and Yoga Retreat - August'  // Only exact match, no variations
+    ],
+    'Lake District Retreat': [
+      'Lake District Retreat'  // Only exact match, no variations
     ]
   };
   
@@ -154,25 +159,34 @@ export async function getAvailableSpots(retreatName) {
     // August should ONLY check August names - force it
     uniqueBookingNames = ['Hiking and Yoga Retreat - August', 'Hiking & Yoga Retreat - Tour du Mont Blanc'];
     console.log('🔒 Forced August-only query:', uniqueBookingNames);
+  } else if (capacityRetreatName === 'Lake District Retreat') {
+    // Lake District should ONLY check Lake District names - force it
+    uniqueBookingNames = ['Lake District Retreat'];
+    console.log('🔒 Forced Lake District-only query:', uniqueBookingNames);
   } else {
     // Unknown retreat - use what we have but log a warning
     console.warn('⚠️ Unknown retreat name:', capacityRetreatName, 'Using:', uniqueBookingNames);
   }
-  
+
   // Final safety check - remove any cross-contamination
   if (capacityRetreatName === 'Hiking and Yoga Retreat - August') {
-    uniqueBookingNames = uniqueBookingNames.filter(name => 
+    uniqueBookingNames = uniqueBookingNames.filter(name =>
       name.includes('August') || name.includes('Tour du Mont Blanc')
     );
     if (uniqueBookingNames.length === 0) {
       uniqueBookingNames = ['Hiking and Yoga Retreat - August', 'Hiking & Yoga Retreat - Tour du Mont Blanc'];
     }
   } else if (capacityRetreatName === 'Hiking & Yoga Retreat Chamonix') {
-    uniqueBookingNames = uniqueBookingNames.filter(name => 
+    uniqueBookingNames = uniqueBookingNames.filter(name =>
       name.includes('Chamonix') && !name.includes('August')
     );
     if (uniqueBookingNames.length === 0) {
       uniqueBookingNames = ['Hiking & Yoga Retreat Chamonix'];
+    }
+  } else if (capacityRetreatName === 'Lake District Retreat') {
+    uniqueBookingNames = uniqueBookingNames.filter(name => name.includes('Lake District'));
+    if (uniqueBookingNames.length === 0) {
+      uniqueBookingNames = ['Lake District Retreat'];
     }
   }
   
@@ -188,7 +202,7 @@ export async function getAvailableSpots(retreatName) {
     console.log('⚠️ Retreat not found in database, defaulting to 9 available spots');
     return 9; // Default to 9 spots if retreat not found
   }
-  
+
   console.log('✅ Retreat found with capacity:', retreat.max_capacity);
 
   // FINAL SAFETY CHECK: Force correct names right before query
@@ -199,6 +213,9 @@ export async function getAvailableSpots(retreatName) {
   } else if (capacityRetreatName === 'Hiking & Yoga Retreat Chamonix') {
     uniqueBookingNames = ['Hiking & Yoga Retreat Chamonix'];
     console.log('🔒🔒 FINAL FORCE: Chamonix retreat - using ONLY:', uniqueBookingNames);
+  } else if (capacityRetreatName === 'Lake District Retreat') {
+    uniqueBookingNames = ['Lake District Retreat'];
+    console.log('🔒🔒 FINAL FORCE: Lake District retreat - using ONLY:', uniqueBookingNames);
   }
 
   // Get total participants booked (check all possible retreat name variations for THIS retreat only)
@@ -358,23 +375,74 @@ export async function getChamonixRetreatStats() {
 }
 
 /**
+ * Get Lake District retreat statistics - ONLY checks Lake District bookings
+ */
+export async function getLakeDistrictRetreatStats() {
+  const capacityRetreatName = 'Lake District Retreat';
+  const uniqueBookingNames = ['Lake District Retreat']; // ONLY Lake District, nothing else
+
+  console.log('🔒 Lake District retreat - checking ONLY:', uniqueBookingNames);
+
+  const { data: retreat } = await supabase
+    .from('retreat_capacity')
+    .select('max_capacity')
+    .eq('retreat_name', capacityRetreatName)
+    .single();
+
+  // Includes pending_transfer bookings so a spot stays held while a guest's bank transfer is awaited
+  const { data: bookings, error: bookingsError } = await supabase
+    .from('bookings')
+    .select('participants, amount_paid, retreat_name, payment_status')
+    .in('retreat_name', uniqueBookingNames)
+    .in('payment_status', ['completed', 'pending_transfer']);
+
+  if (bookingsError) {
+    console.error('❌ Error querying bookings:', bookingsError);
+  }
+
+  const totalParticipants = bookings?.reduce((sum, b) => sum + b.participants, 0) || 0;
+  // Revenue only counts deposits actually confirmed received, not ones still awaiting bank transfer
+  const totalRevenue = bookings?.filter(b => b.payment_status === 'completed').reduce((sum, b) => sum + b.amount_paid, 0) || 0;
+
+  console.log('📊 Lake District Capacity lookup:', {
+    bookingNamesChecked: uniqueBookingNames,
+    bookingsFound: bookings?.length || 0,
+    bookingDetails: bookings?.map(b => ({ name: b.retreat_name, participants: b.participants })),
+    totalParticipants,
+    maxCapacity: retreat?.max_capacity || 10,
+    availableSpots: (retreat?.max_capacity || 10) - totalParticipants
+  });
+
+  return {
+    maxCapacity: retreat?.max_capacity || 10,
+    currentBookings: totalParticipants,
+    availableSpots: (retreat?.max_capacity || 10) - totalParticipants,
+    totalBookings: bookings?.length || 0,
+    totalRevenue: totalRevenue,
+    soldOut: totalParticipants >= (retreat?.max_capacity || 10)
+  };
+}
+
+/**
  * Get retreat statistics (legacy function - routes to specific functions)
  */
 export async function getRetreatStats(retreatName) {
   console.log('🚀🚀🚀 getRetreatStats called with:', retreatName);
   console.log('🚀🚀🚀 NEW CODE VERSION - Using separate functions!');
-  
+
   // Route to specific functions based on retreat name - this ensures complete separation
   const retreatNameMapping = {
     'Hiking and Yoga Retreat in Chamonix': 'chamonix',
     'Hiking & Yoga Retreat Chamonix': 'chamonix',
     'Hiking and Yoga Retreat - August': 'august',
-    'Hiking & Yoga Retreat - Tour du Mont Blanc': 'august'
+    'Hiking & Yoga Retreat - Tour du Mont Blanc': 'august',
+    'Lake District Retreat': 'lakedistrict',
+    'Beyond the Summit - Yoga and Hiking Reset': 'lakedistrict'
   };
-  
+
   const retreatType = retreatNameMapping[retreatName] || retreatName.toLowerCase();
   console.log('🚀🚀🚀 Retreat type determined:', retreatType);
-  
+
   // Route to the correct dedicated function
   if (retreatType === 'august' || retreatName.includes('August') || retreatName.includes('Tour du Mont Blanc')) {
     console.log('📍📍📍 Routing to August-specific function - NO CHAMONIX NAMES WILL BE CHECKED!');
@@ -382,8 +450,11 @@ export async function getRetreatStats(retreatName) {
   } else if (retreatType === 'chamonix' || retreatName.includes('Chamonix')) {
     console.log('📍📍📍 Routing to Chamonix-specific function - NO AUGUST NAMES WILL BE CHECKED!');
     return await getChamonixRetreatStats();
+  } else if (retreatType === 'lakedistrict' || retreatName.includes('Lake District') || retreatName.includes('Beyond the Summit')) {
+    console.log('📍📍📍 Routing to Lake District-specific function!');
+    return await getLakeDistrictRetreatStats();
   }
-  
+
   // Fallback for unknown retreats - should not happen, but route to August as default
   console.warn('⚠️ Unknown retreat name, defaulting to August:', retreatName);
   return await getAugustRetreatStats();
