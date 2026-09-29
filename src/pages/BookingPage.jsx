@@ -6,11 +6,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import TermsContent from '@/components/terms/TermsContent';
 
 const BookingPage = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [step, setStep] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -137,17 +138,6 @@ const BookingPage = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [step]);
-
-  // Check if user returned from canceled payment
-  useEffect(() => {
-    if (searchParams.get('canceled') === 'true') {
-      toast({
-        title: "Payment Canceled",
-        description: "Your payment was canceled. You can try again when you're ready.",
-        variant: "destructive"
-      });
-    }
-  }, [searchParams, toast]);
 
   // Update formData retreat name when retreat changes
   useEffect(() => {
@@ -352,9 +342,9 @@ const BookingPage = () => {
       };
       
       // Log the data being sent for debugging
-      console.log('📤 Sending checkout request:', checkoutData);
-      
-      const response = await fetch(`${API_URL}/create-checkout-session`, {
+      console.log('📤 Sending booking request:', checkoutData);
+
+      const response = await fetch(`${API_URL}/create-booking`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -374,41 +364,40 @@ const BookingPage = () => {
         throw new Error(data.error);
       }
 
-      if (!data.url) {
-        throw new Error('No checkout URL received from server');
+      if (!data.booking) {
+        throw new Error('No booking data received from server');
       }
 
-      // Redirect to Stripe Checkout
-      window.location.href = data.url;
+      navigate('/booking/success', { state: { booking: data.booking } });
     } catch (error) {
       setIsProcessing(false);
-      
+
       // Log the full error for debugging
-      console.error('❌ Payment error details:', {
+      console.error('❌ Booking error details:', {
         error,
         message: error.message,
         name: error.name,
         stack: error.stack,
         API_URL: API_URL || '(empty - using relative URL)',
-        fullURL: `${API_URL}/create-checkout-session`
+        fullURL: `${API_URL}/create-booking`
       });
-      
+
       // Provide more helpful error messages
       let errorMessage = error.message;
-      let errorTitle = "Payment Error";
-      
+      let errorTitle = "Booking Error";
+
       if (error.message.includes('Failed to fetch') || error.name === 'TypeError') {
         errorTitle = "Server Connection Error";
         const apiUrlHint = API_URL ? `API URL: ${API_URL}` : 'API URL not set (using relative path)';
-        errorMessage = `Cannot connect to payment server. ${apiUrlHint}\n\nMake sure the backend server is running on port 4242. Run 'npm run server' in a separate terminal.\n\nIf you're on localhost, you may need to set VITE_API_URL=http://localhost:4242 in a .env file.`;
+        errorMessage = `Cannot connect to the booking server. ${apiUrlHint}\n\nMake sure the backend server is running on port 4242. Run 'npm run server' in a separate terminal.\n\nIf you're on localhost, you may need to set VITE_API_URL=http://localhost:4242 in a .env file.`;
       } else if (error.message.includes('NetworkError') || error.message.includes('Load failed')) {
         errorTitle = "Network Error";
-        errorMessage = "Cannot reach the payment server. Please ensure the backend server is running with 'npm run server'.";
+        errorMessage = "Cannot reach the booking server. Please ensure the backend server is running with 'npm run server'.";
       } else if (error.message.includes('CORS')) {
         errorTitle = "CORS Error";
         errorMessage = "Cross-origin request blocked. Make sure CLIENT_URL in your server .env matches your frontend URL (e.g., http://localhost:3000).";
       }
-      
+
       toast({
         title: errorTitle,
         description: errorMessage,
@@ -1039,29 +1028,18 @@ const BookingPage = () => {
                             }
                           }
                           
-                          const transactionFee = 4.95;
-                          const totalToPay = deposit + transactionFee;
-                          
                           return (
                             <>
-                              <div className="flex justify-between items-center">
-                                <span className="text-[#DCCCA3] text-sm">Deposit:</span>
-                                <span className="text-[#F7F5EB] text-sm">£{deposit}</span>
-                              </div>
-                              <div className="flex justify-between items-center">
-                                <span className="text-[#DCCCA3] text-sm">Transaction Fee:</span>
-                                <span className="text-[#F7F5EB] text-sm">£{transactionFee.toFixed(2)}</span>
-                              </div>
                               <div className="flex justify-between items-center pt-2 border-t border-[#6B8E23]/20">
-                                <span className="text-[#DCCCA3] text-lg font-semibold">Total to Pay Today:</span>
-                                <p className="text-[#C65D2B] text-2xl sm:text-3xl font-bold">£{totalToPay.toFixed(2)}</p>
+                                <span className="text-[#DCCCA3] text-lg font-semibold">Deposit Due:</span>
+                                <p className="text-[#C65D2B] text-2xl sm:text-3xl font-bold">£{deposit}</p>
                               </div>
                               <div className="flex justify-between items-center pt-2 border-t border-[#6B8E23]/20">
                                 <span className="text-[#DCCCA3] text-sm">Full Price: £{fullPrice}</span>
                                 <span className="text-[#DCCCA3] text-sm">Remaining Balance: £{fullPrice - deposit}</span>
                               </div>
                               <p className="text-[#DCCCA3] text-sm mt-4 italic">
-                                You'll pay the remaining balance closer to the retreat date
+                                We'll email you bank transfer details to pay your deposit and secure your spot. You'll pay the remaining balance closer to the retreat date.
                               </p>
                             </>
                           );
@@ -1113,10 +1091,10 @@ const BookingPage = () => {
                     ) : isProcessing ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Processing...
+                        Submitting...
                       </>
                     ) : (
-                      'Checkout'
+                      'Submit Booking Request'
                     )}
                   </Button>
                 ) : null}

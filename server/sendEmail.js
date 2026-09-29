@@ -223,6 +223,14 @@ async function sendViaEmailJS(templateId, templateParams) {
   return { success: true };
 }
 
+/** Bank transfer details guests use to pay their deposit directly (no card processor). */
+const BANK_TRANSFER_DETAILS = {
+  bankName: 'Monzo Bank',
+  accountName: 'Rugile Bazyte',
+  sortCode: '04-00-04',
+  accountNumber: '34007305',
+};
+
 function retreatDatesForName(retreatName) {
   const map = {
     'Hiking and Yoga Retreat in Chamonix': 'June 4 - 9, 2026',
@@ -273,7 +281,12 @@ export async function sendBookingConfirmationEmail(booking) {
         gender: booking.gender || '', // Always send, even if empty
         age: booking.age ? String(booking.age) : '', // Always send, even if empty
         hiking_experience: booking.hiking_experience || '', // Always send, even if empty
-        amount_paid: `GBP ${amountInPounds}`,
+        amount_paid: `GBP ${amountInPounds}`, // Deposit due, to be paid by bank transfer
+        booking_reference: booking.stripe_session_id || '',
+        bank_name: BANK_TRANSFER_DETAILS.bankName,
+        bank_account_name: BANK_TRANSFER_DETAILS.accountName,
+        bank_sort_code: BANK_TRANSFER_DETAILS.sortCode,
+        bank_account_number: BANK_TRANSFER_DETAILS.accountNumber,
       };
       
       await sendViaEmailJS(EMAILJS_TEMPLATE_ID_BOOKING, params);
@@ -386,20 +399,32 @@ export async function sendBookingConfirmationEmail(booking) {
         ` : ''}
         
         <div class="detail-row" style="border-top: 2px solid #C65D2B; margin-top: 15px; padding-top: 15px; border-bottom: none;">
-          <span class="detail-label" style="font-size: 18px;">Total Paid: </span>
+          <span class="detail-label" style="font-size: 18px;">Deposit Due: </span>
           <span class="highlight">£${amountInPounds}</span>
         </div>
       </div>
-      
+
+      <div class="booking-card" style="border-left: 4px solid #C65D2B;">
+        <h2 style="color: #C65D2B;">💳 How to Pay Your Deposit</h2>
+        <p>Please pay your £${amountInPounds} deposit by bank transfer to secure your spot:</p>
+        <div class="detail-row"><span class="detail-label">Bank: </span><span class="detail-value">${BANK_TRANSFER_DETAILS.bankName}</span></div>
+        <div class="detail-row"><span class="detail-label">Account Name: </span><span class="detail-value">${BANK_TRANSFER_DETAILS.accountName}</span></div>
+        <div class="detail-row"><span class="detail-label">Sort Code: </span><span class="detail-value">${BANK_TRANSFER_DETAILS.sortCode}</span></div>
+        <div class="detail-row"><span class="detail-label">Account Number: </span><span class="detail-value">${BANK_TRANSFER_DETAILS.accountNumber}</span></div>
+        <div class="detail-row" style="border-bottom: none;"><span class="detail-label">Payment Reference: </span><span class="detail-value">${booking.stripe_session_id || ''}</span></div>
+        <p style="margin-top: 15px; font-size: 14px;"><strong>Please use the payment reference above</strong> so we can match your transfer to your booking. Your spot is reserved for a limited time pending this deposit.</p>
+      </div>
+
       <div class="next-steps">
         <h3>✅ What Happens Next?</h3>
         <ul>
+          <li><strong>Now:</strong> Pay your deposit by bank transfer using the details above.</li>
           <li><strong>Within 48 hours:</strong> You will receive a detailed itinerary, general information and transportation options.</li>
           <li><strong>90 - 60 days before:</strong> You will receive a comprehensive packing list, recommended training plan and a consent form to sign. The final payment is due.</li>
           <li><strong>30 days before:</strong> You will be invited to an info session and an optional simulation hike.</li>
         </ul>
       </div>
-      
+
       <div class="button-wrapper">
         <a href="https://wildadventurecoach.com/contact" class="button">📞 Get in Touch</a>
       </div>
@@ -441,9 +466,19 @@ ${booking.accommodation_type ? `- Accommodation: ${booking.accommodation_type}` 
 ${booking.gender ? `- Gender: ${booking.gender}` : ''}
 ${booking.age ? `- Age: ${booking.age}` : ''}
 ${booking.hiking_experience ? `- Hiking Experience: ${booking.hiking_experience}` : ''}
-- Total Paid: £${amountInPounds}
+- Deposit Due: £${amountInPounds}
+
+How to Pay Your Deposit
+Please pay your £${amountInPounds} deposit by bank transfer to secure your spot:
+- Bank: ${BANK_TRANSFER_DETAILS.bankName}
+- Account Name: ${BANK_TRANSFER_DETAILS.accountName}
+- Sort Code: ${BANK_TRANSFER_DETAILS.sortCode}
+- Account Number: ${BANK_TRANSFER_DETAILS.accountNumber}
+- Payment Reference: ${booking.stripe_session_id || ''}
+Please use the payment reference above so we can match your transfer to your booking.
 
 What's Next?
+- Now: Pay your deposit by bank transfer using the details above.
 - Within 48 hours: You will receive a detailed itinerary, general information and transportation options.
 - 90 - 60 days before: You will receive a comprehensive packing list, recommended training plan and a consent form to sign. The final payment is due.
 - 30 days before: You will be invited to an info session and an optional simulation hike.
@@ -662,26 +697,26 @@ export async function sendAdminNotification(booking) {
         </div>
         
         <div class="detail" style="border-top: 2px solid #C65D2B; margin-top: 15px; padding-top: 15px; border-bottom: none;">
-          <span class="label" style="font-size: 18px;">Amount Paid:</span> 
+          <span class="label" style="font-size: 18px;">Deposit Due (Bank Transfer Pending):</span>
           <span class="highlight">£${amountInPounds}</span>
         </div>
-        
+
         <div class="detail">
           <span class="label">Booking Date:</span> <span class="value">${bookingDateStr}</span>
         </div>
-        
+
         <div class="detail">
-          <span class="label">Stripe ID:</span> 
+          <span class="label">Booking Reference:</span>
           <span class="value" style="font-family: monospace; font-size: 12px;">${booking.stripe_session_id}</span>
         </div>
       </div>
-      
+
       <div class="action-box">
         <h3>✅ Action Required:</h3>
         <ul>
-          <li>Log into Supabase to view full booking details</li>
+          <li>Watch for a Monzo transfer matching this booking reference and amount</li>
+          <li>Once received, mark this booking's payment_status as "completed" in Supabase</li>
           <li>Send welcome package to guest within 48 hours</li>
-          <li>Update retreat capacity if needed</li>
           <li>Prepare personalized itinerary for guest</li>
         </ul>
       </div>

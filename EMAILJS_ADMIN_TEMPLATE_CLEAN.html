@@ -47,7 +47,7 @@
     <td style="padding: 12px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{hiking_experience}}</td>
     </tr>
     <tr>
-    <td style="padding: 15px 8px 8px 0; font-weight: 600; color: #6b8e23; font-size: 18px; border-top: 2px solid #C65D2B; border-bottom: none;">Amount Paid</td>
+    <td style="padding: 15px 8px 8px 0; font-weight: 600; color: #6b8e23; font-size: 18px; border-top: 2px solid #C65D2B; border-bottom: none;">Deposit Due (Bank Transfer Pending)</td>
     <td style="padding: 15px 0 8px 8px; color: #c65d2b; font-weight: bold; font-size: 24px; text-align: right; border-top: 2px solid #C65D2B; border-bottom: none;">{{amount_paid}}</td>
     </tr>
     <tr>
@@ -55,7 +55,7 @@
     <td style="padding: 12px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{booking_date}}</td>
     </tr>
     <tr>
-    <td style="padding: 12px 8px 8px 0; font-weight: 600; color: #6b8e23; border-bottom: none;">Stripe ID</td>
+    <td style="padding: 12px 8px 8px 0; font-weight: 600; color: #6b8e23; border-bottom: none;">Booking Reference</td>
     <td style="padding: 12px 0 8px 8px; color: #333; text-align: right; font-family: monospace; font-size: 12px; border-bottom: none;">{{stripe_session_id}}</td>
     </tr>
     </tbody>
@@ -64,9 +64,9 @@
     <div style="background: #C65D2B; color: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
     <h3 style="margin-top: 0; font-size: 20px;">Action Required</h3>
     <ul style="padding-left: 20px; margin: 10px 0;">
-    <li style="margin: 8px 0;">Log into Supabase to view full booking details</li>
+    <li style="margin: 8px 0;">Watch for a Monzo transfer matching this booking reference and amount</li>
+    <li style="margin: 8px 0;">Once received, mark this booking's payment_status as "completed" in Supabase</li>
     <li style="margin: 8px 0;">Send welcome package to guest within 48 hours</li>
-    <li style="margin: 8px 0;">Update retreat capacity if needed</li>
     <li style="margin: 8px 0;">Prepare personalized itinerary for guest</li>
     </ul>
     </div>

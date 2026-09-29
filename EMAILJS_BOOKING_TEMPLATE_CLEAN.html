@@ -47,16 +47,46 @@
             <td style="padding: 12px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{hiking_experience}}</td>
           </tr>
           <tr>
-            <td style="padding: 15px 8px 8px 0; font-weight: 600; color: #6B8E23; font-size: 18px; border-top: 2px solid #C65D2B; border-bottom: none;">Total Paid</td>
+            <td style="padding: 15px 8px 8px 0; font-weight: 600; color: #6B8E23; font-size: 18px; border-top: 2px solid #C65D2B; border-bottom: none;">Deposit Due</td>
             <td style="padding: 15px 0 8px 8px; color: #C65D2B; font-weight: bold; font-size: 24px; text-align: right; border-top: 2px solid #C65D2B; border-bottom: none;">{{amount_paid}}</td>
           </tr>
         </table>
+      </div>
+
+      <!-- How to pay -->
+      <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #C65D2B;">
+        <h2 style="color: #C65D2B; margin-top: 0; font-size: 22px;">How to Pay Your Deposit</h2>
+        <p>Please pay your {{amount_paid}} deposit by bank transfer to secure your spot:</p>
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr>
+            <td style="padding: 10px 8px 8px 0; font-weight: 600; color: #6B8E23; width: 40%; border-bottom: 1px solid #e0e0e0;">Bank</td>
+            <td style="padding: 10px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{bank_name}}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 8px 8px 0; font-weight: 600; color: #6B8E23; border-bottom: 1px solid #e0e0e0;">Account Name</td>
+            <td style="padding: 10px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{bank_account_name}}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 8px 8px 0; font-weight: 600; color: #6B8E23; border-bottom: 1px solid #e0e0e0;">Sort Code</td>
+            <td style="padding: 10px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{bank_sort_code}}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 8px 8px 0; font-weight: 600; color: #6B8E23; border-bottom: 1px solid #e0e0e0;">Account Number</td>
+            <td style="padding: 10px 0 8px 8px; color: #333; text-align: right; border-bottom: 1px solid #e0e0e0;">{{bank_account_number}}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 8px 8px 0; font-weight: 600; color: #6B8E23; border-bottom: none;">Payment Reference</td>
+            <td style="padding: 10px 0 8px 8px; color: #333; text-align: right; border-bottom: none;">{{booking_reference}}</td>
+          </tr>
+        </table>
+        <p style="margin-top: 15px; font-size: 13px; color: #666;"><strong>Please use the payment reference above</strong> so we can match your transfer to your booking.</p>
       </div>
 
       <!-- What happens next -->
       <div style="background: #6B8E23; color: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
         <h3 style="margin-top: 0; font-size: 20px;">What Happens Next?</h3>
         <ul style="padding-left: 20px; margin: 10px 0;">
+          <li style="margin: 8px 0;"><strong>Now:</strong> Pay your deposit by bank transfer using the details above.</li>
           <li style="margin: 8px 0;"><strong>Within 48 hours:</strong> You will receive a detailed itinerary, general information and transportation options.</li>
           <li style="margin: 8px 0;"><strong>90 – 60 days before:</strong> You will receive a comprehensive packing list, recommended training plan and a consent form to sign. The final payment is due.</li>
           <li style="margin: 8px 0;"><strong>30 days before:</strong> You will be invited to an info session and an optional simulation hike.</li>

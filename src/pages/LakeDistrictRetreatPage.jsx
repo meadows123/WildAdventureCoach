@@ -69,7 +69,7 @@ const LakeDistrictRetreatPage = () => {
   return (
     <>
       <Helmet>
-        <title>Beyond The Summit - Adventure for Leaders - Wild Adventure Coach</title>
+        <title>Beyond the Summit - Yoga and Hiking Reset - Wild Adventure Coach</title>
         <meta name="description" content="A restorative 3-day mountain escape in the Lake District combining fun guided hikes, grounding yoga, nourishing food, and space to slow down and reset. 12-14 March 2027." />
       </Helmet>
 
@@ -88,7 +88,7 @@ const LakeDistrictRetreatPage = () => {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.2 }}
               src={images[currentImageIndex]}
-              alt={`Beyond The Summit - Lake District Retreat - Image ${currentImageIndex + 1}`}
+              alt={`Beyond the Summit - Yoga and Hiking Reset - Image ${currentImageIndex + 1}`}
               className="w-full h-full object-cover"
               loading="eager"
               decoding="async"
@@ -135,34 +135,24 @@ const LakeDistrictRetreatPage = () => {
             className="text-center mb-10"
           >
             <p className="text-sm sm:text-base font-bold tracking-[0.2em] text-[#C65D2B] uppercase mb-3">
-              Beyond The Summit
+              Beyond the Summit
             </p>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4 text-[#F7F5EB] px-4">
-              Lake District Hiking &amp; Yoga Reset
+              Yoga and Hiking Reset
             </h1>
             <p className="text-lg sm:text-xl text-[#DCCCA3] max-w-3xl mx-auto leading-relaxed mb-2 px-4">
               Step away from the noise. Move, breathe, explore, and come back to yourself.
             </p>
             <div className="w-24 h-1 bg-[#C65D2B] mx-auto rounded-full mb-3 sm:mb-4"></div>
             <p className="text-base sm:text-lg text-[#DCCCA3] max-w-3xl mx-auto leading-relaxed px-4">
-              A restorative 3-day mountain escape combining fun guided hikes, grounding yoga, nourishing food, and time to slow down, reconnect, and reset.
+              A restorative 3-day mountain escape combining fun guided hikes, grounding yoga, private-chef-prepared meals, and time to slow down, reconnect, and reset.
             </p>
             <p className="text-base sm:text-lg text-[#F7F5EB] font-semibold mt-3">
               12–14 March 2027
             </p>
 
             <div className="mt-6 sm:mt-8 flex flex-col items-center gap-3">
-              <div className="flex items-baseline gap-2">
-                <span className="text-3xl sm:text-4xl font-bold text-[#F7F5EB]">£455</span>
-                <span className="text-sm sm:text-base text-[#DCCCA3]">per person</span>
-              </div>
-              <p className="text-sm sm:text-base text-[#BFEA8A] font-semibold">
-                £399 with promo code
-              </p>
               <RegisterButton />
-              <p className="text-xs sm:text-sm text-[#DCCCA3]">
-                £50 deposit to secure your spot — we'll send payment details after you register
-              </p>
             </div>
           </motion.div>
 
@@ -177,7 +167,7 @@ const LakeDistrictRetreatPage = () => {
                 Leave the city, the calendar, and the to-do list behind. Spend three days surrounded by the mountains and lakes of the Lake District - moving your body, breathing fresh air, laughing with good people, and creating space to hear yourself again.
               </p>
               <p className="text-base sm:text-lg text-[#DCCCA3] leading-relaxed mb-4">
-                Through fun and challenging hikes, grounding yoga, mindful moments, and nourishing food, this is a weekend designed to bring you back into balance. Movement to reconnect. Movement so you can rest. Nature to clear your head. Time to go a little deeper inside yourself.
+                Through fun and challenging hikes, grounding yoga, mindful moments, and nourishing meals prepared by our private chef, this is a weekend designed to bring you back into balance. Movement to reconnect. Movement so you can rest. Nature to clear your head. Time to go a little deeper inside yourself.
               </p>
               <p className="text-base sm:text-lg text-[#F7F5EB] font-semibold leading-relaxed mb-6">
                 You don't need to achieve anything. You don't need to optimise yourself. You simply show up - everything is taken care of.
@@ -220,7 +210,7 @@ const LakeDistrictRetreatPage = () => {
                     <span className="text-lg">⚡</span> Spots Filling Up
                   </span>
                   <span className="text-[#C65D2B] font-bold text-base sm:text-lg whitespace-nowrap">
-                    2 / 10 booked
+                    8 / 10 spots available
                   </span>
                 </div>
                 <div className="w-full h-4 sm:h-5 rounded-full bg-[#2E4A34] border border-[#6B8E23]/40 overflow-hidden">
@@ -272,11 +262,18 @@ const LakeDistrictRetreatPage = () => {
                     <p className="text-sm">Time away from work, notifications, and the constant demands of everyday life. Read, walk, journal, nap, sit by the fire, or do nothing at all.</p>
                   </div>
                 </div>
-                <div className="flex items-start text-[#DCCCA3] sm:col-span-2">
+                <div className="flex items-start text-[#DCCCA3]">
                   <span className="text-3xl mr-4">🫶</span>
                   <div>
                     <p className="font-semibold text-[#F7F5EB] mb-1">Meaningful Connection</p>
                     <p className="text-sm">Share the weekend with people also ready to slow down. Expect good food, honest conversation, and the kind of connection that happens naturally when everyone puts their phones away.</p>
+                  </div>
+                </div>
+                <div className="flex items-start text-[#DCCCA3]">
+                  <span className="text-3xl mr-4">👨‍🍳</span>
+                  <div>
+                    <p className="font-semibold text-[#F7F5EB] mb-1">Private Chef</p>
+                    <p className="text-sm">Nourishing, thoughtfully prepared meals cooked just for the group - so all you have to do is show up and eat well.</p>
                   </div>
                 </div>
               </div>
@@ -299,11 +296,23 @@ const LakeDistrictRetreatPage = () => {
             </div>
           </motion.div>
 
-          {/* Mid-page CTA */}
+          {/* Pricing */}
           <motion.div {...fadeInUp} className="mb-12 text-center bg-[#6B8E23]/10 border border-[#6B8E23]/30 rounded-lg p-6 sm:p-8">
             <h3 className="text-xl sm:text-2xl font-bold text-[#F7F5EB] mb-2">Ready to step away from the noise?</h3>
             <p className="text-[#DCCCA3] mb-5">Spots are limited to keep the group small and personal.</p>
+            <div className="flex flex-col items-center gap-3 mb-5">
+              <div className="flex items-baseline gap-2">
+                <span className="text-3xl sm:text-4xl font-bold text-[#F7F5EB]">£455</span>
+                <span className="text-sm sm:text-base text-[#DCCCA3]">per person</span>
+              </div>
+              <p className="text-sm sm:text-base text-[#BFEA8A] font-semibold">
+                £399 with a promo code
+              </p>
+            </div>
             <RegisterButton />
+            <p className="text-xs sm:text-sm text-[#DCCCA3] mt-3">
+              £50 deposit to secure your spot — we'll send payment details after you register
+            </p>
           </motion.div>
 
           {/* Sample Daily Schedule */}
@@ -391,7 +400,7 @@ const LakeDistrictRetreatPage = () => {
               <ul className="space-y-3 text-[#DCCCA3]">
                 <li className="flex items-start">
                   <span className="text-[#C65D2B] mr-3 text-xl">•</span>
-                  <span className="text-base sm:text-lg">People who spend too much time in the city and not enough in nature</span>
+                  <span className="text-base sm:text-lg">People who spend too much time in the city and not enough in the nature</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-[#C65D2B] mr-3 text-xl">•</span>
@@ -399,7 +408,7 @@ const LakeDistrictRetreatPage = () => {
                 </li>
                 <li className="flex items-start">
                   <span className="text-[#C65D2B] mr-3 text-xl">•</span>
-                  <span className="text-base sm:text-lg">Anyone feeling mentally full and craving breathing room</span>
+                  <span className="text-base sm:text-lg">Anyone feeling mentally full and craving for some breathing room</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-[#C65D2B] mr-3 text-xl">•</span>

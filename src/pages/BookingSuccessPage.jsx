@@ -1,67 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
-import { CheckCircle, Calendar, Mail, Loader2 } from 'lucide-react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { CheckCircle, Calendar, Mail } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
 const BookingSuccessPage = () => {
-  const [searchParams] = useSearchParams();
-  const sessionId = searchParams.get('session_id');
-  const [sessionData, setSessionData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  
-  // API URL - since backend serves the frontend, use relative URLs in production
-  const API_URL = import.meta.env.VITE_API_URL || '';
+  const location = useLocation();
+  const booking = location.state?.booking;
 
-  useEffect(() => {
-    const fetchSessionData = async () => {
-      if (!sessionId) {
-        setError('No session ID found');
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const response = await fetch(`${API_URL}/checkout-session/${sessionId}`);
-        const data = await response.json();
-        
-        if (data.error) {
-          throw new Error(data.error);
-        }
-
-        setSessionData(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSessionData();
-  }, [sessionId, API_URL]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen pt-20 pb-16 px-4 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-12 h-12 animate-spin text-[#C65D2B] mx-auto mb-4" />
-          <p className="text-[#DCCCA3] text-lg">Loading your booking details...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error || !sessionData) {
+  if (!booking) {
     return (
       <div className="min-h-screen pt-20 pb-16 px-4">
         <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-4xl font-bold text-[#F7F5EB] mb-4">Something went wrong</h1>
-          <p className="text-[#DCCCA3] mb-8">{error || 'Unable to load booking details'}</p>
-          <Link to="/booking" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+          <div className="inline-flex items-center justify-center w-24 h-24 bg-green-500/20 rounded-full mb-6">
+            <CheckCircle className="w-16 h-16 text-green-500" />
+          </div>
+          <h1 className="text-4xl font-bold text-[#F7F5EB] mb-4">Booking Received!</h1>
+          <p className="text-[#DCCCA3] mb-8">
+            Check your email (and your spam folder) for your booking confirmation and bank transfer details to pay your deposit.
+          </p>
+          <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
             <Button className="bg-[#C65D2B] hover:bg-[#C65D2B]/90 text-[#F7F5EB]">
-              Back to Booking
+              Back to Home
             </Button>
           </Link>
         </div>
@@ -69,14 +30,13 @@ const BookingSuccessPage = () => {
     );
   }
 
-  const { customer_email, metadata, amount_total } = sessionData;
-  const totalAmount = (amount_total / 100).toFixed(2);
+  const depositAmount = (booking.amount_paid / 100).toFixed(2);
 
   return (
     <>
       <Helmet>
-        <title>Booking Confirmed - Wild Adventure Coach</title>
-        <meta name="description" content="Your adventure retreat booking has been confirmed!" />
+        <title>Booking Received - Wild Adventure Coach</title>
+        <meta name="description" content="Your adventure retreat booking has been received - pay your deposit by bank transfer to secure your spot." />
       </Helmet>
 
       <div className="min-h-screen pt-20 pb-16 px-4">
@@ -91,13 +51,13 @@ const BookingSuccessPage = () => {
               <CheckCircle className="w-16 h-16 text-green-500" />
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4 text-[#F7F5EB] px-4">
-              Booking Confirmed!
+              Booking Received!
             </h1>
             <p className="text-xl sm:text-2xl md:text-3xl font-bold text-[#F7F5EB] mb-2 sm:mb-3 px-4">
               Check your Spam Folder
             </p>
             <p className="text-base sm:text-lg md:text-xl text-[#DCCCA3] px-4">
-              Your adventure awaits! We're excited to have you join us.
+              We've emailed you bank transfer details to pay your deposit and secure your spot.
             </p>
           </motion.div>
 
@@ -114,28 +74,26 @@ const BookingSuccessPage = () => {
                 <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
                   <div>
                     <span className="text-[#DCCCA3] text-sm">Retreat</span>
-                    <p className="text-[#F7F5EB] text-lg font-semibold">{metadata?.retreat}</p>
+                    <p className="text-[#F7F5EB] text-lg font-semibold">{booking.retreat_name}</p>
                   </div>
                   <div>
                     <span className="text-[#DCCCA3] text-sm">Name</span>
-                    <p className="text-[#F7F5EB] text-lg">{metadata?.firstName} {metadata?.lastName}</p>
+                    <p className="text-[#F7F5EB] text-lg">{booking.first_name} {booking.last_name}</p>
                   </div>
                   <div>
                     <span className="text-[#DCCCA3] text-sm">Email</span>
-                    <p className="text-[#F7F5EB] text-lg">{customer_email}</p>
+                    <p className="text-[#F7F5EB] text-lg">{booking.email}</p>
                   </div>
                   <div>
-                    <span className="text-[#DCCCA3] text-sm">Total Paid</span>
-                    <p className="text-[#C65D2B] text-2xl font-bold">£{parseFloat(totalAmount).toLocaleString()}</p>
+                    <span className="text-[#DCCCA3] text-sm">Deposit Due</span>
+                    <p className="text-[#C65D2B] text-2xl font-bold">£{parseFloat(depositAmount).toLocaleString()}</p>
                   </div>
                 </div>
 
-                {metadata?.specialRequests && (
-                  <div className="mt-6 pt-6 border-t border-[#6B8E23]/30">
-                    <span className="text-[#DCCCA3] text-sm">Special Requests</span>
-                    <p className="text-[#F7F5EB] mt-2">{metadata.specialRequests}</p>
-                  </div>
-                )}
+                <div className="mt-6 pt-6 border-t border-[#6B8E23]/30">
+                  <span className="text-[#DCCCA3] text-sm">Booking Reference</span>
+                  <p className="text-[#F7F5EB] font-mono mt-1">{booking.stripe_session_id}</p>
+                </div>
               </div>
 
               <div className="space-y-4">
@@ -144,7 +102,7 @@ const BookingSuccessPage = () => {
                   <div>
                     <h3 className="text-[#F7F5EB] font-semibold mb-1">Confirmation Email Sent</h3>
                     <p className="text-[#DCCCA3] text-sm">
-                      We've sent a confirmation email to <strong>{customer_email}</strong> with all the details and next steps.
+                      We've sent a confirmation email to <strong>{booking.email}</strong> with bank transfer details to pay your deposit, plus all the details and next steps.
                     </p>
                   </div>
                 </div>
@@ -154,7 +112,7 @@ const BookingSuccessPage = () => {
                   <div>
                     <h3 className="text-[#F7F5EB] font-semibold mb-1">What's Next?</h3>
                     <p className="text-[#DCCCA3] text-sm">
-                      Our team will contact you within 24-48 hours with detailed information about your retreat, including packing lists, meeting points, and preparation tips.
+                      Please pay your deposit by bank transfer using the details in your email, quoting your booking reference. Our team will then contact you within 24-48 hours with detailed information about your retreat, including packing lists, meeting points, and preparation tips.
                     </p>
                   </div>
                 </div>

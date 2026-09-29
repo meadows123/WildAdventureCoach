@@ -29,17 +29,17 @@ const RetreatsPage = () => {
   const retreats = [
     {
       id: 'lake-district-retreat',
-      title: 'Beyond The Summit - Adventure for Leaders',
+      title: 'Beyond the Summit - Yoga and Hiking Reset',
       past: false,
       soldOut: false,
       location: 'Lake District, England',
       duration: '3 days / 2 nights',
       dates: 'March 12–14, 2027',
       participants: 'Small group of like-minded people',
-      description: 'A restorative 3-day mountain escape combining fun guided hikes, grounding yoga, nourishing food, and time to slow down, reconnect, and reset. Open to all levels.',
+      description: 'A restorative 3-day mountain escape combining fun guided hikes, grounding yoga, private-chef-prepared meals, and time to slow down, reconnect, and reset. Open to all levels.',
       status: 'upcoming',
       price: '£455',
-      priceNote: 'per person · £399 with promo code',
+      priceNote: 'per person · £399 with a promo code',
       beginnerFriendly: true,
       images: [
         '/images/retreat/lake-district/bts-1.jpg'

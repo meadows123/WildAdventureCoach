@@ -22,10 +22,10 @@ const TermsContent = ({ className = '' }) => (
   >
     <div className="pb-6 border-b border-[#6B8E23]/20">
       <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-4">
-        Retreat Terms & Conditions – Hiking & Yoga Retreat 2026
+        Retreat Terms & Conditions – Hiking & Yoga Retreat
       </h2>
       <p className="text-[#DCCCA3] leading-relaxed mb-4">
-        Welcome to the Hiking and Yoga Retreat 2026.
+        Welcome to the Hiking and Yoga Retreat.
       </p>
       <p className="text-[#DCCCA3] leading-relaxed mb-2">
         Please read these Terms and Conditions carefully before confirming your booking.

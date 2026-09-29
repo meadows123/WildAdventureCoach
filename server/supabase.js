@@ -202,11 +202,12 @@ export async function getAvailableSpots(retreatName) {
   }
 
   // Get total participants booked (check all possible retreat name variations for THIS retreat only)
+  // Includes pending_transfer bookings so a spot stays held while a guest's bank transfer is awaited
   const { data: bookings, error: bookingsError } = await supabase
     .from('bookings')
     .select('participants')
     .in('retreat_name', uniqueBookingNames)
-    .eq('payment_status', 'completed');
+    .in('payment_status', ['completed', 'pending_transfer']);
 
   if (bookingsError) {
     console.error('Error fetching bookings:', bookingsError);
@@ -273,18 +274,20 @@ export async function getAugustRetreatStats() {
     .eq('retreat_name', capacityRetreatName)
     .single();
 
+  // Includes pending_transfer bookings so a spot stays held while a guest's bank transfer is awaited
   const { data: bookings, error: bookingsError } = await supabase
     .from('bookings')
     .select('participants, amount_paid, retreat_name, payment_status')
     .in('retreat_name', uniqueBookingNames)
-    .eq('payment_status', 'completed');
+    .in('payment_status', ['completed', 'pending_transfer']);
 
   if (bookingsError) {
     console.error('❌ Error querying bookings:', bookingsError);
   }
 
   const totalParticipants = bookings?.reduce((sum, b) => sum + b.participants, 0) || 0;
-  const totalRevenue = bookings?.reduce((sum, b) => sum + b.amount_paid, 0) || 0;
+  // Revenue only counts deposits actually confirmed received, not ones still awaiting bank transfer
+  const totalRevenue = bookings?.filter(b => b.payment_status === 'completed').reduce((sum, b) => sum + b.amount_paid, 0) || 0;
 
   console.log('📊 August Capacity lookup:', {
     bookingNamesChecked: uniqueBookingNames,
@@ -320,18 +323,20 @@ export async function getChamonixRetreatStats() {
     .eq('retreat_name', capacityRetreatName)
     .single();
 
+  // Includes pending_transfer bookings so a spot stays held while a guest's bank transfer is awaited
   const { data: bookings, error: bookingsError } = await supabase
     .from('bookings')
     .select('participants, amount_paid, retreat_name, payment_status')
     .in('retreat_name', uniqueBookingNames)
-    .eq('payment_status', 'completed');
+    .in('payment_status', ['completed', 'pending_transfer']);
 
   if (bookingsError) {
     console.error('❌ Error querying bookings:', bookingsError);
   }
 
   const totalParticipants = bookings?.reduce((sum, b) => sum + b.participants, 0) || 0;
-  const totalRevenue = bookings?.reduce((sum, b) => sum + b.amount_paid, 0) || 0;
+  // Revenue only counts deposits actually confirmed received, not ones still awaiting bank transfer
+  const totalRevenue = bookings?.filter(b => b.payment_status === 'completed').reduce((sum, b) => sum + b.amount_paid, 0) || 0;
 
   console.log('📊 Chamonix Capacity lookup:', {
     bookingNamesChecked: uniqueBookingNames,
