@@ -27,6 +27,8 @@ const LakeDistrictRegistrationPage = () => {
     lastName: '',
     email: '',
     phone: '',
+    gender: '',
+    age: '',
     room: '',
     dietary: '',
     hikingExperience: '',
@@ -70,6 +72,15 @@ const LakeDistrictRegistrationPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!formData.gender || !formData.age) {
+      toast({
+        title: 'Missing information',
+        description: 'Please fill in your gender and age.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
     if (!formData.room) {
       toast({
         title: 'Room preference required',
@@ -100,6 +111,8 @@ const LakeDistrictRegistrationPage = () => {
           lastName: formData.lastName,
           email: formData.email,
           phone: formData.phone,
+          gender: formData.gender,
+          age: formData.age,
           room: formData.room,
           dietary: formData.dietary,
           hikingExperience: formData.hikingExperience,
@@ -260,6 +273,44 @@ const LakeDistrictRegistrationPage = () => {
                     name="phone"
                     type="tel"
                     value={formData.phone}
+                    onChange={handleChange}
+                    className="bg-[#2E4A34] border-[#6B8E23] text-[#F7F5EB] min-h-[48px]"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-5 sm:gap-6">
+                <div>
+                  <Label htmlFor="gender" className="text-[#DCCCA3] mb-2 block">Gender *</Label>
+                  <select
+                    id="gender"
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleChange}
+                    className="flex h-10 min-h-[48px] w-full rounded-md border border-[#6B8E23] bg-[#2E4A34] px-3 py-2 text-sm text-[#F7F5EB] ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-[#DCCCA3]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C65D2B] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 appearance-none cursor-pointer"
+                    style={{ backgroundImage: "url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%207l5%205%205-5%22%20stroke%3D%22%23DCCCA3%22%20stroke-width%3D%221.5%22%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E')", backgroundPosition: 'right 0.5rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1.5em 1.5em', paddingRight: '2.5rem' }}
+                    required
+                  >
+                    <option value="">Select gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Non-binary">Non-binary</option>
+                    <option value="Prefer not to say">Prefer not to say</option>
+                  </select>
+                </div>
+                <div>
+                  <Label htmlFor="age" className="text-[#DCCCA3] mb-2 block">Age *</Label>
+                  <Input
+                    id="age"
+                    name="age"
+                    type="number"
+                    min="18"
+                    max="100"
+                    step="1"
+                    inputMode="numeric"
+                    onWheel={(event) => event.currentTarget.blur()}
+                    value={formData.age}
                     onChange={handleChange}
                     className="bg-[#2E4A34] border-[#6B8E23] text-[#F7F5EB] min-h-[48px]"
                     required

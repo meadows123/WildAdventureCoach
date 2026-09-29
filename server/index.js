@@ -217,10 +217,11 @@ const LAKE_DISTRICT_DEPOSIT = 5000; // £50.00 in pence
 // Register for the Lake District retreat (holds a spot; deposit is collected later by bank transfer)
 app.post('/register-lake-district', async (req, res) => {
   console.log('📝 Creating Lake District registration for:', req.body.email);
-  const { firstName, lastName, email, phone, room, dietary, hikingExperience, medical } = req.body;
+  const { firstName, lastName, email, phone, gender, age, room, dietary, hikingExperience, medical } = req.body;
 
   if (!firstName || !firstName.trim() || !lastName || !lastName.trim() || !email || !email.trim() ||
-      !phone || !phone.trim() || !room || !room.trim()) {
+      !phone || !phone.trim() || !gender || !String(gender).trim() || !age || !String(age).trim() ||
+      !room || !room.trim()) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
@@ -244,8 +245,8 @@ app.post('/register-lake-district', async (req, res) => {
       first_name: firstName,
       last_name: lastName,
       email,
-      gender: null,
-      age: null,
+      gender,
+      age: parseInt(age),
       been_hiking: null,
       hiking_experience: hikingExperience || null,
       accommodation_type: room,
