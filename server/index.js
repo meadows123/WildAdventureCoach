@@ -256,26 +256,25 @@ app.post('/register-lake-district', async (req, res) => {
     console.log('✅ Lake District registration saved to Supabase:', bookingReference);
 
     try {
-      const message = [
-        `New registration for: ${LAKE_DISTRICT_RETREAT_NAME}`,
-        '',
-        `Booking reference: ${bookingReference}`,
+      // Fold the fields this form collects (that the booking record has no columns for)
+      // into hiking_experience so they still reach the owner via the admin template.
+      const extraDetails = [
         `Phone: ${phone}`,
-        `Room preference: ${room}`,
-        `Allergies & dietary requirements: ${dietary || 'None provided'}`,
-        `Prior hiking experience: ${hikingExperience || 'None provided'}`,
-        `Medical conditions: ${medical || 'None provided'}`,
-        '',
-        'Terms & Conditions accepted: Yes'
-      ].join('\n');
+        `Dietary: ${dietary || 'None provided'}`,
+        `Medical: ${medical || 'None provided'}`
+      ].join(' | ');
 
-      await sendContactEmail({
-        name: `${firstName} ${lastName}`.trim(),
-        email,
-        message
+      const ownerEmailResult = await sendAdminNotification({
+        ...savedBooking,
+        hiking_experience: [savedBooking.hiking_experience, extraDetails].filter(Boolean).join(' — ')
       });
+      if (ownerEmailResult.success) {
+        console.log('✅ Lake District retreat-owner notification sent successfully');
+      } else {
+        console.error('❌ Failed to send Lake District retreat-owner notification:', ownerEmailResult.error);
+      }
     } catch (emailError) {
-      console.error('❌ Error sending registration notification email:', emailError);
+      console.error('❌ Error sending Lake District retreat-owner notification:', emailError);
     }
 
     res.json({ success: true, booking: savedBooking });
