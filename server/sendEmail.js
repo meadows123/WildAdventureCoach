@@ -413,8 +413,8 @@ export async function sendBookingConfirmationEmail(booking) {
         <div class="detail-row"><span class="detail-label">Account Name: </span><span class="detail-value">${BANK_TRANSFER_DETAILS.accountName}</span></div>
         <div class="detail-row"><span class="detail-label">Sort Code: </span><span class="detail-value">${BANK_TRANSFER_DETAILS.sortCode}</span></div>
         <div class="detail-row"><span class="detail-label">Account Number: </span><span class="detail-value">${BANK_TRANSFER_DETAILS.accountNumber}</span></div>
-        <div class="detail-row" style="border-bottom: none;"><span class="detail-label">Payment Reference: </span><span class="detail-value">${booking.stripe_session_id || ''}</span></div>
-        <p style="margin-top: 15px; font-size: 14px;"><strong>Please use the payment reference above</strong> so we can match your transfer to your booking. Your spot is reserved for a limited time pending this deposit.</p>
+        <div class="detail-row" style="border-bottom: none;"><span class="detail-label">Reference: </span><span class="detail-value">${booking.stripe_session_id || ''}</span></div>
+        <p style="margin-top: 15px; font-size: 14px;">Please use just your name, <strong>${booking.stripe_session_id || ''}</strong>, as the payment reference so we can match your transfer to your booking. Your spot is reserved for a limited time pending this deposit.</p>
       </div>
 
       <div class="next-steps">
@@ -475,8 +475,8 @@ Please pay your £${amountInPounds} deposit by bank transfer to secure your spot
 - Account Name: ${BANK_TRANSFER_DETAILS.accountName}
 - Sort Code: ${BANK_TRANSFER_DETAILS.sortCode}
 - Account Number: ${BANK_TRANSFER_DETAILS.accountNumber}
-- Payment Reference: ${booking.stripe_session_id || ''}
-Please use the payment reference above so we can match your transfer to your booking.
+- Reference: ${booking.stripe_session_id || ''}
+Please use just your name, ${booking.stripe_session_id || ''}, as the payment reference so we can match your transfer to your booking.
 
 What's Next?
 - Within 48 hours: Please pay your deposit using the bank details above to secure your spot.
