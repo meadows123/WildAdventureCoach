@@ -7,6 +7,17 @@ import { Button } from '@/components/ui/button';
 
 const LakeDistrictRetreatPage = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [capacity, setCapacity] = useState(null);
+
+  const API_URL = import.meta.env.VITE_API_URL ||
+    (import.meta.env.DEV ? 'http://localhost:4242' : '');
+
+  useEffect(() => {
+    fetch(`${API_URL}/retreat-capacity/${encodeURIComponent('Lake District Retreat')}`)
+      .then(res => res.json())
+      .then(data => setCapacity(data))
+      .catch(error => console.error('Error fetching capacity:', error));
+  }, [API_URL]);
 
   const images = [
     '/images/retreat/lake-district/bts-1.jpg',
@@ -204,28 +215,32 @@ const LakeDistrictRetreatPage = () => {
                 </div>
               </div>
 
-              <div className="mt-6 pt-6 border-t border-[#6B8E23]/30">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="flex items-center gap-2 text-[#F7F5EB] font-semibold text-sm sm:text-base">
-                    <span className="text-lg">⚡</span> Spots Filling Up
-                  </span>
-                  <span className="text-[#C65D2B] font-bold text-base sm:text-lg whitespace-nowrap">
-                    8 / 10 spots available
-                  </span>
+              {capacity && (
+                <div className="mt-6 pt-6 border-t border-[#6B8E23]/30">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="flex items-center gap-2 text-[#F7F5EB] font-semibold text-sm sm:text-base">
+                      <span className="text-lg">⚡</span> Spots Filling Up
+                    </span>
+                    <span className="text-[#C65D2B] font-bold text-base sm:text-lg whitespace-nowrap">
+                      {Math.max(capacity.availableSpots, 0)} / {capacity.maxCapacity} spots available
+                    </span>
+                  </div>
+                  <div className="w-full h-4 sm:h-5 rounded-full bg-[#2E4A34] border border-[#6B8E23]/40 overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${Math.min((capacity.currentBookings / capacity.maxCapacity) * 100, 100)}%` }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1.2, ease: 'easeOut' }}
+                      className="h-full rounded-full bg-gradient-to-r from-[#C65D2B] to-[#E07B4B]"
+                    />
+                  </div>
+                  <p className="text-[#DCCCA3] text-xs sm:text-sm mt-2 text-center sm:text-right">
+                    {capacity.soldOut
+                      ? 'Sold out — join the waitlist'
+                      : `${Math.max(capacity.availableSpots, 0)} spot${capacity.availableSpots === 1 ? '' : 's'} left — reserve yours today`}
+                  </p>
                 </div>
-                <div className="w-full h-4 sm:h-5 rounded-full bg-[#2E4A34] border border-[#6B8E23]/40 overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    whileInView={{ width: '20%' }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1.2, ease: 'easeOut' }}
-                    className="h-full rounded-full bg-gradient-to-r from-[#C65D2B] to-[#E07B4B]"
-                  />
-                </div>
-                <p className="text-[#DCCCA3] text-xs sm:text-sm mt-2 text-center sm:text-right">
-                  8 spots left — reserve yours today
-                </p>
-              </div>
+              )}
             </div>
           </motion.div>
 

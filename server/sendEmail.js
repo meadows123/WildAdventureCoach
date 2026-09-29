@@ -345,7 +345,7 @@ export async function sendBookingConfirmationEmail(booking) {
     <div class="content">
       <p>Dear ${booking.first_name},</p>
       
-      <p>Thank you for booking with <strong>Wild Adventure Coach</strong>! We're thrilled to have you join us for an unforgettable adventure in the stunning landscapes of Mont Blanc.</p>
+      <p>Thank you for booking with <strong>Wild Adventure Coach</strong>! We're thrilled to have you join us for an unforgettable adventure.</p>
       
       <div class="booking-card">
         <h2>📋 Your Booking Details</h2>
