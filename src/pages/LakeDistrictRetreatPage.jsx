@@ -29,7 +29,7 @@ const LakeDistrictRetreatPage = () => {
     '/images/retreat/lake-district/bts-7.jpg',
     '/images/retreat/lake-district/bts-8.jpg',
     '/images/retreat/lake-district/bts-9.jpg',
-    '/images/retreat/lake-district/bts-10.jpg',
+    '/images/retreat/lake-district/ambleside-walk.jpg',
     '/images/retreat/lake-district/brothers-water.jpg',
     '/images/retreat/lake-district/coniston-walk.jpg',
     '/images/retreat/lake-district/wastwater.jpg'
