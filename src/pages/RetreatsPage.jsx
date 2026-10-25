@@ -21,7 +21,7 @@ const RetreatsPage = () => {
     const mapping = {
       'Hiking and Yoga Retreat in Chamonix': 'Hiking & Yoga Retreat Chamonix',
       'Hiking & Yoga Retreat - Tour du Mont Blanc': 'Hiking and Yoga Retreat - August',
-      'Beyond the Summit - Yoga and Hiking Reset': 'Lake District Retreat'
+      'The Wild Escape - Yoga and Hiking Reset': 'Lake District Retreat'
     };
     return mapping[retreatTitle] || retreatTitle;
   };
@@ -30,7 +30,7 @@ const RetreatsPage = () => {
   const retreats = [
     {
       id: 'lake-district-retreat',
-      title: 'Beyond the Summit - Yoga and Hiking Reset',
+      title: 'The Wild Escape - Yoga and Hiking Reset',
       past: false,
       soldOut: false,
       location: 'Keswick, Lake District, England',
@@ -43,7 +43,7 @@ const RetreatsPage = () => {
       priceNote: 'per person · £399 with a promo code',
       beginnerFriendly: true,
       images: [
-        '/images/retreat/lake-district/bts-1.jpg'
+        '/images/retreat/lake-district/buttermere.avif'
       ]
     },
     {

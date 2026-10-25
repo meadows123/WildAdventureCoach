@@ -20,9 +20,10 @@ const LakeDistrictRetreatPage = () => {
   }, [API_URL]);
 
   const images = [
-    '/images/retreat/lake-district/bts-1.jpg',
+    '/images/retreat/lake-district/buttermere.avif',
+    '/images/retreat/lake-district/yoga-group.avif',
     '/images/retreat/lake-district/bts-2.jpg',
-    '/images/retreat/lake-district/bts-3.jpg',
+    '/images/retreat/lake-district/ridge-hikers.jpg',
     '/images/retreat/lake-district/bts-4.jpg',
     '/images/retreat/lake-district/bts-5.jpg',
     '/images/retreat/lake-district/bts-6.jpg',
@@ -30,7 +31,9 @@ const LakeDistrictRetreatPage = () => {
     '/images/retreat/lake-district/bts-8.jpg',
     '/images/retreat/lake-district/bts-9.jpg',
     '/images/retreat/lake-district/bts-10.jpg',
-    '/images/retreat/lake-district/bts-11.jpg'
+    '/images/retreat/lake-district/brothers-water.jpg',
+    '/images/retreat/lake-district/coniston-walk.jpg',
+    '/images/retreat/lake-district/wastwater.jpg'
   ];
 
   useEffect(() => {
@@ -80,7 +83,7 @@ const LakeDistrictRetreatPage = () => {
   return (
     <>
       <Helmet>
-        <title>Beyond the Summit - Yoga and Hiking Reset - Wild Adventure Coach</title>
+        <title>The Wild Escape - Yoga and Hiking Reset - Wild Adventure Coach</title>
         <meta name="description" content="A restorative 3-day mountain escape in the Lake District combining fun guided hikes, grounding yoga, nourishing food, and space to slow down and reset. 12-14 March 2027." />
       </Helmet>
 
@@ -99,7 +102,7 @@ const LakeDistrictRetreatPage = () => {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.2 }}
               src={images[currentImageIndex]}
-              alt={`Beyond the Summit - Yoga and Hiking Reset - Image ${currentImageIndex + 1}`}
+              alt={`The Wild Escape - Yoga and Hiking Reset - Image ${currentImageIndex + 1}`}
               className="w-full h-full object-cover"
               loading="eager"
               decoding="async"
@@ -146,7 +149,7 @@ const LakeDistrictRetreatPage = () => {
             className="text-center mb-10"
           >
             <p className="text-sm sm:text-base font-bold tracking-[0.2em] text-[#C65D2B] uppercase mb-3">
-              Beyond the Summit
+              The Wild Escape
             </p>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4 text-[#F7F5EB] px-4">
               Yoga and Hiking Reset
@@ -172,7 +175,7 @@ const LakeDistrictRetreatPage = () => {
             <div className="bg-[#6B8E23]/10 border border-[#6B8E23]/30 rounded-lg p-4 sm:p-6 md:p-8">
               <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F5EB] mb-3 sm:mb-4">Overview</h2>
               <p className="text-base sm:text-lg text-[#DCCCA3] leading-relaxed mb-4">
-                Life can become a constant cycle of work, responsibilities, screens, messages, and places to be. Beyond the Summit is an invitation to step out of that cycle for a while.
+                Life can become a constant cycle of work, responsibilities, screens, messages, and places to be. The Wild Escape is an invitation to step out of that cycle for a while.
               </p>
               <p className="text-base sm:text-lg text-[#DCCCA3] leading-relaxed mb-4">
                 Leave the city, the calendar, and the to-do list behind. Spend three days surrounded by the mountains and lakes of the Lake District - moving your body, breathing fresh air, laughing with good people, and creating space to hear yourself again.

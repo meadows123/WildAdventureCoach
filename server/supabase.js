@@ -143,7 +143,7 @@ export async function getAvailableSpots(retreatName) {
     'Hiking & Yoga Retreat Chamonix': 'Hiking & Yoga Retreat Chamonix',
     'Hiking and Yoga Retreat - August': 'Hiking and Yoga Retreat - August',
     'Hiking & Yoga Retreat - Tour du Mont Blanc': 'Hiking and Yoga Retreat - August',
-    'Beyond the Summit - Yoga and Hiking Reset': 'Lake District Retreat',
+    'The Wild Escape - Yoga and Hiking Reset': 'Lake District Retreat',
     'Lake District Retreat': 'Lake District Retreat'
   };
 
@@ -463,7 +463,7 @@ export async function getRetreatStats(retreatName) {
     'Hiking and Yoga Retreat - August': 'august',
     'Hiking & Yoga Retreat - Tour du Mont Blanc': 'august',
     'Lake District Retreat': 'lakedistrict',
-    'Beyond the Summit - Yoga and Hiking Reset': 'lakedistrict'
+    'The Wild Escape - Yoga and Hiking Reset': 'lakedistrict'
   };
 
   const retreatType = retreatNameMapping[retreatName] || retreatName.toLowerCase();
@@ -476,7 +476,7 @@ export async function getRetreatStats(retreatName) {
   } else if (retreatType === 'chamonix' || retreatName.includes('Chamonix')) {
     console.log('📍📍📍 Routing to Chamonix-specific function - NO AUGUST NAMES WILL BE CHECKED!');
     return await getChamonixRetreatStats();
-  } else if (retreatType === 'lakedistrict' || retreatName.includes('Lake District') || retreatName.includes('Beyond the Summit')) {
+  } else if (retreatType === 'lakedistrict' || retreatName.includes('Lake District') || retreatName.includes('The Wild Escape')) {
     console.log('📍📍📍 Routing to Lake District-specific function!');
     return await getLakeDistrictRetreatStats();
   }

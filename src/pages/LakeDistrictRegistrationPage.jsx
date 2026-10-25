@@ -15,7 +15,7 @@ const ROOM_OPTIONS = [
   { value: 'Twin', label: 'Twin', description: 'Open to sharing with another participant' }
 ];
 
-const RETREAT_NAME = 'Beyond the Summit - Yoga and Hiking Reset';
+const RETREAT_NAME = 'The Wild Escape - Yoga and Hiking Reset';
 
 const DRAFT_STORAGE_KEY = 'lakeDistrictRegistrationDraft';
 
@@ -196,7 +196,7 @@ const LakeDistrictRegistrationPage = () => {
             <CheckCircle className="w-16 h-16 text-[#6B8E23] mx-auto mb-6" />
             <h1 className="text-3xl sm:text-4xl font-bold text-[#F7F5EB] mb-4">You're in ✨</h1>
             <p className="text-lg text-[#DCCCA3] mb-2">
-              Thanks for registering for Beyond the Summit with Rugilė!
+              Thanks for registering for The Wild Escape with Rugilė!
             </p>
             <p className="text-base text-[#DCCCA3] mb-8">
               We've received your details and will be in touch soon with next steps, including how to send your £50 deposit to secure your spot. Until then, don't stop exploring 🌿
@@ -215,8 +215,8 @@ const LakeDistrictRegistrationPage = () => {
   return (
     <>
       <Helmet>
-        <title>Register - Beyond the Summit - Wild Adventure Coach</title>
-        <meta name="description" content="Register your spot for Beyond the Summit, a 3-day hiking and yoga reset in the Lake District, 12-14 March 2027." />
+        <title>Register - The Wild Escape - Wild Adventure Coach</title>
+        <meta name="description" content="Register your spot for The Wild Escape, a 3-day hiking and yoga reset in the Lake District, 12-14 March 2027." />
       </Helmet>
 
       <div className="min-h-screen pt-20 pb-16 px-4">
