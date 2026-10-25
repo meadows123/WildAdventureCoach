@@ -22,10 +22,10 @@ const LakeDistrictRetreatPage = () => {
   const images = [
     '/images/retreat/lake-district/buttermere.avif',
     '/images/retreat/lake-district/yoga-group.avif',
-    '/images/retreat/lake-district/bts-2.jpg',
     '/images/retreat/lake-district/ridge-hikers.jpg',
     '/images/retreat/lake-district/bts-4.jpg',
     '/images/retreat/lake-district/fleetwith-pike.avif',
+    '/images/retreat/lake-district/bts-2.jpg',
     '/images/retreat/lake-district/bts-7.jpg',
     '/images/retreat/lake-district/bts-8.jpg',
     '/images/retreat/lake-district/bts-9.jpg',
